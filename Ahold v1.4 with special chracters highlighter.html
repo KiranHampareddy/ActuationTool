@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <title>Deal Placement Generator</title>
+  <style>
+        body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f9; /* Light background */
+    color: #333; /* Default text color */
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    background-color: #005a32; /* Ahold green */
+    color: #fff; /* White text */
+    padding: 20px;
+    text-align: center;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff; /* White container */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+    padding: 10px;
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+    border-color: #005a32; /* Focus border in green */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 90, 50, 0.2); /* Light green shadow */
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4caf50; /* Lighter green */
+    color: #fff; /* White text */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #388e3c; /* Darker green on hover */
+}
+
+.highlight {
+    border: 2px solid #005a32; /* Highlight with green border */
+}
+
+.hidden {
+    display: none;
+}
+
+.section-title {
+    font-size: 18px;
+    margin: 20px 0 10px;
+    color: #005a32; /* Section titles in green */
+}
+
+.placements ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.placements ul li {
+    background-color: #e8f5e9; /* Light green for list items */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 4px;
+    margin: 5px 0;
+    padding: 10px;
+}
+
+.form-error {
+    color: #e74c3c; /* Error text in red */
+    margin-top: 10px;
+}
+
+.result {
+    background-color: #e9f5ff; /* Light blue for result section */
+    border: 1px solid #b3d8ff; /* Light blue border */
+    padding: 20px;
+    border-radius: 8px;
+}
+   .highlight {
+            color: brightred; /* Use red color for highlighting */
+            font-weight: bold;
+        }
+        
+    .red-text {
+    color: #ff0000; /* Bright red for emphasis */
+    font-weight: bold; /* Bold text for visibility */
+}
+
+  </style>
+</head>
+<body>
+  <h1>Ahold Actuation</h1>
+  <div class="container">
+    <form id="placementForm" name="placementForm">
+      <label for="dealName">Deal Name:</label> <input type="text" id="dealName" name="dealName"> 
+      <label for="dealId">Deal ID:</label><input type="text" id="dealId" name="dealId"> 
+      <label for="team">Team:</label> <input type="text" id="team" name="team"> 
+      <label for="walletName">Wallet Name:</label><input type="text" id="walletName" name="walletName" oninput="updateWalletId()"> 
+      <label for="walletId">Wallet ID:</label> <input type="text" id="walletId" name="walletId" readonly> 
+      <label for="budget">Budget:</label> <input type="number" id="budget" name="budget" step="0.01"> 
+      <label for="urlInput">Input URL:</label><input type="text" id="urlInput" name="urlInput" placeholder="Enter the URL here" oninput="updateSlug()">
+      <label for="slug">Slug URL:</label><input type="text" id="slug" name="slug" readonly>
+      <label for="flightStartDate">Flight Start Date:</label> 
+      <input type="text" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
+      <label for="flightEndDate">Flight End Date:</label>
+      <input type="text" id="flightEndDate" name="flightEndDate" onchange="calculateDays()"> 
+      <label for="numberOfDays">Number of Days:</label> <input type="number" id="numberOfDays" name="numberOfDays" readonly> 
+      <label for="tactic">Tactic:</label> <select id="tactic" name="tactic" onchange="updateTactic()">
+        <option value="">
+          Select Tactic
+        </option>
+        <option value="BAx">
+          BAx
+        </option>
+        <option value="SPA">
+          SPA
+        </option>
+      </select>
+      <div id="gtbOptions" class="hidden">
+        <label for="allGTB">Include all GTB options:</label> <select id="allGTB" name="allGTB" onchange="updateGTBOptions()">
+          <option value="">
+            Select
+          </option>
+          <option value="yes">
+            Yes
+          </option>
+          <option value="no">
+            No
+          </option>
+        </select>
+        <div id="hannafordOptions" class="hidden">
+          <label for="hannaford">Include Hannaford options:</label> <select id="hannaford" name="hannaford" onchange="updateHannafordOptions()">
+            <option value="">
+              Select
+            </option>
+            <option value="yes">
+              Yes
+            </option>
+            <option value="no">
+              No
+            </option>
+          </select>
+        </div>
+        <div id="catalogueSelection" class="hidden">
+          <label>Catalogue Selections:</label><br>
+          <input type="checkbox" class="catalogue" value="GIANT"> GIANT<br>
+          <input type="checkbox" class="catalogue" value="MAR"> MAR<br>
+          <input type="checkbox" class="catalogue" value="FDL"> FDL<br>
+          <input type="checkbox" class="catalogue" value="Giant_Food"> Giant_Food<br>
+          <input type="checkbox" class="catalogue" value="SNS"> SNS<br>
+        </div>
+      </div><button type="button" onclick="generateData()">Generate Placements</button>
+      <p id="formError" class="form-error"></p>
+    </form>
+    <div id="result" class="result"></div>
+  </div>
+  <script>
+           function updateSlug() {
+            const urlInput = document.getElementById('urlInput').value; // Get the URL input
+            const slug = extractSlug(urlInput);                         // Extract the slug
+            document.getElementById('slug').value = slug;              // Set the slug field value
+        }
+
+        function extractSlug(url) {
+            const regex = /[?&]997=([^&]*)/; // Regex to find slug
+            const match = url.match(regex);   // Match the slug
+            return match ? match[1] : '';     // Return the slug or an empty string if not found
+        }
+// Calculate the number of days between start and end dates
+
+        function calculateDays() {
+        const startDate = new Date(document.getElementById('flightStartDate').value);
+        const endDate = new Date(document.getElementById('flightEndDate').value);
+    
+    if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+        const diffTime = Math.abs(endDate - startDate);
+        const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 for extra count
+        document.getElementById('numberOfDays').value = numberOfDays;
+    } else {
+        document.getElementById('numberOfDays').value = '';
+    }
+}
+        function highlightSpecialChars(text) {
+    return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
+}
+        function updateTactic() {
+            const tactic = document.getElementById('tactic').value;
+            const isBAx = tactic === 'BAx';
+            const isSPA = tactic === 'SPA';
+
+            document.getElementById('gtbOptions').classList.toggle('hidden', !isBAx && !isBAx);
+            document.getElementById('hannafordOptions').classList.toggle('hidden', !isBAx);
+            document.getElementById('catalogueSelection').classList.add('hidden');
+            
+            // Reset selections
+            document.getElementById('allGTB').value = '';
+            document.getElementById('hannaford').value = '';
+        }
+
+        function updateGTBOptions() {
+            const allGTB = document.getElementById('allGTB').value;
+            const hannafordOptions = document.getElementById('hannafordOptions');
+            const catalogueSelection = document.getElementById('catalogueSelection');
+
+            if (allGTB === 'yes') {
+                hannafordOptions.classList.remove('hidden');
+                catalogueSelection.classList.add('hidden');
+            } else if (allGTB === 'no') {
+                hannafordOptions.classList.add('hidden');
+                catalogueSelection.classList.remove('hidden');
+            }
+        }
+
+        function updateHannafordOptions() {
+            const hannaford = document.getElementById('hannaford').value;
+            const catalogueSelection = document.getElementById('catalogueSelection');
+            const gtbOptions = document.getElementById('allGTB').value;
+
+            if (hannaford === 'yes') {
+                catalogueSelection.classList.add('hidden');
+            } else if (hannaford === 'no' && gtbOptions === 'no') {
+                catalogueSelection.classList.remove('hidden');
+            }
+        }
+
+        function validateInputs() {
+            let valid = true;
+            const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'walletId', 'budget', 'flightStartDate', 'flightEndDate', 'numberOfDays', 'tactic'];
+
+            requiredFields.forEach(id => {
+                const input = document.getElementById(id);
+                if (!input.value) {
+                    valid = false;
+                    input.classList.add('highlight');
+                } else {
+                    input.classList.remove('highlight');
+                }
+            });
+
+            if (document.getElementById('tactic').value === 'BAx') {
+                if (document.getElementById('allGTB').value === 'no' && !document.querySelectorAll('.catalogue:checked').length) {
+                    valid = false;
+                    document.getElementById('formError').textContent = 'Please select at least one catalogue.';
+                } else {
+                    document.getElementById('formError').textContent = '';
+                }
+            }
+
+            return valid;
+        }
+        function extractSlug(url) {
+        const regex = /[?&]997=([^&]*)/; // Regex to find slug
+        const match = url.match(regex);   // Match the slug
+        return match ? match[1] : '';     // Return the slug or an empty string if not found
+}
+
+         function generateData() {
+            if (!validateInputs()) {
+                return;
+            }
+
+            const dealName = highlightSpecialChars(document.getElementById('dealName').value.replace(/[\s/]/g, '_'));
+            const dealId = highlightSpecialChars(document.getElementById('dealId').value);
+            const team = highlightSpecialChars(document.getElementById('team').value);
+            const walletName = highlightSpecialChars(document.getElementById('walletName').value.replace(/[\s/]/g, '_'));
+            const walletId = highlightSpecialChars(walletName.substring(0, 7)); // Extract the first 7 characters
+            document.getElementById('walletId').value = walletId; // Set the walletId field value
+            const budget = parseFloat(document.getElementById('budget').value);
+            const flightStartDate = document.getElementById('flightStartDate').value;
+            const flightEndDate = document.getElementById('flightEndDate').value;
+            const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
+            const slug = document.getElementById('slug').value.trim();
+            const tactic = document.getElementById('tactic').value;
+            const allGTB = document.getElementById('allGTB').value;
+            const hannaford = document.getElementById('hannaford').value;
+            const catalogueSelections = Array.from(document.querySelectorAll('.catalogue:checked')).map(cb => cb.value);
+
+            let bufferMultiplier;
+    let pointBuffer;
+
+    switch (tactic) {
+        case 'SPA':
+            bufferMultiplier = 1.40; // SPA may have a different multiplier if needed
+            pointBuffer = '40%'; // Point buffer for SPA
+            break;
+        case 'BAx':
+            bufferMultiplier = 1.05;
+            pointBuffer = '5%'; // Point buffer for BAX
+            break;
+    }
+
+    const walletCap = Math.round((budget / numberOfDays) * bufferMultiplier);
+    const rosBuffer = Math.round(walletCap * 0.25); // Calculate ROS Campaign Buffer (25% of wallet cap)
+
+    let resultText = `<P> Hi @</p>
+                      <p>Note:</p>
+                      <p>1.</p>
+                      <p>2.</p>
+                      <p>The campaigns have been trafficked and QAed. Below are the details: </p>
+                      <p><strong>Deal Name:</strong> ${dealName}</p>
+                      <p><strong>Deal ID:</strong> ${dealId}</p>
+                      <p><strong>Team:</strong> ${team}</p>
+                      <p><strong>Wallet Name:</strong> ${walletName}</p>
+                      <p><strong>Wallet ID:</strong> ${walletId}</p>
+                      <p><strong>Slug URL:/pages/${slug}</p></strong> 
+                      <p><strong>Budget:</strong> $${budget.toFixed(2)}</p>
+                      <p><strong>Flight Start Date:</strong> ${flightStartDate}</p>
+                      <p><strong>Flight End Date:</strong> ${flightEndDate}</p>
+                      <p><strong>Number of Days:</strong> ${numberOfDays}</p>
+                      <p><strong>Wallet Cap:</strong> $${walletCap.toFixed(2)}</p>
+                      <p><strong>Buffer Used:</strong> ${pointBuffer}</p>`; // Add point buffer information
+            if (tactic === 'SPA') {
+                resultText += '<div class="placements">';
+                resultText += '<h2 class="section-title">SPA Placements:</h2>';
+                resultText += `
+                    <p><strong>Category:</strong></p>
+                    <ul>
+                        <li>${walletId}_SL_CAT_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Category 2:</strong></p>
+                    <ul>
+                        <li>${walletId}_SL_CAT2_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Product details Page:</strong></p>
+                    <ul>
+                        <li>${walletId}_SL_PDP_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Past Purchases:</strong></p>
+                    <ul>
+                        <li>${walletId}_SL_PP_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Order confirmation:</strong></p>
+                    <ul>
+                        <li>${walletId}_SL_OC_${dealName}_${dealId}</li>
+                    </ul>
+                    
+                    <p><strong>Search:</strong></p>
+                    <ul>
+                        <li>${walletId}_SL_KWT_${dealName}_${dealId}</li>
+                    </ul>
+                </div>`;
+            } else if (tactic === 'BAx') {
+                if (allGTB === 'yes') {
+                    resultText += '<div class="placements">';
+                    resultText += '<h2 class="section-title">BAX Placements:</h2>';
+                    resultText += `<p><strong>ROS Campaign Buffer:</strong> $${rosBuffer}</p>`; // Add only if BAx
+                    resultText += `
+                        <p><strong>Search Banner X:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_Search_Top_BannerX_${dealName}_${dealId}</li>
+                            <li>${walletId}_BA_Search_Below_20th_Product_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+
+                        <p><strong>Category Banner X:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_CAT_Middle_BannerX_${dealName}_${dealId}</li>
+                            <li>${walletId}_BA_CAT_Bottom_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+
+                        <p><strong>Category L2 Banner X:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_CATL2_Below_20th_Product_BannerX_${dealName}_${dealId}</li>
+                            <li>${walletId}_BA_CATL2_Bottom_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+
+                        <p><strong>Homepage Banner X:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_HP_Bottom_BannerX_${dealName}_${dealId}</li>
+                            <li>${walletId}_BA_HP_MID_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+
+                        <p><strong>Run on Site Banner X:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_ROS_Run_of_Site_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+
+                        <p><strong>Past Purchases:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_PP_Top_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+                        
+                        <p><strong>Product Details Page:</strong></p>
+                        <ul>
+                            <li>${walletId}_BA_PDP_Top_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+                        
+                    </div>`;
+                } else if (allGTB === 'no') {
+                    if (catalogueSelections.length > 0) {
+                        resultText += '<div class="placements">';
+                        resultText += '<h2 class="section-title">Catalogue Placements:</h2>';
+                        resultText += `<p><strong>ROS Campaign Buffer:</strong> $${rosBuffer}</p>`; // Add only if BAx
+                        const catalogueShortforms = catalogueSelections.sort().join('_');
+
+                        resultText += `
+                            <p><strong>Search Banner X:</strong></p>
+                            <ul>
+                                <li>${walletId}_BA_${catalogueShortforms}_Search_Top_BannerX_${dealName}_${dealId}</li>
+                                <li>${walletId}_BA_${catalogueShortforms}_Search_Below_20th_Product_BannerX_${dealName}_${dealId}</li>
+                            </ul>
+
+                            <p><strong>Category Banner X:</strong></p>
+                            <ul>
+                                <li>${walletId}_BA_${catalogueShortforms}_CAT_Middle_BannerX_${dealName}_${dealId}</li>
+                                <li>${walletId}_BA_${catalogueShortforms}_CAT_Bottom_BannerX_${dealName}_${dealId}</li>
+                            </ul>
+
+                            <p><strong>Category L2 Banner X:</strong></p>
+                            <ul>
+                                <li>${walletId}_BA_${catalogueShortforms}_CATL2_Below_20th_Product_BannerX_${dealName}_${dealId}</li>
+                                <li>${walletId}_BA_${catalogueShortforms}_CATL2_Bottom_BannerX_${dealName}_${dealId}</li>
+                            </ul>
+
+                            <p><strong>Homepage Banner X:</strong></p>
+                            <ul>
+                                <li>${walletId}_BA_${catalogueShortforms}_HP_Bottom_BannerX_${dealName}_${dealId}</li>
+                                <li>${walletId}_BA_${catalogueShortforms}_HP_MID_BannerX_${dealName}_${dealId}</li>
+                            </ul>
+
+                            <p><strong>Run on Site Banner X:</strong></p>
+                            <ul>
+                                <li>${walletId}_BA_${catalogueShortforms}_ROS_Run_of_Site_BannerX_${dealName}_${dealId}</li>
+                            </ul>
+
+                            <p><strong>Past Purchases:</strong></p>
+                            <ul>
+                                <li>${walletId}_BA_${catalogueShortforms}_PP_Top_BannerX_${dealName}_${dealId}</li>
+                            </ul>
+                            
+                            <p><strong>Product Details Page:</strong></p>
+                            <ul>
+                            <li>${walletId}_BA_${catalogueShortforms}_PDP_Top_BannerX_${dealName}_${dealId}</li>
+                        </ul>
+                        </div>`;
+                    }
+                }
+            }
+
+            if (hannaford === 'yes') {
+                resultText += '<div class="placements">';
+                resultText += '<h2 class="section-title">Hannaford Placements:</h2>';
+                resultText += `
+                    <p><strong>Category L2:</strong></p>
+                    <ul>
+                        <li>${walletId}_BA_Han_CATL2_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Category Top:</strong></p>
+                    <ul>
+                        <li>${walletId}_BA_Han_CATTB_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Homepage:</strong></p>
+                    <ul>
+                        <li>${walletId}_BA_Han_HP_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Department:</strong></p>
+                    <ul>
+                        <li>${walletId}_BA_Han_DP_${dealName}_${dealId}</li>
+                    </ul>
+                    
+                    <p><strong>Search:</strong></p>
+                    <ul>
+                        <li>${walletId}_BA_Han_KWT_${dealName}_${dealId}</li>
+                    </ul>
+                    
+                </div>`;
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+        }
+
+        function updateWalletId() {
+            const walletName = document.getElementById('walletName').value;
+            if (walletName) {
+                // Remove non-numeric characters
+                let walletId = walletName.replace(/\D/g, '');
+
+                // Ensure walletId is exactly 7 digits long
+                if (walletId.length > 7) {
+                    walletId = walletId.substring(0, 7);
+                } else if (walletId.length < 7) {
+                    walletId = walletId.padStart(7, '0');
+                }
+
+                document.getElementById('walletId').value = walletId;
+            } else {
+                document.getElementById('walletId').value = '';
+            }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+    flatpickr("#flightStartDate", {
+        dateFormat: "m-d-y", // Format of the selected date
+        onChange: function(selectedDates, dateStr, instance) {
+            calculateDays(); // Call your existing function to calculate days
+        }
+    });
+
+    flatpickr("#flightEndDate", {
+        dateFormat: "m-d-y", // Format of the selected date
+        onChange: function(selectedDates, dateStr, instance) {
+            calculateDays(); // Call your existing function to calculate days
+        }
+    });
+});
+  </script>
+</body>
+</html>
