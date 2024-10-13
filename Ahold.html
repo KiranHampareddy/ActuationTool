@@ -5,195 +5,293 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <title>Deal Placement Generator</title>
+  <title>Ahold Actuation</title>
   <style>
         body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f7f9; /* Light background */
-    color: #333; /* Default text color */
-    margin: 0;
-    padding: 0;
-}
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f4f8; /* Softer light background */
+            color: #333; /* Default text color */
+            margin: 0;
+            padding: 0;
+        }
 
-h1 {
-    background-color: #005a32; /* Ahold green */
-    color: #fff; /* White text */
-    padding: 20px;
-    text-align: center;
-    margin: 0;
-}
+        h1 {
+            background-color: #004d3d; /* Rich green */
+            color: #fff; /* White text */
+            padding: 20px;
+            text-align: center;
+            margin: 0;
+            font-size: 2.5rem; /* Larger heading */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
 
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff; /* White container */
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
+        .container {
+            max-width: 1200px; /* Wider container */
+            margin: 20px auto;
+            padding: 30px; /* Increased padding */
+            background-color: #fff; /* White background */
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
 
-form {
-    display: flex;
-    flex-direction: column;
-}
+        .input-box {
+            padding: 20px; /* Padding inside the box */
+            background-color: #fafafa; /* Light grey background for the input box */
+            border: 1px solid #e0e0e0; /* Light border */
+            border-radius: 12px; /* Rounded corners */
+            margin-bottom: 20px; /* Space below the input box */
+        }
 
-label {
-    font-weight: bold;
-    margin-bottom: 8px;
-}
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: margin-left; /* Center inputs */
+            max-width: 600px; /* Limit form width */
+            margin: 0 auto; /* Center the form */
+        }
 
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select {
-    padding: 10px;
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 4px;
-    margin-bottom: 15px;
-    font-size: 16px;
-}
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1rem; /* Slightly larger labels */
+            color: #005a32; /* Dark green for labels */
+        }
 
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-select:focus {
-    border-color: #005a32; /* Focus border in green */
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 90, 50, 0.2); /* Light green shadow */
-}
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%; /* Full width for inputs */
+            padding: 12px; /* Increased padding for comfort */
+            border: 1px solid #ddd; /* Light border */
+            border-radius: 8px; /* Rounded corners */
+            margin-bottom: 15px;
+            font-size: 16px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+        }
 
-button {
-    padding: 10px 20px;
-    background-color: #4caf50; /* Lighter green */
-    color: #fff; /* White text */
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #007a5e; /* Focus border in green */
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 122, 94, 0.3); /* Light green shadow */
+        }
 
-button:hover {
-    background-color: #388e3c; /* Darker green on hover */
-}
+        button {
+            padding: 12px 24px; /* Larger button */
+            background-color: #28a745; /* Brighter button */
+            color: #fff; /* White text */
+            border: none;
+            border-radius: 8px; /* Round buttons more */
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle button shadow */
+            margin-top: 10px; /* Space above button */
+        }
 
-.highlight {
-    border: 2px solid #005a32; /* Highlight with green border */
-}
+        .center-button {
+            display: flex;
+           justify-content: center;
+          margin: 20px 0; /* Optional: adds some space above and below */
+        }
 
-.hidden {
-    display: none;
-}
-
-.section-title {
-    font-size: 18px;
-    margin: 20px 0 10px;
-    color: #005a32; /* Section titles in green */
-}
-
-.placements ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-.placements ul li {
-    background-color: #e8f5e9; /* Light green for list items */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 4px;
-    margin: 5px 0;
-    padding: 10px;
-}
-
-.form-error {
-    color: #e74c3c; /* Error text in red */
-    margin-top: 10px;
-}
-
-.result {
-    background-color: #e9f5ff; /* Light blue for result section */
-    border: 1px solid #b3d8ff; /* Light blue border */
-    padding: 20px;
-    border-radius: 8px;
-}
-   .highlight {
-            color: brightred; /* Use red color for highlighting */
+        .highlight {
+            color: #d9534f; /* Use red color for highlighting */
             font-weight: bold;
         }
-        
-    .red-text {
-    color: #ff0000; /* Bright red for emphasis */
-    font-weight: bold; /* Bold text for visibility */
-}
 
-  </style>
+        .red-text {
+            color: #ff0000; /* Bright red for emphasis */
+            font-weight: bold; /* Bold text for visibility */
+        }
+
+        .section-title {
+            font-size: 1.5rem; /* Increase section title size */
+            margin: 20px 0 10px;
+            color: #005a32; /* Section titles in green */
+        }
+
+        .output-container {
+            display: flex; /* Flexbox for side-by-side layout */
+            justify-content: space-between; /* Space between items */
+            margin-top: 20px; /* Space above the output container */
+           
+        }
+
+        .result {
+            flex: 1; /* Allow result to take more space */
+            background-color: #e9f5ff; /* Light blue for result section */
+            border: 1px solid #b3d8ff; /* Light blue border */
+            padding: 20px;
+             min-height: 700px;
+            border-radius: 8px;
+            margin-left: 20px; /* Space between result and EI notes */
+        }
+
+        .ei-notes {
+    background-color: #d1e7dd; /* Softer green */
+    border: 1px solid #b3d8ff; /* Darker border for definition */
+    border-radius: 8px;
+    height: 700px; /* Set a specific height for the info box */
+    padding: 20px; /* Add more padding */
+    color: #333; /* Dark text for readability */
+    width: 400px; /* Fixed width for notes */
+    box-sizing: border-box; /* Include padding and border in height and width */
+}
+        .form-error {
+            color: #c0392b; /* Darker red for errors */
+            margin-top: 10px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap; /* Wrap buttons on smaller screens */
+        }
+
+        .catalogue-button {
+            background-color: #e0e0e0; /* Light grey */
+            color: #333; /* Dark text */
+            border: none;
+            border-radius: 8px; /* Rounded corners */
+            padding: 10px 20px; /* Padding for comfort */
+            margin: 5px; /* Space between buttons */
+            cursor: pointer;
+            font-size: 16px; /* Font size */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transitions */
+        }
+
+        .catalogue-button.selected {
+            background-color: #28a745; /* Green for selected */
+            color: white; /* White text when selected */
+        }
+
+        .catalogue-button:hover {
+            background-color: #d0d0d0; /* Darker grey on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+    </style>
 </head>
 <body>
   <h1>Ahold Actuation</h1>
-  <div class="container">
-    <form id="placementForm" name="placementForm">
-      <label for="dealName">Deal Name:</label> <input type="text" id="dealName" name="dealName"> 
-      <label for="dealId">Deal ID:</label><input type="text" id="dealId" name="dealId"> 
-      <label for="team">Team:</label> <input type="text" id="team" name="team"> 
-      <label for="walletName">Wallet Name:</label><input type="text" id="walletName" name="walletName" oninput="updateWalletId()"> 
-      <label for="walletId">Wallet ID:</label> <input type="text" id="walletId" name="walletId" readonly> 
-      <label for="budget">Budget:</label> <input type="number" id="budget" name="budget" step="0.01"> 
-      <label for="urlInput">Input URL:</label><input type="text" id="urlInput" name="urlInput" placeholder="Enter the URL here" oninput="updateSlug()">
-      <label for="slug">Slug URL:</label><input type="text" id="slug" name="slug" readonly>
-      <label for="flightStartDate">Flight Start Date:</label> 
-      <input type="text" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
-      <label for="flightEndDate">Flight End Date:</label>
-      <input type="text" id="flightEndDate" name="flightEndDate" onchange="calculateDays()"> 
-      <label for="numberOfDays">Number of Days:</label> <input type="number" id="numberOfDays" name="numberOfDays" readonly> 
-      <label for="tactic">Tactic:</label> <select id="tactic" name="tactic" onchange="updateTactic()">
-        <option value="">
-          Select Tactic
-        </option>
-        <option value="BAx">
-          BAx
-        </option>
-        <option value="SPA">
-          SPA
-        </option>
-      </select>
-      <div id="gtbOptions" class="hidden">
-        <label for="allGTB">Include all GTB options:</label> <select id="allGTB" name="allGTB" onchange="updateGTBOptions()">
-          <option value="">
-            Select
-          </option>
-          <option value="yes">
-            Yes
-          </option>
-          <option value="no">
-            No
-          </option>
+    <div class="input-box">
+      <form id="placementForm" name="placementForm">
+        <label for="dealName">Deal Name:</label>
+        <input type="text" id="dealName" name="dealName"> 
+
+        <label for="dealId">Deal ID:</label>
+        <input type="text" id="dealId" name="dealId"> 
+
+        <label for="team">Team:</label>
+        <input type="text" id="team" name="team"> 
+
+        <label for="walletName">Wallet Name:</label>
+        <input type="text" id="walletName" name="walletName" oninput="updateWalletId()"> 
+
+        <label for="walletId">Wallet ID:</label>
+        <input type="text" id="walletId" name="walletId" readonly> 
+
+        <label for="budget">Budget:</label>
+        <input type="number" id="budget" name="budget" step="0.01"> 
+
+        <label for="urlInput">Input URL:</label>
+        <input type="text" id="urlInput" name="urlInput" placeholder="Enter the URL here" oninput="updateSlug()">
+
+        <label for="slug">Review Slug URL:</label>
+        <input type="text" id="slug" name="slug" readonly>
+
+        <label for="flightStartDate">Flight Start Date:</label> 
+        <input type="text" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
+
+        <label for="flightEndDate">Flight End Date:</label>
+        <input type="text" id="flightEndDate" name="flightEndDate" onchange="calculateDays()"> 
+
+        <label for="numberOfDays">Number of Days:</label> 
+        <input type="number" id="numberOfDays" name="numberOfDays" readonly> 
+
+        <label for="tactic">Tactic:</label> 
+        <select id="tactic" name="tactic" onchange="updateTactic()">
+          <option value="">Select Tactic</option>
+          <option value="BAx">BAx</option>
+          <option value="SPA">SPA</option>
         </select>
-        <div id="hannafordOptions" class="hidden">
-          <label for="hannaford">Include Hannaford options:</label> <select id="hannaford" name="hannaford" onchange="updateHannafordOptions()">
-            <option value="">
-              Select
-            </option>
-            <option value="yes">
-              Yes
-            </option>
-            <option value="no">
-              No
-            </option>
+
+        <div id="gtbOptions" class="hidden">
+          <label for="allGTB">Include all GTB options:</label> 
+          <select id="allGTB" name="allGTB" onchange="updateGTBOptions()">
+            <option value="">Select</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
           </select>
+          
+          <div id="hannafordOptions" class="hidden">
+            <label for="hannaford">Include Hannaford options:</label> 
+            <select id="hannaford" name="hannaford" onchange="updateHannafordOptions()">
+              <option value="">Select</option>
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </div>
+          
+          <div id="catalogueSelection" class="hidden">
+    <label>Catalogue Selections:</label><br>
+    <button type="button" class="catalogue-button" onclick="toggleSelection(this, 'GIANT')">GIANT</button>
+    <button type="button" class="catalogue-button" onclick="toggleSelection(this, 'MAR')">MAR</button>
+    <button type="button" class="catalogue-button" onclick="toggleSelection(this, 'FDL')">FDL</button>
+    <button type="button" class="catalogue-button" onclick="toggleSelection(this, 'Giant_Food')">Giant Food</button>
+    <button type="button" class="catalogue-button" onclick="toggleSelection(this, 'SNS')">SNS</button>
+</div>
+          </div>
         </div>
-        <div id="catalogueSelection" class="hidden">
-          <label>Catalogue Selections:</label><br>
-          <input type="checkbox" class="catalogue" value="GIANT"> GIANT<br>
-          <input type="checkbox" class="catalogue" value="MAR"> MAR<br>
-          <input type="checkbox" class="catalogue" value="FDL"> FDL<br>
-          <input type="checkbox" class="catalogue" value="Giant_Food"> Giant_Food<br>
-          <input type="checkbox" class="catalogue" value="SNS"> SNS<br>
-        </div>
-      </div><button type="button" onclick="generateData()">Generate Placements</button>
-      <p id="formError" class="form-error"></p>
-    </form>
-    <div id="result" class="result"></div>
+        <div class="center-button">
+        <button type="button" onclick="generateData()">Click for Magic</button>
+        <p id="formError" class="form-error"></p>
+      </form>
+    </div>
+    
+<div class="output-container" style="font-family: Arial, sans-serif; padding: 20px; background-color: #f0fff0; border-radius: 8px; border: 1px solid #d0e7d0;">
+  <div id="result" class="result" style="margin-bottom: 20px;"></div>
+  <div class="ei-notes">
+    <h2 class="section-title" style="color: #2c5c2f; border-bottom: 2px solid #a8d8a8; padding-bottom: 10px;">Trafficking Prerequisites</h2>
+    <p><strong>Trafficking Guides and Notes:</strong></p>
+    
+          <h3 style="color: #4a994a;">Banner X:</h3>
+          <ul style="list-style-type: none; padding-left: 0;">
+           <li>CPC for All Banner X Placements Except for "Homepage": <strong>$0.014</strong></li>
+             <li>CPC for Homepage Placement: <strong>$0.013</strong></li>
+            <li>CPC for ROS (Run of Site) Placement: <strong>$0.013</strong> (with 25% wallet buffer)</li>
+          </ul>
+      <p><strong>Note:</strong> Refer to the ADRM Banner X Trafficking Guide for details.</p>
+      <p><strong>Link:</strong></p>
+    <p>
+  <a href="https://lion.app.box.com/file/1477928492899?s=isih8qkumogvxd6xyetik0zi9lcad0ku" target="_blank" style="text-decoration: none; color: #2c5c2f;">ADRM Banner X Trafficking Guide</a>
+  </p>
+
+    <h3 style="color: #4a994a;">SPA:</h3>
+    <p><strong>CPCs as follows:</strong></p>
+    <ul style="list-style-type: none; padding-left: 0;">
+      <li>CAT: <strong>$0.014</strong></li>
+      <li>CAT2: <strong>$0.014</strong></li>
+      <li>PDP: <strong>$0.013</strong></li>
+      <li>PP: <strong>$0.013</strong></li>
+      <li>OC: <strong>$0.014</strong></li>
+      <li>Search: <strong>$0.014</strong></li>
+    </ul>
+    <p><strong>Link:</strong></p>
+    <p>
+      <a href="https://lion.app.box.com/file/1476602898575?s=uj7cuh4edqeu7tpsmg9ys5i8nsi0betn" target="_blank" style="text-decoration: none; color: #2c5c2f;">ADRM SPA Trafficking Guide</a>
+    </p>
   </div>
+</div>
+  
   <script>
+        
            function updateSlug() {
             const urlInput = document.getElementById('urlInput').value; // Get the URL input
             const slug = extractSlug(urlInput);                         // Extract the slug
@@ -205,20 +303,26 @@ button:hover {
             const match = url.match(regex);   // Match the slug
             return match ? match[1] : '';     // Return the slug or an empty string if not found
         }
-// Calculate the number of days between start and end dates
+            // Calculate the number of days between start and end dates
 
-        function calculateDays() {
-        const startDate = new Date(document.getElementById('flightStartDate').value);
-        const endDate = new Date(document.getElementById('flightEndDate').value);
-    
-    if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
-        const diffTime = Math.abs(endDate - startDate);
-        const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 for extra count
-        document.getElementById('numberOfDays').value = numberOfDays;
-    } else {
-        document.getElementById('numberOfDays').value = '';
-    }
-}
+            function calculateDays() {
+                const startDate = new Date(document.getElementById("flightStartDate").value);
+                const endDate = new Date(document.getElementById("flightEndDate").value);
+
+                if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+                    if (startDate > endDate) {
+                        document.getElementById("numberOfDays").value = "Start date must be before end date.";
+                    } else {
+                        const diffTime = endDate - startDate; // No need for Math.abs since startDate <= endDate
+                        const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 for extra count
+                        document.getElementById("numberOfDays").value = numberOfDays;
+                    }
+                }
+                
+                else {
+                    document.getElementById("numberOfDays").value = ""; // Clear if invalid input
+                }
+            }
         function highlightSpecialChars(text) {
     return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
 }
@@ -261,32 +365,44 @@ button:hover {
                 catalogueSelection.classList.remove('hidden');
             }
         }
+        
+        function toggleSelection(button, value) {
+    button.classList.toggle('selected'); // Toggle the selected class on button click
+}
 
         function validateInputs() {
-            let valid = true;
-            const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'walletId', 'budget', 'flightStartDate', 'flightEndDate', 'numberOfDays', 'tactic'];
+    let valid = true;
+    const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'walletId', 'budget', 'flightStartDate', 'flightEndDate', 'numberOfDays', 'tactic'];
 
-            requiredFields.forEach(id => {
-                const input = document.getElementById(id);
-                if (!input.value) {
-                    valid = false;
-                    input.classList.add('highlight');
-                } else {
-                    input.classList.remove('highlight');
-                }
-            });
-
-            if (document.getElementById('tactic').value === 'BAx') {
-                if (document.getElementById('allGTB').value === 'no' && !document.querySelectorAll('.catalogue:checked').length) {
-                    valid = false;
-                    document.getElementById('formError').textContent = 'Please select at least one catalogue.';
-                } else {
-                    document.getElementById('formError').textContent = '';
-                }
-            }
-
-            return valid;
+    requiredFields.forEach(id => {
+        const input = document.getElementById(id);
+        if (!input.value) {
+            valid = false;
+            input.classList.add('highlight');
+        } else {
+            input.classList.remove('highlight');
         }
+    });
+
+    // Updated logic for tactic and catalogue validation
+    if (document.getElementById('tactic').value === 'BAx') {
+        if (document.getElementById('allGTB').value === 'no' && !document.querySelectorAll('.catalogue-button.selected').length) {
+            valid = false;
+            document.getElementById('formError').textContent = 'Please select at least one catalogue.';
+        } else {
+            document.getElementById('formError').textContent = '';
+        }
+    }
+
+    return valid;
+}
+function getSelectedCatalogues() {
+    const selectedButtons = document.querySelectorAll('.catalogue-button.selected'); // Adjust selector if necessary
+    return Array.from(selectedButtons).map(button => button.textContent); // Get the text or value of selected buttons
+}
+
+
+
         function extractSlug(url) {
         const regex = /[?&]997=([^&]*)/; // Regex to find slug
         const match = url.match(regex);   // Match the slug
@@ -312,7 +428,7 @@ button:hover {
             const tactic = document.getElementById('tactic').value;
             const allGTB = document.getElementById('allGTB').value;
             const hannaford = document.getElementById('hannaford').value;
-            const catalogueSelections = Array.from(document.querySelectorAll('.catalogue:checked')).map(cb => cb.value);
+           const catalogueSelections = getSelectedCatalogues(); // Call the function to get selected catalogues
 
             let bufferMultiplier;
     let pointBuffer;
