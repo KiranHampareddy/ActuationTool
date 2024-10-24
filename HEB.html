@@ -136,7 +136,7 @@ Link: ${linkTo}
 
 Background: 
 
-Note:
+Notes:
 
 Thank you..!
         `.trim();
@@ -175,13 +175,21 @@ Line items:
 2. ${lineItemModified}
 
 Notes:
-${keyCallouts}
+
+Thank you..!
+
         `.trim();
     } else if (campaignType === "promotedProducts") {
         const [
-            onsiteOwner, campaignBuilder, crewName, supplier, campaignName,
-            lineItem, status, ioBudget, startDate, endDate, linkTo
-        ] = data;
+        onsiteOwner, campaignBuilder, crewName, newColumn1, // Keep the new columns for parsing
+        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+        cpm, goal, currentSpend, shouldSpend, pacing
+    ] = data;
+    
+        const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
+        const totalBudget = budget * 2;
+        const lineItemModified = lineItemName.replace("Search", "Category");
 
         output = `
 Hi
@@ -190,19 +198,23 @@ Below Promoted Products campaign has been set up and is ready for QA. Please QA 
 
 Team: ${supplier}
 
-Budget: ${ioBudget}
+Wallet: ${walletName}
 
-Flight date: ${startDate} to ${endDate}
+Flight dates: ${startDate} to ${endDate}
 
-Campaign name: ${campaignName}
+Budget: $${budget.toFixed(2)}
 
-Line item: ${lineItem}
+CPM: ${cpm}
 
-Link: ${linkTo}
+Total budget: $${totalBudget.toFixed(2)}
 
-Note:
+Line items:
+1. ${lineItemName}
+2. ${lineItemModified}
 
+Notes:
 Thank you..!
+
         `.trim();
     }
 
