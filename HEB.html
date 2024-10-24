@@ -6,58 +6,151 @@
     <title>Campaign Tool</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f7; /* Light gray */
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
-        label, select {
-            display: block;
+
+        .container {
+            max-width: 600px;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #c12e30; /* HEB Red */
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 300;
+            font-size: 2em;
+        }
+
+        label {
+            font-weight: bold;
             margin-top: 10px;
+            display: block;
         }
-        textarea {
+
+        select, textarea {
             width: 100%;
-            height: 100px;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
+
+        select:focus, textarea:focus {
+            border-color: #c12e30; /* HEB Red */
+            box-shadow: 0 0 5px rgba(193, 46, 48, 0.5);
+            outline: none;
+        }
+
         button {
+            background-color: #c12e30; /* HEB Red */
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
             margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.2s;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
+        button:hover {
+            background-color: #a41e20; /* Darker Red */
+            transform: scale(1.05);
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #333;
+            font-weight: 400;
+            font-size: 1.5em;
+        }
+
         pre {
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 5px;
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+            overflow: auto;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            line-height: 1.5; /* Improved line spacing */
+        }
+
+        pre:hover {
+            background-color: #e8e8e8; /* Slightly darker on hover */
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            h2 {
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
 <body>
 
-<h1>Campaign Tool</h1>
+<div class="container">
+    <h1>HEB Actuator</h1>
 
-<label for="campaignType">Select Campaign Type:</label>
-<select id="campaignType">
-    <option value="intragrid">IntraGrid</option>
-    <option value="cab">CAB</option>
-    <option value="headerBar">Header Bar</option>
-    <option value="promotedProducts">Promoted Products</option>
-</select>
+    <label for="campaignType">Select Campaign Type:</label>
+    <select id="campaignType">
+        <option value="intragrid">IntraGrid</option>
+        <option value="cab">CAB</option>
+        <option value="headerBar">Header Bar</option>
+        <option value="promotedProducts">Promoted Products</option>
+    </select>
 
-<div>
-    <label for="inputData">Paste your input data:</label>
-    <textarea id="inputData" placeholder="Paste your data in the specified format..."></textarea>
-    
-    <button onclick="generateOutput()">Generate Output</button>
+    <div>
+        <label for="inputData">Paste your input data:</label>
+        <textarea id="inputData" placeholder="Paste your data in the specified format..."></textarea>
+        
+        <button onclick="generateOutput()">Generate Output</button>
+    </div>
+
+    <h2>Output:</h2>
+    <pre id="outputData"></pre>
 </div>
-
-<h2>Output:</h2>
-<pre id="outputData"></pre>
 
 <script>
 function generateOutput() {
     const campaignType = document.getElementById("campaignType").value;
     const input = document.getElementById("inputData").value.trim();
 
-    // Normalize newlines and escape double quotes
     const normalizedInput = input
-        .replace(/(\r\n|\n|\r)/g, ' ')  // Replace newlines with spaces
-        .replace(/"/g, '\\"'); // Escape double quotes
+        .replace(/(\r\n|\n|\r)/g, ' ')
+        .replace(/"/g, '\\"');
 
     const data = normalizedInput.split('\t');
 
@@ -70,42 +163,43 @@ function generateOutput() {
 
     if (campaignType === "intragrid") {
         const [
-        onsiteOwner, campaignBuilder, crewName, newColumn1, // Keep the new columns for parsing
-        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
-        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-        cpm, goal, currentSpend, shouldSpend, pacing
-    ] = data;
-
+            onsiteOwner, campaignBuilder, crewName, newColumn1,
+            supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+            cpm, goal, currentSpend, shouldSpend, pacing
+        ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
 
         output = `
-Hi
+Hi @
 
 Below IntraGrid campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team: ${supplier}
+Team:                ${supplier}
 
-Wallet: ${walletName}
+Wallet:              ${walletName}
 
-Flight dates: ${startDate} to ${endDate}
+Flight dates:        ${startDate} to ${endDate}
 
-Budget: $${budget.toFixed(2)}
+Budget:              $${budget.toFixed(2)}
 
-CPM: ${cpm}
+CPM:                 ${cpm}
 
-Total budget: $${totalBudget.toFixed(2)}
+Total budget:        $${totalBudget.toFixed(2)}
 
 Line items:
-1. ${lineItemName}
-2. ${lineItemModified}
+
+${lineItemName}
+
+${lineItemModified}
 
 Notes:
 
+Thank you..!`;
 
-        `.trim();
     } else if (campaignType === "cab") {
         const [
             onsiteOwner, campaignBuilder, crewName, supplier, campaignName,
@@ -114,109 +208,109 @@ Notes:
         ] = data;
 
         output = `
-Hi
+Hi @
 
 Below CAB campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team: ${supplier}
+Team:                ${supplier}
 
-Wallet: ${walletName}
+Wallet:              ${walletName}
 
-Budget: ${ioBudget}
+Budget:              ${ioBudget}
 
-Flight date: ${startDate} to ${endDate}
+Flight date:         ${startDate} to ${endDate}
 
-Category: ${category}
+Category:            ${category}
 
-Line item name/Campaign name: ${lineItemName}
+Campaign name:       ${lineItemName}
 
-Copy: ${campaignName}
+Copy:                
 
-Link: ${linkTo}
+Link:                ${linkTo}
 
-Background: 
+Background:
 
-Notes:
+Notes: 
 
-Thank you..!
-        `.trim();
+Thank you..!`;
+
     } else if (campaignType === "headerBar") {
         const [
-        onsiteOwner, campaignBuilder, crewName, newColumn1, // Keep the new columns for parsing
-        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
-        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-        cpm, goal, currentSpend, shouldSpend, pacing
-    ] = data;
-
+            onsiteOwner, campaignBuilder, crewName, newColumn1,
+            supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+            cpm, goal, currentSpend, shouldSpend, pacing
+        ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Broad Display");
 
         output = `
-Hi
+Hi @
 
 Below Header Bar campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team: ${supplier}
+Team:                ${supplier}
 
-Wallet: ${walletName}
+Wallet:              ${walletName}
 
-Flight dates: ${startDate} to ${endDate}
+Flight dates:        ${startDate} to ${endDate}
 
-Budget: $${budget.toFixed(2)}
+Budget:              $${budget.toFixed(2)}
 
-CPM: ${cpm}
+CPM:                 ${cpm}
 
-Total budget: $${totalBudget.toFixed(2)}
+Total budget:        $${totalBudget.toFixed(2)}
 
 Line items:
-1. ${lineItemName}
-2. ${lineItemModified}
 
-Notes:
+${lineItemName}
 
-Thank you..!
+${lineItemModified}
 
-        `.trim();
+Notes: 
+
+Thank you..!`;
+
     } else if (campaignType === "promotedProducts") {
         const [
-        onsiteOwner, campaignBuilder, crewName, newColumn1, // Keep the new columns for parsing
-        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
-        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-        cpm, goal, currentSpend, shouldSpend, pacing
-    ] = data;
-    
+            onsiteOwner, campaignBuilder, crewName, newColumn1,
+            supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+            cpm, goal, currentSpend, shouldSpend, pacing
+        ] = data;
+
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
 
         output = `
-Hi
+Hi @
 
 Below Promoted Products campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team: ${supplier}
+Team:                ${supplier}
 
-Wallet: ${walletName}
+Wallet:              ${walletName}
 
-Flight dates: ${startDate} to ${endDate}
+Flight dates:        ${startDate} to ${endDate}
 
-Budget: $${budget.toFixed(2)}
+Budget:              $${budget.toFixed(2)}
 
-CPM: ${cpm}
+CPM:                 ${cpm}
 
-Total budget: $${totalBudget.toFixed(2)}
+Total budget:        $${totalBudget.toFixed(2)}
 
 Line items:
-1. ${lineItemName}
-2. ${lineItemModified}
 
-Notes:
+${lineItemName}
 
-Thank you..!
+${lineItemModified}
 
-        `.trim();
+Notes: 
+
+Thank you..!`;
     }
 
     document.getElementById("outputData").innerText = output;
