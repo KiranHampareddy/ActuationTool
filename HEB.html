@@ -70,11 +70,12 @@ function generateOutput() {
 
     if (campaignType === "intragrid") {
         const [
-            onsiteOwner, campaignBuilder, crewName, supplier, placementType,
-            campaignName, hrm, lineItem, walletName, lineItemName,
-            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-            cpm, goal, currentSpend, shouldSpend, pacing
-        ] = data;
+        onsiteOwner, campaignBuilder, crewName, newColumn1, // Keep the new columns for parsing
+        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+        cpm, goal, currentSpend, shouldSpend, pacing
+    ] = data;
+
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
@@ -102,7 +103,8 @@ Line items:
 2. ${lineItemModified}
 
 Notes:
-${keyCallouts}
+
+
         `.trim();
     } else if (campaignType === "cab") {
         const [
@@ -140,11 +142,12 @@ Thank you..!
         `.trim();
     } else if (campaignType === "headerBar") {
         const [
-            onsiteOwner, campaignBuilder, crewName, supplier, placementType,
-            campaignName, hrm, lineItem, walletName, lineItemName,
-            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-            cpm, goal, currentSpend, shouldSpend, pacing
-        ] = data;
+        onsiteOwner, campaignBuilder, crewName, newColumn1, // Keep the new columns for parsing
+        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+        cpm, goal, currentSpend, shouldSpend, pacing
+    ] = data;
+
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
