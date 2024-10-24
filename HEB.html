@@ -6,48 +6,85 @@
     <title>Campaign Tool</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
         }
-        label, select {
+        h1 {
+            color: #2c3e50;
+        }
+        label, select, textarea {
             display: block;
             margin-top: 10px;
+            width: 100%;
+        }
+        select, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
         }
         textarea {
-            width: 100%;
             height: 100px;
+            resize: vertical;
         }
         button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
             margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        h2 {
+            margin-top: 30px;
+            color: #34495e;
         }
         pre {
             background: #f0f0f0;
             padding: 10px;
             border-radius: 5px;
+            overflow-x: auto;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
 <body>
 
-<h1>Campaign Tool</h1>
+<div class="container">
+    <h1>Campaign Tool</h1>
 
-<label for="campaignType">Select Campaign Type:</label>
-<select id="campaignType">
-    <option value="intragrid">IntraGrid</option>
-    <option value="cab">CAB</option>
-    <option value="headerBar">Header Bar</option>
-    <option value="promotedProducts">Promoted Products</option>
-</select>
+    <label for="campaignType">Select Campaign Type:</label>
+    <select id="campaignType">
+        <option value="intragrid">IntraGrid</option>
+        <option value="cab">CAB</option>
+        <option value="headerBar">Header Bar</option>
+        <option value="promotedProducts">Promoted Products</option>
+    </select>
 
-<div>
-    <label for="inputData">Paste your input data:</label>
-    <textarea id="inputData" placeholder="Paste your data in the specified format..."></textarea>
-    
-    <button onclick="generateOutput()">Generate Output</button>
+    <div>
+        <label for="inputData">Paste your input data:</label>
+        <textarea id="inputData" placeholder="Paste your data in the specified format..."></textarea>
+        
+        <button onclick="generateOutput()">Generate Output</button>
+    </div>
+
+    <h2>Output:</h2>
+    <pre id="outputData"></pre>
 </div>
-
-<h2>Output:</h2>
-<pre id="outputData"></pre>
 
 <script>
 function generateOutput() {
@@ -69,19 +106,19 @@ function generateOutput() {
     let output = '';
 
     if (campaignType === "intragrid") {
-        const [
-            onsiteOwner, campaignBuilder, crewName, supplier, placementType,
-            campaignName, hrm, lineItem, walletName, lineItemName,
-            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-            cpm, goal, currentSpend, shouldSpend, pacing
-        ] = data;
+    const [
+        onsiteOwner, campaignBuilder, crewName, newColumn1, newColumn2, // Keep the new columns for parsing
+        supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
+        status, keyCallouts, ioBudget, startDate, endDate, dueDate,
+        cpm, goal, currentSpend, shouldSpend, pacing
+    ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
 
         output = `
-Hi
+Hi,
 
 Below IntraGrid campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
@@ -102,7 +139,8 @@ Line items:
 2. ${lineItemModified}
 
 Notes:
-${keyCallouts}
+
+Thank you...!
         `.trim();
     } else if (campaignType === "cab") {
         const [
@@ -112,7 +150,7 @@ ${keyCallouts}
         ] = data;
 
         output = `
-Hi
+Hi,
 
 Below CAB campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
@@ -132,7 +170,7 @@ Copy: ${campaignName}
 
 Link: ${linkTo}
 
-Background: 
+Background:
 
 Note:
 
@@ -151,7 +189,7 @@ Thank you..!
         const lineItemModified = lineItemName.replace("Search", "Broad Display");
 
         output = `
-Hi
+Hi,
 
 Below Header Bar campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
@@ -181,7 +219,7 @@ ${keyCallouts}
         ] = data;
 
         output = `
-Hi
+Hi,
 
 Below Promoted Products campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
