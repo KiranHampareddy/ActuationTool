@@ -282,7 +282,6 @@ Thank you..!`;
         ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
-        const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
 
         output = `
@@ -299,8 +298,6 @@ Flight dates:        ${startDate} to ${endDate}
 Budget:              $${budget.toFixed(2)}
 
 CPM:                 ${cpm}
-
-Total budget:        $${totalBudget.toFixed(2)}
 
 Line items:
 
