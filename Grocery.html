@@ -3,46 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retailer Data Analysis</title>
+    <title>Grocery Actuation</title>
+    <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #f9f9f9; /* Light background */
             margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            padding: 0;
         }
         .container {
-            display: flex;
-            justify-content: space-between;
-            width: 100%;
-            background-color: #ffffff; /* White background for the entire container */
+            background-color: #ffffff; /* White background for the container */
+            padding: 20px;
+            margin: 20px auto;
+            width: 90%;
+            max-width: 600px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-        }
-        .input-container {
-            width: 30%;
-        }
-        .output-container {
-            width: 35%;
-            display: flex;
-            flex-direction: column;
-        }
-        .side-container {
-            display: flex;
-            flex-direction: column;
-            width: 30%;
         }
         .heading {
-            background-color: #4caf50;
-            color: #ffffff;
+            background-color: #4caf50; /* Soft green */
+            color: #ffffff; /* White text */
             padding: 15px;
             border-radius: 10px;
             text-align: center;
             font-size: 24px;
-            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            margin: -20px -20px 20px -20px;
         }
         .form-group {
             margin-bottom: 15px;
@@ -54,139 +43,124 @@
             width: 100%;
             padding: 10px;
             margin-top: 5px;
-            border: 1px solid #ccc;
+            border: 1px solid #ccc; /* Light gray border */
             border-radius: 8px;
             box-sizing: border-box;
         }
         .highlight {
-            border-color: #81c784;
-            background-color: #e8f5e9;
-        }
-        .result, .lcp, .ei-team {
-            margin-top: 20px;
-            padding: 20px;
-            border-radius: 10px;
+            border-color: #81c784; /* Light green highlight */
+            background-color: #e8f5e9; /* Very light green background */
         }
         .result {
-            background-color: #f1f8e9;
-        }
-        .lcp {
-            background-color: #e0f7fa;
-            border: 1px solid #80deea;
-        }
-        .ei-team {
-            background-color: #e1bee7;
-            border: 1px solid #ba68c8;
-        }
-        .btn {
-            padding: 10px 20px;
-            color: #ffffff;
-            background-color: #388e3c;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 16px;
-        }
-        .btn:hover {
-            background-color: #2e7d32;
-        }
-        .red-text {
-            color: #ff0000;
-            font-weight: bold;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f1f8e9; /* Soft light green for results */
+            border-radius: 10px;
         }
         .hidden {
             display: none;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            color: #ffffff; /* White text */
+            background-color: #388e3c; /* Darker green */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2e7d32; /* Even darker green on hover */
+        }
+        .red-text {
+            color: #ff0000; /* Bright red for emphasis */
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="input-container">
-        <div class="heading">Grocery Actuation</div>
-        <div class="form-group">
-            <label for="dealName">Deal Name</label>
-            <input type="text" id="dealName" placeholder="Enter Deal Name">
-        </div>
-        <div class="form-group">
-            <label for="dealId">Deal ID</label>
-            <input type="text" id="dealId" placeholder="Enter Deal ID">
-        </div>
-        <div class="form-group">
-            <label for="team">Team</label>
-            <input type="text" id="team" placeholder="Enter Team Name">
-        </div>
-        <div class="form-group">
-            <label for="walletName">Wallet Name</label>
-            <input type="text" id="walletName" placeholder="Enter Wallet Name">
-        </div>
-        <div class="form-group">
-            <label for="budget">Budget</label>
-            <input type="number" id="budget" placeholder="Enter Budget">
-        </div>
-        <div class="form-group">
-            <label for="flightStartDate">Flight Start Date</label>
-            <input type="text" id="flightStartDate" placeholder="Select Start Date">
-        </div>
-        <div class="form-group">
-            <label for="flightEndDate">Flight End Date</label>
-            <input type="text" id="flightEndDate" placeholder="Select End Date">
-        </div>
-        <div class="form-group">
-            <label for="numberOfDays">Number of Days</label>
-            <input type="text" id="numberOfDays" placeholder="Number of Days" readonly>
-        </div>
-        <div class="form-group">
-            <label for="tactic">Select Tactic</label>
-            <select id="tactic" onchange="updateTactic()">
-                <option value="">-- Select Tactic --</option>
-                <option value="SPA">SPA</option>
-                <option value="BA">BA</option>
-            </select>
-        </div>
-        <div class="form-group hidden" id="placementFields">
-            <label for="kwGroupNames">KW Group Names (comma-separated)</label>
-            <input type="text" id="kwGroupNames" placeholder="Enter KW Group Names">
-            <label for="brand">Brand</label>
-            <input type="text" id="brand" placeholder="Enter Brand">
-        </div>
-        <div class="form-group">
-            <label for="walletCapType">Wallet Cap Type</label>
-            <select id="walletCapType">
-                <option value="capped">Capped</option>
-                <option value="uncapped">Uncapped</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <button class="btn" onclick="generateData()">Generate Data</button>
-        </div>
+    <!-- Heading -->
+    <div class="heading">Grocery Actuation</div>
+
+    <!-- Form for data input -->
+    <div class="form-group">
+        <label for="dealName">Deal Name</label>
+        <input type="text" id="dealName" placeholder="Enter Deal Name">
+    </div>
+    <div class="form-group">
+        <label for="dealId">Deal ID</label>
+        <input type="text" id="dealId" placeholder="Enter Deal ID">
+    </div>
+    <div class="form-group">
+        <label for="team">Team</label>
+        <input type="text" id="team" placeholder="Enter Team Name">
+    </div>
+    <div class="form-group">
+        <label for="walletName">Wallet Name</label>
+        <input type="text" id="walletName" placeholder="Enter Wallet Name">
+    </div>
+    <div class="form-group">
+        <label for="budget">Budget</label>
+        <input type="number" id="budget" placeholder="Enter Budget">
+    </div>
+    <div class="form-group">
+        <label for="flightStartDate">Flight Start Date</label>
+        <input type="text" id="flightStartDate" placeholder="Select Start Date">
+    </div>
+    <div class="form-group">
+        <label for="flightEndDate">Flight End Date</label>
+        <input type="text" id="flightEndDate" placeholder="Select End Date">
+    </div>
+    <div class="form-group">
+        <label for="numberOfDays">Number of Days</label>
+        <input type="text" id="numberOfDays" placeholder="Number of Days" readonly>
     </div>
 
-    <div class="output-container">
-        <div class="result" id="result"></div>
+    <!-- Tactic selection -->
+    <div class="form-group">
+        <label for="tactic">Select Tactic</label>
+        <select id="tactic" onchange="updateTactic()">
+            <option value="">-- Select Tactic --</option>
+            <option value="SPA">SPA</option>
+            <option value="BA">BA</option>
+        </select>
     </div>
 
-    <div class="side-container">
-        <div class="lcp" id="lcp">
-            <h3>LCP</h3>
-            <div id="lcpResult">Your LCP result will be displayed here.</div>
-            <p id="walletBalance">Wallet Balance: [Insert Wallet Balance Here]</p>
-        </div>
-        <div class="ei-team" id="eiTeam">
-            <h3>EI Team</h3>
-            <p>EI Team instructions:</p>
-            <ol>
-                <li>Please follow the code.</li>
-                <li>CPC = [Insert CPC Here]</li>
-            </ol>
-            <p id="eiTeamResult">Your EI Team details will be displayed here.</p>
-        </div>
+    <!-- KW Group Names and Brand fields, hidden initially -->
+    <div class="form-group hidden" id="placementFields">
+        <label for="kwGroupNames">KW Group Names (comma-separated)</label>
+        <input type="text" id="kwGroupNames" placeholder="Enter KW Group Names">
+        <label for="brand">Brand</label>
+        <input type="text" id="brand" placeholder="Enter Brand">
     </div>
+
+    <!-- Wallet Cap Type -->
+    <div class="form-group">
+        <label for="walletCapType">Wallet Cap Type</label>
+        <select id="walletCapType">
+            <option value="capped">Capped</option>
+            <option value="uncapped">Uncapped</option>
+        </select>
+    </div>
+
+    <!-- Generate Data Button -->
+    <div class="form-group">
+        <button class="btn" onclick="generateData()">Generate Data</button>
+    </div>
+
+    <!-- Section to display result -->
+    <div class="result" id="result"></div>
 </div>
 
+<!-- Flatpickr JS -->
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
+    // Initialize Flatpickr for date inputs
     document.addEventListener('DOMContentLoaded', function() {
         flatpickr('#flightStartDate', {
             dateFormat: "m/d/Y",
@@ -198,20 +172,32 @@
         });
     });
 
+    // Update visibility of KW Group Names and Brand fields based on tactic
     function updateTactic() {
         const tactic = document.getElementById('tactic').value;
         const placementFields = document.getElementById('placementFields');
-        placementFields.classList.toggle('hidden', tactic !== 'SPA');
+        if (tactic === 'SPA') {
+            placementFields.classList.remove('hidden');
+        } else if (tactic === 'BA') {
+            placementFields.classList.add('hidden');
+        }
     }
 
-    function calculateDays() {
+    // Calculate the number of days between start and end dates
+        function calculateDays() {
         const startDate = new Date(document.getElementById('flightStartDate').value);
         const endDate = new Date(document.getElementById('flightEndDate').value);
-        const numberOfDays = !isNaN(startDate) && !isNaN(endDate) ? 
-            Math.floor((endDate - startDate) / (1000 * 60 * 60 * 24)) + 1 : '';
+    
+        if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+        const diffTime = Math.abs(endDate - startDate);
+        const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 for extra count
         document.getElementById('numberOfDays').value = numberOfDays;
+        } else {
+        document.getElementById('numberOfDays').value = '';
     }
+}
 
+    // Validate inputs and highlight empty fields
     function validateInputs() {
         let valid = true;
         const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'budget', 'flightStartDate', 'flightEndDate', 'numberOfDays'];
@@ -227,16 +213,19 @@
         return valid;
     }
 
+    // Function to highlight special characters other than underscores in red
     function highlightSpecialChars(text) {
         return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
     }
 
+    // Generate and display the result data based on form inputs
     function generateData() {
         if (!validateInputs()) {
             alert('Please fill in all required fields.');
             return;
         }
 
+        // Highlight special characters in Deal Name and Wallet Name
         const dealName = highlightSpecialChars(document.getElementById('dealName').value.replace(/[\s/]/g, '_'));
         const dealId = document.getElementById('dealId').value;
         const team = document.getElementById('team').value;
@@ -248,25 +237,37 @@
         const tactic = document.getElementById('tactic').value;
         const walletCapType = document.getElementById('walletCapType').value;
 
-        const bufferMultiplier = 1.40;
+        // Buffer multiplier for budget calculations
+        const bufferMultiplier = 1.40; // 40% additional
         const bufferUsedText = '40%';
 
+        // Generate placements based on selected tactic
         let placements = '';
         if (tactic === 'SPA') {
             const kwGroupNames = document.getElementById('kwGroupNames').value.split(',').map(name => {
                 return highlightSpecialChars(name.trim().replace(/[\s/]/g, '_'));
             });
             const brand = highlightSpecialChars(document.getElementById('brand').value.replace(/\s+/g, '_'));
-            placements = `<ul>${kwGroupNames.map(name => `<li>KW_${name}_${brand}_${dealId}</li>`).join('')}<li>CAT_${brand}_${dealId}</li></ul>`;
+            placements = `
+                <ul>
+                    ${kwGroupNames.map(name => `<li>KW_${name}_${brand}_${dealId}</li>`).join('')}
+                    <li>CAT_${brand}_${dealId}</li>
+                </ul>
+            `;
         } else if (tactic === 'BA') {
             placements = `<p>ST_${dealName}_${dealId}</p>`;
         }
 
+        // Calculate wallet cap if capped
         const walletCap = walletCapType === 'capped' ? Math.round((budget / numberOfDays) * bufferMultiplier) : 'N/A';
 
+        // Display the generated data
         const resultHtml = `
             <p>Hi @</p>
             <p>The campaigns have been trafficked and QAed. Below are the details:</p>
+            <p>Note:</p>
+            <p>1.</p>
+            <p>2.</p>
             <p><strong>Details:</strong></p>
             <p>Deal Name: ${dealName}</p>
             <p>Deal ID: ${dealId}</p>
@@ -280,22 +281,6 @@
         `;
 
         document.getElementById('result').innerHTML = resultHtml;
-
-        const lcpResultHtml = `
-            <p><strong>Details:</strong></p>
-            <p>Deal Name: ${dealName}</p>
-            <p>Deal ID: ${dealId}</p>
-            <p>Team: ${team}</p>
-            <p>Wallet Name: ${walletName}</p>
-            <p>Budget: $${budget.toFixed(2)}</p>
-            <p>Flight Dates: ${flightStartDate} - ${flightEndDate}</p>
-            <p>Number of Days: ${numberOfDays}</p>
-            ${walletCapType === 'capped' ? `<p>Buffer Used: ${bufferUsedText}</p><p>Wallet Cap: $${walletCap}</p>` : ''}
-        `;
-        
-        document.getElementById('lcpResult').innerHTML = lcpResultHtml;
-        document.getElementById('walletBalance').innerText = "Wallet Balance: [Insert Wallet Balance Here]";
-        document.getElementById('eiTeamResult').innerText = "Your EI Team details will be displayed here."; // Replace with actual data
     }
 </script>
 
