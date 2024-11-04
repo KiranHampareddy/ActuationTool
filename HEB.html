@@ -163,38 +163,45 @@ function generateOutput() {
 
     if (campaignType === "intragrid") {
         const [
-            onsiteOwner, campaignBuilder, crewName, newColumn1,
-            supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
-            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-            cpm, goal, currentSpend, shouldSpend, pacing
+            onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
+            campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
+            ioBudget, startDate, endDate, dueDate, cpm, goal, currentSpend,
+            shouldSpend, flightLength, today, daysRemaining, daysCompleted, pacing
         ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
+        const cpmValue = parseFloat(cpm.replace(/[^0-9.-]+/g, "")); // Ensure cpmValue is calculated
+        const cpmPerThousand = (cpmValue / 1000);
 
         output = `
 Hi @
 
 Below IntraGrid campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team:                ${supplier}
+Team: ${supplier}
 
-Wallet:              ${walletName}
+Wallet: 
+${walletName}
 
-Flight dates:        ${startDate} to ${endDate}
+crewName/External ID: ${crewName}
 
-Budget:              $${budget.toFixed(2)}
+Flight dates: ${startDate} to ${endDate}
 
-CPM:                 ${cpm}
+Budget: $${budget.toFixed(2)}
 
-Total budget:        $${totalBudget.toFixed(2)}
+CPM: $${cpmValue} ($${cpmPerThousand})
+
+Total budget: $${totalBudget.toFixed(2)}
 
 Line items:
 
 ${lineItemName}
 
 ${lineItemModified}
+
+Advertisement for ${supplier}. Click to Product Page.
 
 Notes:
 
@@ -212,21 +219,26 @@ Hi @
 
 Below CAB campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team:                ${supplier}
+Team: ${supplier}
 
-Wallet:              ${walletName}
+Wallet:
+${walletName}
 
-Budget:              ${ioBudget}
+crewName: ${crewName}
 
-Flight date:         ${startDate} to ${endDate}
+Budget: ${ioBudget}
 
-Category:            ${category}
+Flight date: ${startDate} to ${endDate}
 
-Campaign name:       ${lineItemName}
+Category: ${category}
+
+Campaign name:       
+${lineItemName}
+
+Link:
+${linkTo}
 
 Copy:                
-
-Link:                ${linkTo}
 
 Background:
 
@@ -245,29 +257,36 @@ Thank you..!`;
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Broad Display");
+        const cpmValue = parseFloat(cpm.replace(/[^0-9.-]+/g, ""));
+        const cpmPerThousand = (cpmValue / 1000).toFixed(2);
 
         output = `
 Hi @
 
 Below Header Bar campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team:                ${supplier}
+Team: ${supplier}
 
-Wallet:              ${walletName}
+Wallet: 
+${walletName}
 
-Flight dates:        ${startDate} to ${endDate}
+crewName/External ID: ${crewName}
 
-Budget:              $${budget.toFixed(2)}
+Flight dates: ${startDate} to ${endDate}
 
-CPM:                 ${cpm}
+Budget: $${budget.toFixed(2)}
 
-Total budget:        $${totalBudget.toFixed(2)}
+CPM: ${cpmValue} ($${cpmPerThousand})
+
+Total budget: $${totalBudget.toFixed(2)}
 
 Line items:
 
 ${lineItemName}
 
 ${lineItemModified}
+
+Advertisement for ${supplier}. Click to Product Page.
 
 Notes: 
 
@@ -275,35 +294,44 @@ Thank you..!`;
 
     } else if (campaignType === "promotedProducts") {
         const [
-            onsiteOwner, campaignBuilder, crewName, newColumn1,
-            supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
-            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-            cpm, goal, currentSpend, shouldSpend, pacing
+            onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
+            campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
+            ioBudget, startDate, endDate, dueDate, cpm, goal, currentSpend,
+            shouldSpend, flightLength, today, daysRemaining, daysCompleted, pacing
         ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
+        const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
+        const cpmValue = parseFloat(cpm.replace(/[^0-9.-]+/g, ""));
+        const cpmPerThousand = (cpmValue / 1000).toFixed(2);
 
         output = `
 Hi @
 
 Below Promoted Products campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team:                ${supplier}
+Team: ${supplier}
 
-Wallet:              ${walletName}
+Wallet: ${walletName}
 
-Flight dates:        ${startDate} to ${endDate}
+crewName/External ID: ${crewName}
 
-Budget:              $${budget.toFixed(2)}
+Flight dates: ${startDate} to ${endDate}
 
-CPM:                 ${cpm}
+Budget: $${budget.toFixed(2)}
+
+CPM: ${cpmValue} ($${cpmPerThousand})
+
+Total budget: $${totalBudget.toFixed(2)}
 
 Line items:
 
 ${lineItemName}
 
 ${lineItemModified}
+
+Advertisement for ${supplier}. Click to Product Page.
 
 Notes: 
 
