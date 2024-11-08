@@ -148,9 +148,9 @@ function generateOutput() {
     const campaignType = document.getElementById("campaignType").value;
     const input = document.getElementById("inputData").value.trim();
 
-    const normalizedInput = input
-        .replace(/(\r\n|\n|\r)/g, ' ')
-        .replace(/"/g, '\\"');
+   const normalizedInput = input
+    .replace(/(\r\n|\n|\r)/g, ' ')  // Replace line breaks with a space
+    .replace(/"/g, '');              // Remove all double quotes
 
     const data = normalizedInput.split('\t');
 
@@ -321,17 +321,11 @@ Flight dates: ${startDate} to ${endDate}
 
 Budget: $${budget.toFixed(2)}
 
-CPM: ${cpmValue} ($${cpmPerThousand})
-
-Total budget: $${totalBudget.toFixed(2)}
-
 Line items:
 
 ${lineItemName}
 
 ${lineItemModified}
-
-Advertisement for ${supplier}. Click to Product Page.
 
 Notes: 
 
