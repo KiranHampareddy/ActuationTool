@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -203,6 +204,10 @@ ${lineItemModified}
 
 Advertisement for ${supplier}. Click to Product Page.
 
+Link: 
+
+Copy:
+
 Notes:
 
 Thank you..!`;
@@ -248,17 +253,17 @@ Thank you..!`;
 
     } else if (campaignType === "headerBar") {
         const [
-            onsiteOwner, campaignBuilder, crewName, newColumn1,
-            supplier, placementType, campaignName, hrm, lineItem, walletName, lineItemName,
-            status, keyCallouts, ioBudget, startDate, endDate, dueDate,
-            cpm, goal, currentSpend, shouldSpend, pacing
+            onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
+            campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
+            ioBudget, startDate, endDate, dueDate, cpm, goal, currentSpend,
+            shouldSpend, flightLength, today, daysRemaining, daysCompleted, pacing
         ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Broad Display");
         const cpmValue = parseFloat(cpm.replace(/[^0-9.-]+/g, ""));
-        const cpmPerThousand = (cpmValue / 1000).toFixed(2);
+        const cpmPerThousand = (cpmValue / 1000);
 
         output = `
 Hi @
@@ -304,7 +309,7 @@ Thank you..!`;
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Category");
         const cpmValue = parseFloat(cpm.replace(/[^0-9.-]+/g, ""));
-        const cpmPerThousand = (cpmValue / 1000).toFixed(2);
+        const cpmPerThousand = (cpmValue / 1000);
 
         output = `
 Hi @
