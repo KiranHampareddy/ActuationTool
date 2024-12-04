@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ticket Drafting Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    header {
+      background-color: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    .container {
+      width: 80%;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .select-section {
+      margin-bottom: 20px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 16px;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      display: block;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      background-color: #fff;
+    }
+
+    .input-section {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .input-section h3 {
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="number"], input[type="date"], input[type="url"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background-color: #fff;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, input[type="url"]:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+    }
+
+    .output {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .output h3 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .red-text {
+      color: red;
+      font-weight: bold;
+    }
+
+    .btn {
+      display: inline-block;
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-align: center;
+      margin: 0 auto;
+      width: 100%;
+      max-width: 200px;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .input-section input {
+      width: 48%;
+      display: inline-block;
+      margin-right: 4%;
+    }
+
+    .input-section input:last-child {
+      margin-right: 0;
+    }
+
+    .input-section .input-half {
+      width: 48%;
+      display: inline-block;
+    }
+
+    .input-section .input-half:last-child {
+      margin-right: 0;
+    }
+
+    .tactic-info {
+      font-size: 16px;
+      color: #333;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Ticket Drafting Tool</h1>
+  </header>
+
+  <div class="container">
+    <div class="select-section">
+      <label for="tactic">Select Tactic:</label>
+      <select id="tactic" onchange="showInputs()">
+        <option value="">--Select Tactic--</option>
+        <option value="SPA">SPA</option>
+        <option value="BAx">BAx</option>
+        <option value="Lockouts">Lockouts</option>
+      </select>
+    </div>
+
+    <!-- Inputs for SPA -->
+    <div id="spa" class="input-section">
+      <h3>SPA Inputs</h3>
+      <div class="form-group">
+        <label for="spa_deal_name">Deal Name:</label>
+        <input type="text" id="spa_deal_name">
+      </div>
+      <div class="form-group">
+        <label for="spa_deal_id">Deal ID:</label>
+        <input type="text" id="spa_deal_id">
+      </div>
+      <div class="form-group">
+        <label for="spa_additional">Additional Information:</label>
+        <input type="text" id="spa_additional">
+      </div>
+    </div>
+
+    <!-- Inputs for BAx -->
+    <div id="bax" class="input-section">
+      <h3>BAx Inputs</h3>
+      <div class="form-group">
+        <label for="dealName">Deal Name:</label>
+        <input type="text" id="dealName" name="dealName">
+      </div>
+      <div class="form-group">
+        <label for="dealId">Deal ID:</label>
+        <input type="text" id="dealId" name="dealId">
+      </div>
+      <div class="form-group">
+        <label for="team">Team:</label>
+        <input type="text" id="team" name="team">
+      </div>
+      <div class="form-group">
+        <label for="walletName">Wallet Name:</label>
+        <input type="text" id="walletName" name="walletName" oninput="updateWalletId()">
+      </div>
+      <div class="form-group">
+        <label for="walletId">Wallet ID:</label>
+        <input type="text" id="walletId" name="walletId" readonly>
+      </div>
+      <div class="form-group">
+        <label for="budget">Budget:</label>
+        <input type="number" id="budget" name="budget" step="0.01">
+      </div>
+      <div class="form-group">
+        <label for="appUrl">Input APP URL:</label>
+        <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here" oninput="validateUrls()">
+        <span id="appUrlError" class="error"></span>
+      </div>
+      <div class="form-group">
+        <label for="webUrl">Input WEB URL:</label>
+        <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here" oninput="validateUrls()">
+        <span id="webUrlError" class="error"></span>
+      </div>
+      <div class="form-group">
+        <label for="flightStartDate">Flight Start Date:</label>
+        <input type="date" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
+      </div>
+      <div class="form-group">
+        <label for="flightEndDate">Flight End Date:</label>
+        <input type="date" id="flightEndDate" name="flightEndDate" onchange="calculateDays()">
+      </div>
+      <div class="form-group">
+        <label for="numberOfDays">Number of Days:</label>
+        <input type="number" id="numberOfDays" name="numberOfDays" readonly>
+      </div>
+    </div>
+
+    <!-- Inputs for Lockouts -->
+    <div id="lockouts" class="input-section">
+      <h3>Lockouts Inputs</h3>
+      <div class="form-group">
+        <label for="lockouts_deal_name">Deal Name:</label>
+        <input type="text" id="lockouts_deal_name">
+      </div>
+      <div class="form-group">
+        <label for="lockouts_deal_id">Deal ID:</label>
+        <input type="text" id="lockouts_deal_id">
+      </div>
+      <div class="form-group">
+        <label for="lockouts_reason">Lockout Reason:</label>
+        <input type="text" id="lockouts_reason">
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div id="output" class="output">
+      <h3>Generated Output:</h3>
+      <p id="output_text">Once you fill out the form, the generated ticket will appear here.</p>
+    </div>
+
+    <button class="btn" onclick="generateOutput()">Generate Ticket</button>
+  </div>
+
+  <script>
+    function showInputs() {
+      var tactic = document.getElementById("tactic").value;
+      document.getElementById("spa").style.display = "none";
+      document.getElementById("bax").style.display = "none";
+      document.getElementById("lockouts").style.display = "none";
+      if (tactic === "SPA") {
+        document.getElementById("spa").style.display = "block";
+      } else if (tactic === "BAx") {
+        document.getElementById("bax").style.display = "block";
+      } else if (tactic === "Lockouts") {
+        document.getElementById("lockouts").style.display = "block";
+      }
+    }
+
+    function generateOutput() {
+      var tactic = document.getElementById("tactic").value;
+      var outputText = "";
+      if (tactic === "SPA") {
+        var dealName = document.getElementById("spa_deal_name").value;
+        var dealId = document.getElementById("spa_deal_id").value;
+        var additional = document.getElementById("spa_additional").value;
+        outputText = `SPA Ticket:
+                      <br>Deal Name: ${dealName}
+                      <br>Deal ID: ${dealId}
+                      <br>Additional Information: ${additional}`;
+      } else if (tactic === "BAx") {
+        var dealName = document.getElementById("dealName").value;
+        var dealId = document.getElementById("dealId").value;
+        var team = document.getElementById("team").value;
+        var walletName = document.getElementById("walletName").value;
+        var walletId = document.getElementById("walletId").value;
+        var budget = parseFloat(document.getElementById("budget").value);
+        var appUrl = document.getElementById("appUrl").value;
+        var webUrl = document.getElementById("webUrl").value;
+        var flightStartDate = document.getElementById("flightStartDate").value;
+        var flightEndDate = document.getElementById("flightEndDate").value;
+        var numberOfDays = document.getElementById("numberOfDays").value;
+        outputText = `BAx Ticket:
+                      <br>Deal Name: ${dealName}
+                      <br>Deal ID: ${dealId}
+                      <br>Team: ${team}
+                      <br>Wallet Name: ${walletName}
+                      <br>Wallet ID: ${walletId}
+                      <br>Budget: $${budget.toFixed(2)}
+                      <br>App URL: ${appUrl}
+                      <br>Web URL: ${webUrl}
+                      <br>Flight Start Date: ${flightStartDate}
+                      <br>Flight End Date: ${flightEndDate}
+                      <br>Number of Days: ${numberOfDays}`;
+      } else if (tactic === "Lockouts") {
+        var dealName = document.getElementById("lockouts_deal_name").value;
+        var dealId = document.getElementById("lockouts_deal_id").value;
+        var reason = document.getElementById("lockouts_reason").value;
+        outputText = `Lockouts Ticket:
+                      <br>Deal Name: ${dealName}
+                      <br>Deal ID: ${dealId}
+                      <br>Lockout Reason: ${reason}`;
+      }
+
+      document.getElementById("output_text").innerHTML = outputText;
+    }
+
+    function calculateDays() {
+      var startDate = document.getElementById("flightStartDate").value;
+      var endDate = document.getElementById("flightEndDate").value;
+
+      if (startDate && endDate) {
+        var start = new Date(startDate);
+        var end = new Date(endDate);
+        var timeDiff = end - start;
+        var days = timeDiff / (1000 * 3600 * 24);
+        document.getElementById("numberOfDays").value = days;
+      }
+    }
+
+    function updateWalletId() {
+      var walletName = document.getElementById("walletName").value;
+      document.getElementById("walletId").value = "ID-" + walletName.toUpperCase();
+    }
+
+    function validateUrls() {
+      var appUrl = document.getElementById("appUrl").value;
+      var webUrl = document.getElementById("webUrl").value;
+      var appUrlError = document.getElementById("appUrlError");
+      var webUrlError = document.getElementById("webUrlError");
+      var appPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+      var webPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+
+      if (!appPattern.test(appUrl)) {
+        appUrlError.textContent = "Please enter a valid app URL.";
+      } else {
+        appUrlError.textContent = "";
+      }
+
+      if (!webPattern.test(webUrl)) {
+        webUrlError.textContent = "Please enter a valid web URL.";
+      } else {
+        webUrlError.textContent = "";
+      }
+    }
+  </script>
+
+</body>
+</html>
