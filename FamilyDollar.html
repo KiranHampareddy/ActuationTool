@@ -5,274 +5,148 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ticket Drafting Tool</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    header {
-      background-color: #333;
-      color: white;
-      padding: 20px;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-    }
-
-    .container {
-      width: 80%;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    .select-section {
-      margin-bottom: 20px;
-    }
-
-    select {
-      padding: 10px;
-      font-size: 16px;
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: block;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      background-color: #fff;
-    }
-
     .input-section {
       display: none;
       margin-top: 20px;
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
     }
-
-    .input-section h3 {
-      color: #333;
-      margin-bottom: 15px;
-    }
-
     label {
-      font-weight: bold;
-      display: block;
-      margin-bottom: 5px;
+      margin-right: 10px;
     }
-
-    input[type="text"], input[type="number"], input[type="date"], input[type="url"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      background-color: #fff;
-      transition: border-color 0.3s;
-    }
-
-    input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, input[type="url"]:focus {
-      border-color: #4CAF50;
-      outline: none;
-    }
-
     .error {
       color: red;
       font-size: 12px;
     }
-
-    .output {
-      padding: 20px;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
-
-    .output h3 {
-      margin-bottom: 15px;
-      color: #333;
-    }
-
-    .red-text {
-      color: red;
-      font-weight: bold;
-    }
-
-    .btn {
-      display: inline-block;
-      background-color: #4CAF50;
-      color: white;
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      text-align: center;
-      margin: 0 auto;
-      width: 100%;
-      max-width: 200px;
-    }
-
-    .btn:hover {
-      background-color: #45a049;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .input-section input {
-      width: 48%;
-      display: inline-block;
-      margin-right: 4%;
-    }
-
-    .input-section input:last-child {
-      margin-right: 0;
-    }
-
-    .input-section .input-half {
-      width: 48%;
-      display: inline-block;
-    }
-
-    .input-section .input-half:last-child {
-      margin-right: 0;
-    }
-
-    .tactic-info {
-      font-size: 16px;
-      color: #333;
-      margin-top: 10px;
-    }
-
+     .red-text {
+    color: red;
+  }
   </style>
 </head>
 <body>
 
-  <header>
-    <h1>Ticket Drafting Tool</h1>
-  </header>
+  <h1>Family Dollar Legends Satish and Sarah</h1>
 
-  <div class="container">
-    <div class="select-section">
-      <label for="tactic">Select Tactic:</label>
-      <select id="tactic" onchange="showInputs()">
-        <option value="">--Select Tactic--</option>
-        <option value="SPA">SPA</option>
-        <option value="BAx">BAx</option>
-        <option value="Lockouts">Lockouts</option>
-      </select>
-    </div>
+  <!-- Dropdown for selecting tactic -->
+  <label for="tactic">Select Tactic:</label>
+  <select id="tactic" onchange="showInputs()">
+    <option value="">--Select Tactic--</option>
+    <option value="SPA">SPA</option>
+    <option value="BAx">BAx</option>
+    <option value="Lockouts">Lockouts</option>
+  </select>
 
-    <!-- Inputs for SPA -->
-    <div id="spa" class="input-section">
-      <h3>SPA Inputs</h3>
-      <div class="form-group">
-        <label for="spa_deal_name">Deal Name:</label>
-        <input type="text" id="spa_deal_name">
-      </div>
-      <div class="form-group">
-        <label for="spa_deal_id">Deal ID:</label>
-        <input type="text" id="spa_deal_id">
-      </div>
-      <div class="form-group">
-        <label for="spa_additional">Additional Information:</label>
-        <input type="text" id="spa_additional">
-      </div>
-    </div>
-
-    <!-- Inputs for BAx -->
-    <div id="bax" class="input-section">
-      <h3>BAx Inputs</h3>
-      <div class="form-group">
-        <label for="dealName">Deal Name:</label>
-        <input type="text" id="dealName" name="dealName">
-      </div>
-      <div class="form-group">
-        <label for="dealId">Deal ID:</label>
-        <input type="text" id="dealId" name="dealId">
-      </div>
-      <div class="form-group">
-        <label for="team">Team:</label>
-        <input type="text" id="team" name="team">
-      </div>
-      <div class="form-group">
-        <label for="walletName">Wallet Name:</label>
-        <input type="text" id="walletName" name="walletName" oninput="updateWalletId()">
-      </div>
-      <div class="form-group">
-        <label for="walletId">Wallet ID:</label>
-        <input type="text" id="walletId" name="walletId" readonly>
-      </div>
-      <div class="form-group">
-        <label for="budget">Budget:</label>
-        <input type="number" id="budget" name="budget" step="0.01">
-      </div>
-      <div class="form-group">
-        <label for="appUrl">Input APP URL:</label>
-        <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here" oninput="validateUrls()">
-        <span id="appUrlError" class="error"></span>
-      </div>
-      <div class="form-group">
-        <label for="webUrl">Input WEB URL:</label>
-        <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here" oninput="validateUrls()">
-        <span id="webUrlError" class="error"></span>
-      </div>
-      <div class="form-group">
-        <label for="flightStartDate">Flight Start Date:</label>
-        <input type="date" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
-      </div>
-      <div class="form-group">
-        <label for="flightEndDate">Flight End Date:</label>
-        <input type="date" id="flightEndDate" name="flightEndDate" onchange="calculateDays()">
-      </div>
-      <div class="form-group">
-        <label for="numberOfDays">Number of Days:</label>
-        <input type="number" id="numberOfDays" name="numberOfDays" readonly>
-      </div>
-    </div>
-
-    <!-- Inputs for Lockouts -->
-    <div id="lockouts" class="input-section">
-      <h3>Lockouts Inputs</h3>
-      <div class="form-group">
-        <label for="lockouts_deal_name">Deal Name:</label>
-        <input type="text" id="lockouts_deal_name">
-      </div>
-      <div class="form-group">
-        <label for="lockouts_deal_id">Deal ID:</label>
-        <input type="text" id="lockouts_deal_id">
-      </div>
-      <div class="form-group">
-        <label for="lockouts_reason">Lockout Reason:</label>
-        <input type="text" id="lockouts_reason">
-      </div>
-    </div>
-
-    <!-- Output -->
-    <div id="output" class="output">
-      <h3>Generated Output:</h3>
-      <p id="output_text">Once you fill out the form, the generated ticket will appear here.</p>
-    </div>
-
-    <button class="btn" onclick="generateOutput()">Generate Ticket</button>
+  <!-- Inputs for SPA -->
+  <div id="spa" class="input-section">
+    <h3>SPA Inputs</h3>
+    <label for="spa_deal_name">Deal Name:</label>
+    <input type="text" id="spa_deal_name"><br><br>
+    <label for="spa_deal_id">Deal ID:</label>
+    <input type="text" id="spa_deal_id"><br><br>
+    <label for="spa_additional">Additional Information:</label>
+    <input type="text" id="spa_additional"><br><br>
   </div>
 
+  <!-- Inputs for BAx -->
+  <div id="bax" class="input-section">
+    <h3>BAx Inputs</h3>
+    <form id="placementForm" name="placementForm">
+      <label for="dealName">Deal Name:</label>
+      <input type="text" id="dealName" name="dealName"> <br><br>
+
+      <label for="dealId">Deal ID:</label>
+      <input type="text" id="dealId" name="dealId"> <br><br>
+
+      <label for="team">Team:</label>
+      <input type="text" id="team" name="team"> <br><br>
+
+      <label for="walletName">Wallet Name:</label>
+      <input type="text" id="walletName" name="walletName" oninput="updateWalletId()"> <br><br>
+
+      <label for="walletId">Wallet ID:</label>
+      <input type="text" id="walletId" name="walletId" readonly> <br><br>
+
+      <label for="budget">Budget:</label>
+      <input type="number" id="budget" name="budget" step="0.01"> <br><br>
+
+      <label for="appUrl">Input APP URL:</label>
+      <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here" oninput="validateUrls()"> <br><br>
+      <span id="appUrlError" class="error"></span> <br><br>
+
+      <label for="webUrl">Input WEB URL:</label>
+      <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here" oninput="validateUrls()"> <br><br>
+      <span id="webUrlError" class="error"></span> <br><br>
+
+      <label for="flightStartDate">Flight Start Date:</label> 
+      <input type="date" id="flightStartDate" name="flightStartDate" onchange="calculateDays()"> <br><br>
+
+      <label for="flightEndDate">Flight End Date:</label>
+      <input type="date" id="flightEndDate" name="flightEndDate" onchange="calculateDays()"> <br><br>
+
+      <label for="numberOfDays">Number of Days:</label>
+      <input type="number" id="numberOfDays" name="numberOfDays" readonly> <br><br>
+    </form>
+  </div>
+
+  <!-- Inputs for Lockouts -->
+  <div id="lockouts" class="input-section">
+    <h3>Lockouts Inputs</h3>
+    <label for="lockouts_deal_name">Deal Name:</label>
+    <input type="text" id="lockouts_deal_name"><br><br>
+    <label for="lockouts_deal_id">Deal ID:</label>
+    <input type="text" id="lockouts_deal_id"><br><br>
+    <label for="lockouts_reason">Lockout Reason:</label>
+    <input type="text" id="lockouts_reason"><br><br>
+  </div>
+
+  <!-- Output -->
+  <div id="output" style="margin-top: 20px;">
+    <h3>Output:</h3>
+    <p id="output_text"></p>
+  </div>
+
+  <!-- Submit Button -->
+  <button onclick="generateOutput()">Generate Output</button>
+
   <script>
+    // Function to replace spaces with underscores in all input fields
+  function replaceSpaces(input) {
+    input.value = input.value.replace(/\s+/g, '_');
+  }
+
+  // Function to highlight special characters in red (non-alphanumeric except underscores)
+  function highlightSpecialChars(input) {
+    // Regex to match non-alphanumeric characters, excluding underscore (_)
+    const specialCharRegex = /[^a-zA-Z0-9_]/g;
+    const value = input.value;
+
+    // Find special characters and highlight them in red
+    const highlightedValue = value.replace(specialCharRegex, function(match) {
+      return `<span class="red-text">${match}</span>`;
+    });
+
+    // Set the HTML content of the input field to highlight special characters
+    input.innerHTML = highlightedValue;
+  }
+
+  // Add event listeners for all input fields
+  document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"]').forEach(function(input) {
+    // Replace spaces with underscores when typing
+    input.addEventListener('input', function() {
+      replaceSpaces(input);
+      highlightSpecialChars(input);
+    });
+  });
+
+    // Function to show the input fields based on the selected tactic
     function showInputs() {
-      var tactic = document.getElementById("tactic").value;
+      // Hide all input sections initially
       document.getElementById("spa").style.display = "none";
       document.getElementById("bax").style.display = "none";
       document.getElementById("lockouts").style.display = "none";
+
+      // Get selected tactic
+      var tactic = document.getElementById("tactic").value;
+
+      // Show the relevant section based on the selected tactic
       if (tactic === "SPA") {
         document.getElementById("spa").style.display = "block";
       } else if (tactic === "BAx") {
@@ -282,90 +156,203 @@
       }
     }
 
-    function generateOutput() {
-      var tactic = document.getElementById("tactic").value;
-      var outputText = "";
-      if (tactic === "SPA") {
-        var dealName = document.getElementById("spa_deal_name").value;
-        var dealId = document.getElementById("spa_deal_id").value;
-        var additional = document.getElementById("spa_additional").value;
-        outputText = `SPA Ticket:
-                      <br>Deal Name: ${dealName}
-                      <br>Deal ID: ${dealId}
-                      <br>Additional Information: ${additional}`;
-      } else if (tactic === "BAx") {
-        var dealName = document.getElementById("dealName").value;
-        var dealId = document.getElementById("dealId").value;
-        var team = document.getElementById("team").value;
-        var walletName = document.getElementById("walletName").value;
-        var walletId = document.getElementById("walletId").value;
-        var budget = parseFloat(document.getElementById("budget").value);
-        var appUrl = document.getElementById("appUrl").value;
-        var webUrl = document.getElementById("webUrl").value;
-        var flightStartDate = document.getElementById("flightStartDate").value;
-        var flightEndDate = document.getElementById("flightEndDate").value;
-        var numberOfDays = document.getElementById("numberOfDays").value;
-        outputText = `BAx Ticket:
-                      <br>Deal Name: ${dealName}
-                      <br>Deal ID: ${dealId}
-                      <br>Team: ${team}
-                      <br>Wallet Name: ${walletName}
-                      <br>Wallet ID: ${walletId}
-                      <br>Budget: $${budget.toFixed(2)}
-                      <br>App URL: ${appUrl}
-                      <br>Web URL: ${webUrl}
-                      <br>Flight Start Date: ${flightStartDate}
-                      <br>Flight End Date: ${flightEndDate}
-                      <br>Number of Days: ${numberOfDays}`;
-      } else if (tactic === "Lockouts") {
-        var dealName = document.getElementById("lockouts_deal_name").value;
-        var dealId = document.getElementById("lockouts_deal_id").value;
-        var reason = document.getElementById("lockouts_reason").value;
-        outputText = `Lockouts Ticket:
-                      <br>Deal Name: ${dealName}
-                      <br>Deal ID: ${dealId}
-                      <br>Lockout Reason: ${reason}`;
-      }
-
-      document.getElementById("output_text").innerHTML = outputText;
-    }
-
-    function calculateDays() {
-      var startDate = document.getElementById("flightStartDate").value;
-      var endDate = document.getElementById("flightEndDate").value;
-
-      if (startDate && endDate) {
-        var start = new Date(startDate);
-        var end = new Date(endDate);
-        var timeDiff = end - start;
-        var days = timeDiff / (1000 * 3600 * 24);
-        document.getElementById("numberOfDays").value = days;
-      }
-    }
-
-    function updateWalletId() {
-      var walletName = document.getElementById("walletName").value;
-      document.getElementById("walletId").value = "ID-" + walletName.toUpperCase();
-    }
-
+    // Function to validate the URLs
     function validateUrls() {
-      var appUrl = document.getElementById("appUrl").value;
-      var webUrl = document.getElementById("webUrl").value;
-      var appUrlError = document.getElementById("appUrlError");
-      var webUrlError = document.getElementById("webUrlError");
-      var appPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
-      var webPattern = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$/;
+      const appUrl = document.getElementById("appUrl").value;
+      const webUrl = document.getElementById("webUrl").value;
+      
+      const appUrlPattern = /^fdshop:\/\/coupon\/\d+$/;
+      const webUrlPattern = /^https:\/\/www\.familydollar\.com\/coupon-details\/\d+$/;
 
-      if (!appPattern.test(appUrl)) {
-        appUrlError.textContent = "Please enter a valid app URL.";
+      let validAppUrl = appUrlPattern.test(appUrl);
+      let validWebUrl = webUrlPattern.test(webUrl);
+
+      // Validate App URL
+      if (appUrl && !validAppUrl) {
+        document.getElementById("appUrlError").textContent = "Invalid App URL format. Correct format: fdshop://coupon/{id}.";
       } else {
-        appUrlError.textContent = "";
+        document.getElementById("appUrlError").textContent = "";
       }
 
-      if (!webPattern.test(webUrl)) {
-        webUrlError.textContent = "Please enter a valid web URL.";
+      // Validate Web URL
+      if (webUrl && !validWebUrl) {
+        document.getElementById("webUrlError").textContent = "Invalid Web URL format. Correct format: https://www.familydollar.com/coupon-details/{id}.";
       } else {
-        webUrlError.textContent = "";
+        document.getElementById("webUrlError").textContent = "";
+      }
+    }
+
+    // Function to generate output based on the input values
+function generateOutput() {
+  var tactic = document.getElementById("tactic").value;
+  var outputText = "";
+
+  if (tactic === "SPA") {
+    var dealName = document.getElementById("spa_deal_name").value;
+    var dealId = document.getElementById("spa_deal_id").value;
+    var additional = document.getElementById("spa_additional").value;
+    outputText = `SPA Placements Ticket:
+                  <br>Deal Name: ${dealName}
+                  <br>Deal ID: ${dealId}
+                  <br>Additional Info: ${additional}`;
+  } else if (tactic === "BAx") {
+    var dealName = document.getElementById("dealName").value;
+    var dealId = document.getElementById("dealId").value;
+    var team = document.getElementById("team").value;
+    var walletName = document.getElementById("walletName").value;
+    var walletId = document.getElementById("walletId").value;
+    var budget = parseFloat(document.getElementById("budget").value);
+    var appUrl = document.getElementById("appUrl").value;
+    var webUrl = document.getElementById("webUrl").value;
+    var flightStartDate = document.getElementById("flightStartDate").value;
+    var flightEndDate = document.getElementById("flightEndDate").value;
+    var numberOfDays = parseInt(document.getElementById("numberOfDays").value);
+
+    // If any of the critical fields are empty, show an error
+    if (!dealName || !dealId || !team || !walletName || !walletId || isNaN(budget) || !flightStartDate || !flightEndDate || isNaN(numberOfDays)) {
+      outputText = "Please fill in all the required fields for BAx.";
+    } else {
+      let bufferMultiplier = 1.20;  // For BAx
+      let pointBuffer = '20%';  // Point buffer for BAx
+
+      const walletCap = Math.round((budget / numberOfDays) * bufferMultiplier);
+      const rosBuffer = Math.round(walletCap * 0.20);  // 20% buffer
+
+      outputText = `<p>Hi @</p>
+                    <p>Note:</p>
+                    <p>1. </p>
+                    <p>2. </p>
+                    <p>The campaigns have been trafficked and QAed. Below are the details:</p>
+                    <p><strong>BAx: </strong></p>
+                    <p><Strong>Deal Name:</strong> ${dealName}</p>
+                    <p><strong>Deal ID:</strong> ${dealId}</p>
+                    <p><strong>Team:</strong> ${team}</p>
+                    <p><strong>Wallet Name:</strong> ${walletName}</p>
+                    <p><strong>Wallet ID:</strong> ${walletId}</p>
+                    <p><strong>APP URL:</strong>${appUrl}</p>
+                    <p><strong>WEB URL:</strong>${webUrl}</p>
+                    <p><strong>Budget:</strong> $${budget.toFixed(2)}</p>
+                    <p><strong>Flight Start Date:</strong> ${flightStartDate}</p>
+                    <p><strong>Flight End Date:</strong> ${flightEndDate}</p>
+                    <p><strong>Number of Days:</strong> ${numberOfDays}</p>
+                    <p><strong>Wallet Cap:</strong> $${walletCap.toFixed(2)}</p>
+                    <p><strong>Buffer Used:</strong> ${pointBuffer}</p>
+                    <P><strong>App Placements:</strong>
+                    <p><strong>Product Details Page: (Product Page) (Slot: medium-banner)</strong></p>
+                    <ul>
+                        <li>PDP_Med_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Run of Site: (Run of Site) (Slot: medium-banner)</strong></p>
+                    <ul>
+                        <li>ROS_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Coupon Details Page: (Coupon) (Slot: medium-banner)</strong></p>
+                    <ul>
+                        <li>CP_Med_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Search Results Page: (Search) (Slot: thin-banner)</strong></p>
+                    <ul>
+                        <li>Search_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Sub-Category: (Category) (Slot: thin-banner)</strong></p>
+                    <ul>
+                        <li>SubCAT_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Coupon Listing Page: (Coupon) (Slot: thin-banner)</strong></p>
+                    <ul>
+                        <li>CP_Thin_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Product Details Page - Top: (Product Page) (Slot: pdp-pencil-banner)</strong></p>
+                    <ul>
+                        <li>PDP_Pencil_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Coupon Details Page - Top: (Coupon) (Slot: pdp-pencil-banner)</strong></p>
+                    <ul>
+                        <li>CP_Pencil_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Homepage - Midpage: (Homepage - App) (Slot: midpage-banner)</strong></p>
+                    <ul>
+                        <li>HPApp_Mid_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Coupon Category Navigation: (Category) (Slot: coupon-navigation-banner)</strong></p>
+                    <ul>
+                        <li>CP_${dealName}_${dealId}</li>
+                    </ul>
+
+                    <p><strong>Category - Hero: (Category) (Slot: category-hero-banner)</strong></p>
+                    <ul>
+                        <li>CAT_${dealName}_${dealId}</li>
+                    </ul>
+                    <P><strong>Web Placements:</strong>
+                    <p><strong>Homepage – Large 2-Across: (Homepage - Web) (Slot: 2-across-banner)</strong></p>
+                    <ul>
+                        <li>HPWeb_2Across_${dealName}_${dealId}</li>
+                    </ul>
+                    <p><strong>Homepage – Pencil Banner ​: (Homepage - Web) (pencil-banner)</strong></p>
+                    <ul>
+                        <li>HPWeb_Pencil_${dealName}_${dealId}</li>
+                    </ul>`;
+                    
+                    
+    }
+  } else if (tactic === "Lockouts") {
+    var dealName = document.getElementById("lockouts_deal_name").value;
+    var dealId = document.getElementById("lockouts_deal_id").value;
+    var reason = document.getElementById("lockouts_reason").value;
+    outputText = `Lockouts Ticket:
+                  <br>Deal Name: ${dealName}
+                  <br>Deal ID: ${dealId}
+                  <br>Lockout Reason: ${reason}`;
+  } else {
+    outputText = "Please select a tactic and provide the necessary details.";
+  }
+
+  // Display the output
+  document.getElementById("output_text").innerHTML = outputText;
+}
+ function highlightSpecialChars(text) {
+    return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
+}
+
+
+    // Function to update the wallet ID when the wallet name is entered
+    function updateWalletId() {
+            const walletName = document.getElementById('walletName').value;
+            if (walletName) {
+                // Remove non-numeric characters
+                let walletId = walletName.replace(/\D/g, '');
+
+                // Ensure walletId is exactly 7 digits long
+                if (walletId.length > 7) {
+                    walletId = walletId.substring(0, 7);
+                } else if (walletId.length < 7) {
+                    walletId = walletId.padStart(7, '0');
+                }
+
+                document.getElementById('walletId').value = walletId;
+            } else {
+                document.getElementById('walletId').value = '';
+            }
+        }
+    // Function to calculate the number of days between the flight dates
+    function calculateDays() {
+      var flightStartDate = document.getElementById("flightStartDate").value;
+      var flightEndDate = document.getElementById("flightEndDate").value;
+
+      if (flightStartDate && flightEndDate) {
+        var start = new Date(flightStartDate);
+        var end = new Date(flightEndDate);
+        var difference = Math.floor((end - start) / (1000 * 60 * 60 * 24) +1 ); // Difference in days
+        document.getElementById("numberOfDays").value = difference;
       }
     }
   </script>
