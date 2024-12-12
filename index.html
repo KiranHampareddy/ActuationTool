@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      Family Dollar
+    </title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  </head>
+  
+  <body>
+    <h1>
+      Family Dollar
+    </h1>
+    <label for="tactic">
+      Select Tactic:
+    </label>
+    <select id="tactic" onchange="showInputs()">
+      <option value="">
+        --Select Tactic--
+      </option>
+      <option value="SPA">
+        Search
+      </option>
+      <option value="BAx">
+        Banner X
+      </option>
+      <option value="Lockouts">
+        Lockouts
+      </option>
+    </select>
+    <div id="spa" class="input-section">
+      <h3>
+        SPA Inputs
+      </h3>
+      <div class="input-group">
+        <label for="spa_deal_name">
+          Deal Name:
+        </label>
+        <input type="text" id="spa_deal_name">
+      </div>
+      <div class="input-group">
+        <label for="spa_deal_id">
+          Deal ID:
+        </label>
+        <input type="text" id="spa_deal_id">
+      </div>
+      <div class="input-group">
+        <label for="spa_additional">
+          Additional Information:
+        </label>
+        <input type="text" id="spa_additional">
+      </div>
+    </div>
+    <div id="bax" class="input-section">
+      <h3>
+        BAx Inputs
+      </h3>
+      <form id="placementForm">
+        <div class="input-group">
+          <label for="dealName">
+            Deal Name:
+          </label>
+          <input type="text" id="dealName" name="dealName">
+        </div>
+        <div class="input-group">
+          <label for="dealId">
+            Deal ID:
+          </label>
+          <input type="text" id="dealId" name="dealId">
+        </div>
+        <div class="input-group">
+          <label for="team">
+            Team:
+          </label>
+          <input type="text" id="team" name="team">
+        </div>
+        <div class="input-group">
+          <label for="walletName">
+            Wallet Name:
+          </label>
+          <input type="text" id="walletName" name="walletName" oninput="updateWalletId()">
+        </div>
+        <div class="input-group">
+          <label for="walletId">
+            Wallet ID:
+          </label>
+          <input type="text" id="walletId" name="walletId" readonly>
+        </div>
+        <div class="input-group">
+          <label for="budget">
+            Budget:
+          </label>
+          <input type="number" id="budget" name="budget" step="0.01">
+        </div>
+        <div class="input-group">
+          <label for="appUrl">
+            Input APP URL:
+          </label>
+          <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here"
+          oninput="validateUrls()">
+          <span id="appUrlError" class="error">
+          </span>
+        </div>
+        <div class="input-group">
+          <label for="webUrl">
+            Input WEB URL:
+          </label>
+          <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here"
+          oninput="validateUrls()">
+          <span id="webUrlError" class="error">
+          </span>
+        </div>
+        <div class="input-group">
+          <label for="flightStartDate">
+            Flight Start Date:
+          </label>
+          <input type="text" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
+        </div>
+        <div class="input-group">
+          <label for="flightEndDate">
+            Flight End Date:
+          </label>
+          <input type="text" id="flightEndDate" name="flightEndDate" onchange="calculateDays()">
+        </div>
+        <div class="input-group">
+          <label for="numberOfDays">
+            Number of Days:
+          </label>
+          <input type="number" id="numberOfDays" name="numberOfDays" readonly>
+        </div>
+      </form>
+    </div>
+    <div id="lockouts" class="input-section">
+      <h3>
+        Lockouts Inputs
+      </h3>
+      <div class="input-group">
+        <label for="lockouts_deal_name">
+          Deal Name:
+        </label>
+        <input type="text" id="lockouts_deal_name">
+      </div>
+      <div class="input-group">
+        <label for="lockouts_deal_id">
+          Deal ID:
+        </label>
+        <input type="text" id="lockouts_deal_id">
+      </div>
+      <div class="input-group">
+        <label for="lockouts_reason">
+          Lockout Reason:
+        </label>
+        <input type="text" id="lockouts_reason">
+      </div>
+    </div>
+    <div id="output" style="margin-top: 20px;">
+      <h3>
+        Output:
+      </h3>
+      <p id="output_text">
+      </p>
+    </div>
+    <button onclick="generateOutput()">
+      Generate Output
+    </button>
+    <script src="script.js">
+    </script>
+    <!-- Link to external JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr">
+    </script>
+  </body>
+
+</html>
