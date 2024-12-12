@@ -1,179 +1,204 @@
-<!DOCTYPE html>
-<html lang="en">
-  
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-      Family Dollar
-    </title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- Link to external CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  </head>
-  
-  <body>
-    <div class="container">
-    <h1>
-      Family Dollar
-    </h1>
-    <label for="tactic">
-      Select Tactic:
-    </label>
-    <select id="tactic" onchange="showInputs()">
-      <option value="">
-        --Select Tactic--
-      </option>
-      <option value="SPA">
-        Search
-      </option>
-      <option value="BAx">
-        Banner X
-      </option>
-      <option value="Lockouts">
-        Lockouts
-      </option>
-    </select>
-    <div id="spa" class="input-section">
-      <h3>
-        SPA Inputs
-      </h3>
-      <div class="input-group">
-        <label for="spa_deal_name">
-          Deal Name:
-        </label>
-        <input type="text" id="spa_deal_name">
-      </div>
-      <div class="input-group">
-        <label for="spa_deal_id">
-          Deal ID:
-        </label>
-        <input type="text" id="spa_deal_id">
-      </div>
-      <div class="input-group">
-        <label for="spa_additional">
-          Additional Information:
-        </label>
-        <input type="text" id="spa_additional">
-      </div>
-    </div>
-    <div id="bax" class="input-section">
-      <h3>
-        BAx Inputs
-      </h3>
-      <form id="placementForm">
-        <div class="input-group">
-          <label for="dealName">
-            Deal Name:
-          </label>
-          <input type="text" id="dealName" name="dealName">
-        </div>
-        <div class="input-group">
-          <label for="dealId">
-            Deal ID:
-          </label>
-          <input type="text" id="dealId" name="dealId">
-        </div>
-        <div class="input-group">
-          <label for="team">
-            Team:
-          </label>
-          <input type="text" id="team" name="team">
-        </div>
-        <div class="input-group">
-          <label for="walletName">
-            Wallet Name:
-          </label>
-          <input type="text" id="walletName" name="walletName" oninput="updateWalletId()">
-        </div>
-        <div class="input-group">
-          <label for="walletId">
-            Wallet ID:
-          </label>
-          <input type="text" id="walletId" name="walletId" readonly>
-        </div>
-        <div class="input-group">
-          <label for="budget">
-            Budget:
-          </label>
-          <input type="number" id="budget" name="budget" step="0.01">
-        </div>
-        <div class="input-group">
-          <label for="appUrl">
-            Input APP URL:
-          </label>
-          <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here"
-          oninput="validateUrls()">
-          <span id="appUrlError" class="error">
-          </span>
-        </div>
-        <div class="input-group">
-          <label for="webUrl">
-            Input WEB URL:
-          </label>
-          <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here"
-          oninput="validateUrls()">
-          <span id="webUrlError" class="error">
-          </span>
-        </div>
-        <div class="input-group">
-          <label for="flightStartDate">
-            Flight Start Date:
-          </label>
-          <input type="text" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
-        </div>
-        <div class="input-group">
-          <label for="flightEndDate">
-            Flight End Date:
-          </label>
-          <input type="text" id="flightEndDate" name="flightEndDate" onchange="calculateDays()">
-        </div>
-        <div class="input-group">
-          <label for="numberOfDays">
-            Number of Days:
-          </label>
-          <input type="number" id="numberOfDays" name="numberOfDays" readonly>
-        </div>
-      </form>
-    </div>
-    <div id="lockouts" class="input-section">
-      <h3>
-        Lockouts Inputs
-      </h3>
-      <div class="input-group">
-        <label for="lockouts_deal_name">
-          Deal Name:
-        </label>
-        <input type="text" id="lockouts_deal_name">
-      </div>
-      <div class="input-group">
-        <label for="lockouts_deal_id">
-          Deal ID:
-        </label>
-        <input type="text" id="lockouts_deal_id">
-      </div>
-      <div class="input-group">
-        <label for="lockouts_reason">
-          Lockout Reason:
-        </label>
-        <input type="text" id="lockouts_reason">
-      </div>
-    </div>
-    <div id="output" style="margin-top: 20px;">
-      <h3>
-        Output:
-      </h3>
-      <p id="output_text">
-      </p>
-    </div>
-    <button onclick="generateOutput()">
-      Generate Output
-    </button>
-    <script src="script.js">
-    </script>
-    <!-- Link to external JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr">
-    </script>
-  </body>
+/* Base Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-</html>
+/* General Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7fafc;
+  color: #333;
+  padding: 20px;
+  line-height: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Ensure it takes the full height */
+  margin: 0;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  color: #333;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Container to center the form */
+.container {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tactic Selection */
+select {
+  padding: 12px;
+  font-size: 16px;
+  margin: 15px 0;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background-color: #fff;
+  transition: border 0.3s ease;
+}
+
+select:hover,
+select:focus {
+  border-color: #4A90E2;
+  outline: none;
+}
+
+/* Input Section Styling */
+.input-section {
+  display: none;
+  margin-top: 20px;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.input-section.active {
+  display: block;
+  transform: translateY(0);
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+  font-size: 14px;
+  color: #4A4A4A;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  font-size: 16px;
+  background-color: #fff;
+  transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+  border-color: #4A90E2;
+  outline: none;
+}
+
+/* Error Message Styling */
+.error {
+  color: #E74C3C;
+  font-size: 13px;
+}
+
+.red-text {
+  color: #E74C3C;
+}
+
+/* Buttons Styling */
+button {
+  padding: 14px 28px;
+  background-color: #4A90E2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 25px;
+  width: 100%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #357ABD;
+  transform: translateY(-2px);
+}
+
+button:active {
+  background-color: #2C6E9D;
+}
+
+/* Output Box Styling */
+#output {
+  display: none;
+  margin-top: 20px;
+  padding: 25px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+#output h3 {
+  margin-bottom: 15px;
+  font-size: 1.8rem;
+  color: #333;
+}
+
+#output_text {
+  font-size: 1.2rem;
+  color: #333;
+}
+
+/* Add smooth animation for output visibility */
+#output.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#output.inactive {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Responsive Styling */
+@media screen and (max-width: 768px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 15px;
+    width: 100%;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    font-size: 14px;
+  }
+}
