@@ -162,12 +162,12 @@ function generateOutput() {
     let output = '';
 
     if (campaignType === "intragrid") {
+      
         const [
-            onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
-            campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
-            ioBudget, startDate, endDate, dueDate, cpm, goal, currentSpend,
-            shouldSpend, flightLength, today, daysRemaining, daysCompleted, pacing
-        ] = data;
+        onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
+        campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
+        ioBudget, startDate, endDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
+    ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
@@ -191,9 +191,9 @@ Flight dates: ${startDate} to ${endDate}
 
 Budget: $${budget.toFixed(2)}
 
-CPM: $${cpmValue} ($${cpmPerThousand})
-
 Total budget: $${totalBudget.toFixed(2)}
+
+CPM: $${cpmValue} ($${cpmPerThousand})
 
 Line items:
 
@@ -210,6 +210,7 @@ Copy:
 Notes:
 
 Thank you..!`;
+
 
     } else if (campaignType === "cab") {
         const [
@@ -254,12 +255,10 @@ Thank you..!`;
 
     } else if (campaignType === "headerBar") {
         const [
-            onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
-            campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
-            ioBudget, startDate, endDate, dueDate, cpm, goal, currentSpend,
-            shouldSpend, flightLength, today, daysRemaining, daysCompleted, pacing
-        ] = data;
-
+        onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
+        campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
+        ioBudget, startDate, endDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
+    ] = data;
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
         const lineItemModified = lineItemName.replace("Search", "Broad Display");
@@ -282,9 +281,9 @@ Flight dates: ${startDate} to ${endDate}
 
 Budget: $${budget.toFixed(2)}
 
-CPM: ${cpmValue} ($${cpmPerThousand})
-
 Total budget: $${totalBudget.toFixed(2)}
+
+CPM: $${cpmValue} ($${cpmPerThousand})
 
 Line items:
 
@@ -300,11 +299,10 @@ Thank you..!`;
 
     } else if (campaignType === "promotedProducts") {
         const [
-            onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
-            campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
-            ioBudget, startDate, endDate, dueDate, cpm, goal, currentSpend,
-            shouldSpend, flightLength, today, daysRemaining, daysCompleted, pacing
-        ] = data;
+        onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
+        campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
+        ioBudget, startDate, endDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
+    ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
