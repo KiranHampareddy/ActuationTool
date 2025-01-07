@@ -637,11 +637,11 @@ function getSelectedCatalogues() {
                 // Remove non-numeric characters
                 let walletId = walletName.replace(/\D/g, '');
 
-                // Ensure walletId is exactly 7 digits long
-                if (walletId.length > 7) {
-                    walletId = walletId.substring(0, 7);
-                } else if (walletId.length < 7) {
-                    walletId = walletId.padStart(7, '0');
+                // Ensure walletId is exactly 8 digits long
+                if (walletId.length > 8) {
+                    walletId = walletId.substring(0, 8);
+                } else if (walletId.length < 8) {
+                    walletId = walletId.padStart(8, '0');
                 }
 
                 document.getElementById('walletId').value = walletId;
