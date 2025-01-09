@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -213,39 +214,40 @@ Thank you..!`;
 
 
     } else if (campaignType === "cab") {
-        const [
-            onsiteOwner, campaignBuilder, crewName, supplier, campaignName,
-            lineItem, category, walletName, lineItemName, status,
-            keyCallouts, ioBudget, startDate, endDate, dueDate, linkTo
-        ] = data;
+            const [
+        onsiteOwner2, campaignBuilder3, crewName4, supplier5, campaignName6,
+        lineItem7, category8, walletName9, lineItemName10, status11,
+        keyCallouts12, ioBudget13, startDate14, endDate15, dueDate16, linkTo17,
+        creative, newStatus, column1, column2
+    ] = data;
 
         output = `
 Hi @
 
 Below CAB campaign has been set up and is ready for QA. Please QA and provide your feedback.
 
-Team: ${supplier}
+Team: ${supplier5}
 
 Wallet:
-${walletName}
+${walletName9}
 
-CrewName: ${crewName}
+Crew Name: ${crewName4}
 
-Budget: ${ioBudget}
+Budget: ${ioBudget13}
 
-Flight date: ${startDate} to ${endDate}
+Flight date: ${startDate14} to ${endDate15}
 
-Category: ${category}
+Category: ${category8}
 
 Campaign name:       
-${lineItemName}
+${lineItemName10}
 
-Advertisement for ${supplier}. Click to Product Page.
+Advertisement for ${supplier5}. Click to Product Page.
 
 Link:
-${linkTo}
+${linkTo17}
 
-Copy:                
+Copy:                 
 
 Background:
 
