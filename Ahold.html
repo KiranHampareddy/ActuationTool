@@ -419,7 +419,7 @@ function getSelectedCatalogues() {
             const dealId = highlightSpecialChars(document.getElementById('dealId').value);
             const team = highlightSpecialChars(document.getElementById('team').value);
             const walletName = highlightSpecialChars(document.getElementById('walletName').value.replace(/[\s/]/g, '_'));
-            const walletId = highlightSpecialChars(walletName.substring(0, 7)); // Extract the first 7 characters
+            const walletId = highlightSpecialChars(walletName.substring(0, 8)); // Extract the first 8 characters
             document.getElementById('walletId').value = walletId; // Set the walletId field value
             const budget = parseFloat(document.getElementById('budget').value);
             const flightStartDate = document.getElementById('flightStartDate').value;
