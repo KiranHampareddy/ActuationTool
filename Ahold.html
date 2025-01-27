@@ -304,26 +304,30 @@
             const match = url.match(regex);   // Match the slug
             return match ? match[1] : '';     // Return the slug or an empty string if not found
         }
-            // Calculate the number of days between start and end dates
+        function calculateDays() {
+    const startDate = new Date(document.getElementById("flightStartDate").value);
+    const endDate = new Date(document.getElementById("flightEndDate").value);
 
-            function calculateDays() {
-                const startDate = new Date(document.getElementById("flightStartDate").value);
-                const endDate = new Date(document.getElementById("flightEndDate").value);
+    // Reset times to midnight (to avoid time affecting the calculation)
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
 
-                if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
-                    if (startDate > endDate) {
-                        document.getElementById("numberOfDays").value = "Start date must be before end date.";
-                    } else {
-                        const diffTime = endDate - startDate; // No need for Math.abs since startDate <= endDate
-                        const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 for extra count
-                        document.getElementById("numberOfDays").value = numberOfDays;
-                    }
-                }
-                
-                else {
-                    document.getElementById("numberOfDays").value = ""; // Clear if invalid input
-                }
-            }
+    if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+        if (startDate > endDate) {
+            document.getElementById("numberOfDays").value = "Start date must be before end date.";
+        } else {
+            // Calculate the difference in milliseconds
+            const diffTime = endDate - startDate; // Time difference in milliseconds
+            const numberOfDays = diffTime / (1000 * 60 * 60 * 24); // Convert to days
+
+            // Round the result and add 1 to include the start date
+            document.getElementById("numberOfDays").value = Math.round(numberOfDays) + 1;  
+        }
+    } else {
+        document.getElementById("numberOfDays").value = ""; // Clear if invalid input
+    }
+}
+
         function highlightSpecialChars(text) {
     return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
 }
