@@ -167,7 +167,7 @@ function generateOutput() {
         const [
         onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
         campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
-        ioBudget, startDate, endDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
+        ioBudget, startDate, endDate, DueDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
     ] = data;
 
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
@@ -259,7 +259,7 @@ Thank you..!`;
         const [
         onsiteOwner, campaignBuilder, qaAssignee, crewName, supplier, placementType,
         campaignName, hrm, lineItem, walletName, lineItemName, status, keyCallouts,
-        ioBudget, startDate, endDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
+        ioBudget, startDate, endDate, DueDate, cpm, goal, currentSpend, shouldSpend, incremental, pacing, optimizationRestrictions
     ] = data;
         const budget = parseFloat(ioBudget.replace(/[^0-9.-]+/g, ""));
         const totalBudget = budget * 2;
