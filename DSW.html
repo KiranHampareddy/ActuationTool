@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale: 1.0">
+    <title>DSW Actuation Tool</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .heading {
+            background-color: #3f51b5;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 500;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+            margin: -30px -30px 30px -30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #82b1ff;
+            outline: none;
+            box-shadow: 0 0 0 0.2rem rgba(41, 98, 255, 0.25);
+        }
+
+        .highlight {
+            border-color: #ff8a80;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            color: #ffffff;
+            background-color: #2962ff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1a53d1;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f4ff;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: monospace;
+            line-height: 1.5;
+            border: 1px solid #c5cae9;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .result h3 {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .result p {
+            margin-bottom: 10px;
+        }
+
+        .red-text {
+            color: #ef5350;
+            font-weight: 600;
+        }
+
+        .optional {
+            font-style: italic;
+            color: #78909c;
+        }
+
+        .section-divider {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #cfd8dc;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .copy-button {
+            background-color: #4caf50;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .copy-button:hover {
+            background-color: #3b863e;
+        }
+
+        /* style resultArea same with style result for consistency and original state in orginized mananger
+             the changes helps better for style */
+        .result-area {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f4ff;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: monospace;
+            line-height: 1.5;
+            border: 1px solid #c5cae9;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow-x: auto;
+            position: relative;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="heading">DSW Actuation Tool</div>
+
+        <div class="form-group">
+            <label for="dealName">Deal Name</label>
+            <input type="text" id="dealName" placeholder="Enter Deal Name">
+        </div>
+        <div class="form-group">
+            <label for="dealId">Deal ID</label>
+            <input type="text" id="dealId" placeholder="Enter Deal ID">
+        </div>
+        <div class="form-group">
+            <label for="team">Team</label>
+            <input type="text" id="team" placeholder="Enter Team Name">
+        </div>
+        <div class="form-group">
+            <label for="walletName">Wallet Name</label>
+            <input type="text" id="walletName" placeholder="Enter Wallet Name">
+        </div>
+        <div class="form-group">
+            <label for="budget">Budget</label>
+            <input type="number" id="budget" placeholder="Enter Budget">
+        </div>
+        <div class="form-group">
+            <label for="flightStartDate">Flight Start Date</label>
+            <input type="text" id="flightStartDate" placeholder="Select Start Date">
+        </div>
+        <div class="form-group">
+            <label for="flightEndDate">Flight End Date</label>
+            <input type="text" id="flightEndDate" placeholder="Select End Date">
+        </div>
+        <div class="form-group">
+            <label for="numberOfDays">Number of Days</label>
+            <input type="text" id="numberOfDays" placeholder="Number of Days" readonly>
+        </div>
+
+        <!-- Integrated Campaign Name Extraction Section -->
+        <div class="form-group">
+            <label for="campaignNameRow">Paste Campaign Name Row</label>
+            <textarea id="campaignNameRow" rows="2" style="width: 100%;"
+                placeholder="Paste 'Campaign Name...' row here"></textarea>
+        </div>
+        <div class="form-group">
+            <button class="btn" onclick="extractCampaignNames()">Extract Campaign Names</button>
+        </div>
+
+        <!-- Adding areaResult so when results  can view after proccesse from a area display. as from originzally request from
+           a a separrate out
+         -->
+        <div class="result-area" id="campaignNamesResult"></div>
+
+        <div class="form-group">
+            <label for="tactic">Select Tactic</label>
+            <select id="tactic" onchange="updateTactic()">
+                <option value="">-- Select Tactic --</option>
+                <option value="SPA">SPA</option>
+                <option value="BA">BA</option>
+            </select>
+        </div>
+
+        <div class="form-group hidden" id="spaFields">
+            <label for="kwGroupNames">KW Group Names (comma-separated)</label>
+            <input type="text" id="kwGroupNames" placeholder="Enter KW Group Names">
+
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" placeholder="Enter Brand">
+
+            <label for="catGroupNames" class="optional">CAT Group Names (comma-separated, optional)</label>
+            <input type="text" id="catGroupNames" placeholder="Enter CAT Group Names (leave blank for common)">
+
+            <label for="pdpGroupNames" class="optional">PDP Group Names (comma-separated, optional)</label>
+            <input type="text" id="pdpGroupNames" placeholder="Enter PDP Group Names (leave blank for common)">
+
+            <label for="cartGroupNames" class="optional">CART Group Names (comma-separated, optional)</label>
+            <input type="text" id="cartGroupNames" placeholder="Enter CART Group Names (leave blank for common)">
+
+            <label for="hpGroupNames" class="optional">HP Group Names (comma-separated, optional)</label>
+            <input type="text" id="hpGroupNames" placeholder="Enter HP Group Names (leave blank for common)">
+        </div>
+
+        <div class="form-group">
+            <button class="btn" onclick="generateData()">Generate Data</button>
+        </div>
+
+        <div class="result" id="result">
+            <button class="copy-button" onclick="copyResult()">Copy to Clipboard</button>
+            <pre><code id="result-code"></code></pre>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr('#flightStartDate', {
+                dateFormat: "m/d/Y",
+                onChange: calculateDays
+            });
+            flatpickr('#flightEndDate', {
+                dateFormat: "m/d/Y",
+                onChange: calculateDays
+            });
+        });
+
+        function calculateDays() {
+            const startDate = new Date(document.getElementById("flightStartDate").value);
+            const endDate = new Date(document.getElementById("flightEndDate").value);
+
+            startDate.setHours(0, 0, 0, 0);
+            endDate.setHours(0, 0, 0, 0);
+
+            if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+                if (startDate > endDate) {
+                    document.getElementById("numberOfDays").value = "Start date must be before end date.";
+                } else {
+                    const diffTime = endDate - startDate;
+                    const numberOfDays = diffTime / (1000 * 60 * 60 * 24);
+
+                    document.getElementById("numberOfDays").value = Math.round(numberOfDays) + 1;
+                }
+            } else {
+                document.getElementById("numberOfDays").value = "";
+            }
+        }
+
+        function highlightSpecialChars(text) {
+            return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
+        }
+
+        function validateInputs() {
+            let valid = true;
+            const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'budget', 'flightStartDate', 'flightEndDate', 'numberOfDays'];
+            const tactic = document.getElementById('tactic').value;
+
+            if (tactic === 'SPA') {
+                requiredFields.push('kwGroupNames', 'brand');
+            }
+            requiredFields.forEach(id => {
+                const input = document.getElementById(id);
+                if (!input || !input.value.trim()) {
+                    if (input) {
+                        input.classList.add('highlight');
+                    }
+                    valid = false;
+                } else if (input) {
+                    input.classList.remove('highlight');
+                }
+            });
+            return valid;
+        }
+
+        function extractCampaignNames() {
+            const campaignRow = document.getElementById('campaignNameRow').value;
+
+            const regex = /Campaign Name\s+([^\n]*?)(?=Campaign Name|$)/g;
+            let match;
+            const campaignNames = [];
+
+            while ((match = regex.exec(campaignRow)) !== null) {
+                const campaignName = match[1].trim();
+                campaignNames.push(campaignName);
+            }
+
+            const campaignNamesString = campaignNames.join(', ');
+
+            document.getElementById('campaignNamesResult').textContent = campaignNamesString;
+        }
+
+        function generateData() {
+            if (!validateInputs()) {
+                alert('Please fill in all required fields for the selected tactic.');
+                return;
+            }
+
+            const dealNameRaw = document.getElementById('dealName').value;
+            const dealName = highlightSpecialChars(dealNameRaw.replace(/[\s/]/g, '_'));
+            const dealId = document.getElementById('dealId').value;
+            const team = document.getElementById('team').value;
+            const walletNameRaw = document.getElementById('walletName').value;
+            const walletName = highlightSpecialChars(walletNameRaw.replace(/[\s/]/g, '_'));
+            const budget = parseFloat(document.getElementById('budget').value);
+            const flightStartDate = document.getElementById('flightStartDate').value;
+            const flightEndDate = document.getElementById('flightEndDate').value;
+            const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
+            const tactic = document.getElementById('tactic').value;
+
+            let kwGroupNames = [];
+            let brandRaw = "";
+            let brand = "";
+            let catGroupNames = [];
+            let pdpGroupNames = [];
+            let cartGroupNames = [];
+            let hpGroupNames = [];
+
+            if (tactic === 'SPA') {
+                kwGroupNames = document.getElementById('kwGroupNames').value.split(',').map(name => highlightSpecialChars(name.trim().replace(/[\s/]/g, '_')));
+                brandRaw = document.getElementById('brand').value;
+                brand = highlightSpecialChars(brandRaw.replace(/\s+/g, '_'));
+
+                const catInput = document.getElementById('catGroupNames').value;
+                catGroupNames = catInput ? catInput.split(',').map(name => highlightSpecialChars(name.trim().replace(/[\s/]/g, '_'))) : [];
+
+                const pdpInput = document.getElementById('pdpGroupNames').value;
+                pdpGroupNames = pdpInput ? pdpInput.split(',').map(name => highlightSpecialChars(name.trim().replace(/[\s/]/g, '_'))) : [];
+
+                const cartInput = document.getElementById('cartGroupNames').value;
+                cartGroupNames = cartInput ? cartInput.split(',').map(name => highlightSpecialChars(name.trim().replace(/[\s/]/g, '_'))) : [];
+
+                const hpInput = document.getElementById('hpGroupNames').value;
+                hpGroupNames = hpInput ? hpInput.split(',').map(name => highlightSpecialChars(name.trim().replace(/[\s/]/g, '_'))) : [];
+            }
+
+            const walletCap = Math.round(budget / numberOfDays);
+
+            const hpPercentage = 0.05;
+            const hpAllocation = Math.round(hpPercentage * walletCap * 100) / 100;
+
+            let catPercentage = (catGroupNames.length === 0 || catGroupNames.length === 1) ? 0.15 : 0.10;
+            let pdpPercentage = (pdpGroupNames.length === 0 || pdpGroupNames.length === 1) ? 0.15 : 0.10;
+
+            const catAllocation = Math.round(catPercentage * walletCap * 100) / 100;
+            const pdpAllocation = Math.round(pdpPercentage * walletCap * 100) / 100;
+
+            let message = `Hi @,\n\nThe campaigns have been trafficked and QAed.\n\nNote:\nPDP has been trafficked and is in Paused state\n\nDetails:\nDeal Name: ${dealName}\nDeal ID: ${dealId}\nTeam: ${team}\nWallet Name: ${walletName}\nBudget: $${budget.toFixed(2)}\nFlight Dates: ${flightStartDate} - ${flightEndDate}\nNumber of Days: ${numberOfDays}\nBuffer Used: Even Pacing\nWallet Cap: $${walletCap}\n---------------------------------------------------------------------\n`;
+
+            let placements = "";
+
+            if (tactic === 'SPA') {
+                placements += `Placements:\n${kwGroupNames.map(name => `KWT_${name}_${brand}_${dealId}`).join('\n')}\n`;
+
+                placements += `\n---------------------------------------------------------------------\n`;
+
+                if (catGroupNames.length > 0) {
+                    placements += `CAT:\nCLC - ${catPercentage * 100}% of $${walletCap} = $${catAllocation}\n${catGroupNames.map(name => `CAT_${name}_${brand}_${dealId}`).join('\n')}\n`;
+
+                } else {
+                    placements += `CAT:\nCLC - ${catPercentage * 100}% of $${walletCap} = $${catAllocation}\nCAT_${brand}_${dealId}\n`
+                }
+
+                placements += `\n---------------------------------------------------------------------\n`;
+
+                if (pdpGroupNames.length > 0) {
+                    placements += `PDP:\nCLC - ${pdpPercentage * 100}% of $${walletCap} = $${pdpAllocation}\n${pdpGroupNames.map(name => `PDP_${name}_${brand}_${dealId}`).join('\n')}\n`;
+
+                } else {
+                    placements += `PDP:\nCLC - ${pdpPercentage * 100}% of $${walletCap} = $${pdpAllocation}\nPDP_${brand}_${dealId}\n`;
+                }
+
+                placements += `\n---------------------------------------------------------------------\n`;
+
+
+                if (hpGroupNames.length > 0) {
+                    placements += `HP:\nCLC - ${hpPercentage * 100}% of $${walletCap} = $${hpAllocation}\n${hpGroupNames.map(name => `HP_${name}_${brand}_${dealId}`).join('\n')}\n`;
+                }
+                else {
+                    placements += `HP:\nCLC - ${hpPercentage * 100}% of $${walletCap} = $${hpAllocation}\nHP_${brand}_${dealId}\n`;
+                }
+                placements += `\n---------------------------------------------------------------------\n`;
+
+
+                if (cartGroupNames.length > 0) {
+                    placements += `CART:\n${cartGroupNames.map(name => `CART_${name}_${brand}_${dealId}`).join('\n')}\n`;
+                } else {
+                    placements += `CART:\nCART_${brand}_${dealId}\n`
+                }
+                placements += `\n---------------------------------------------------------------------\n`;
+                message += placements
+
+            }
+            else if (tactic === 'BA') {
+                placements = `\nBehavioral Audience (BA) Placements:\nCAT_${dealName}_${dealId}\nHP_${dealName}_${dealId}\nPDP_${dealName}_${dealId}\nSearch_${dealName}_${dealId}\nSearch_Modal_${dealName}_${dealId}\n---------------------------------------------------------------------\n`;
+                message += placements;
+            }
+
+            let endingMessage = `\nThank you\n@EI Team AdOps`;
+
+            message += endingMessage;
+
+            document.getElementById('result-code').innerHTML = message; // Use innerHTML here
+        }
+
+        function updateTactic() {
+            const tactic = document.getElementById('tactic').value;
+            const spaFields = document.getElementById('spaFields');
+
+            if (tactic === 'SPA') {
+                spaFields.classList.remove('hidden');
+            } else {
+                spaFields.classList.add('hidden');
+            }
+        }
+
+        function copyResult() {
+            const resultText = document.getElementById('result-code').textContent;
+            navigator.clipboard.writeText(resultText)
+                .then(() => {
+                    alert('Result copied to clipboard!');
+                })
+                .catch(err => {
+                    console.error('Failed to copy: ', err);
+                });
+        }
+    </script>
+
+</html>
