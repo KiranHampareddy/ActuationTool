@@ -3,286 +3,529 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grocery Actuation</title>
+    <title>Grocery Actuation: Streamlined Deal Configuration</title>
     <!-- Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9; /* Light background */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
             margin: 0;
             padding: 0;
+            color: #333;
         }
+
         .container {
-            background-color: #ffffff; /* White background for the container */
-            padding: 20px;
-            margin: 20px auto;
+            background-color: #fff;
+            padding: 30px;
+            margin: 30px auto;
             width: 90%;
-            max-width: 600px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
         }
+
         .heading {
-            background-color: #4caf50; /* Soft green */
-            color: #ffffff; /* White text */
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-            margin: -20px -20px 20px -20px;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            font-weight: bold;
-        }
-        input[type="text"], input[type="number"], select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc; /* Light gray border */
-            border-radius: 8px;
-            box-sizing: border-box;
-        }
-        .highlight {
-            border-color: #81c784; /* Light green highlight */
-            background-color: #e8f5e9; /* Very light green background */
-        }
-        .result {
-            margin-top: 20px;
+            background-color: #3f51b5;
+            color: #ffffff;
             padding: 20px;
-            background-color: #f1f8e9; /* Soft light green for results */
-            border-radius: 10px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            margin: -30px -30px 25px -30px;
+            letter-spacing: 0.5px;
+            width: 100%;
         }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #82b1ff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(62, 109, 242, 0.2);
+        }
+
+        .highlight {
+            border-color: #ff6347;
+            background-color: #ffebee;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            width: 100%;
+        }
+
         .hidden {
             display: none;
         }
+
         .btn {
             display: inline-block;
-            padding: 10px 20px;
-            color: #ffffff; /* White text */
-            background-color: #388e3c; /* Darker green */
+            padding: 12px 25px;
+            color: #ffffff;
+            background-color: #3f51b5;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             text-align: center;
-            font-size: 16px;
-            transition: background-color 0.3s;
+            font-size: 17px;
+            transition: background-color 0.3s, transform 0.2s;
         }
+
         .btn:hover {
-            background-color: #2e7d32; /* Even darker green on hover */
+            background-color: #283593;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
         }
+
         .red-text {
-            color: #ff0000; /* Bright red for emphasis */
-            font-weight: bold;
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        #flightDatesContainer {
+            display: flex;
+            gap: 20px;
+        }
+
+        #flightDatesContainer .form-group {
+            flex: 1;
+        }
+
+        .tactic-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        #tactic {
+            width: 50%;
+            min-width: 200px;
+            margin: 0 auto;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: larger;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .section-header {
+            text-align: center;
+            padding: 15px;
+            font-size: larger;
+            width: 100%;
+        }
+
+        #baKeywords label,
+        #placementFields label {
+            color: gray;
+            font-style: italic;
+        }
+
+        /* Style for BA Keyword Sets */
+        .ba-keyword-sets {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .ba-keyword-set {
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            box-sizing: border-box;
+        }
+
+        .ba-keyword-set strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .ba-keyword-set p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* On smaller screens, make each set take up full width */
+        @media (max-width: 768px) {
+            .ba-keyword-set {
+                width: 100%;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<div class="container">
-    <!-- Heading -->
-    <div class="heading">Grocery Actuation</div>
+    <div class="container">
+        <!-- Heading -->
+        <div class="heading"><i class="fas fa-shopping-cart"></i> Grocery</div>
 
-    <!-- Form for data input -->
-    <div class="form-group">
-        <label for="dealName">Deal Name</label>
-        <input type="text" id="dealName" placeholder="Enter Deal Name">
+        <!-- Form for data input -->
+        <div class="form-group">
+            <label for="dealName">Deal Name <span class="red-text">*</span></label>
+            <input type="text" id="dealName" placeholder="Enter Deal Name" aria-required="true">
+            <div class="error-message" id="dealNameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="dealId">Deal ID <span class="red-text">*</span></label>
+            <input type="text" id="dealId" placeholder="Enter Deal ID" aria-required="true">
+            <div class="error-message" id="dealIdError"></div>
+        </div>
+        <div class="form-group">
+            <label for="team">Team <span class="red-text">*</span></label>
+            <input type="text" id="team" placeholder="Enter Team Name" aria-required="true">
+            <div class="error-message" id="teamError"></div>
+        </div>
+        <div class="form-group">
+            <label for="walletName">Wallet Name <span class="red-text">*</span></label>
+            <input type="text" id="walletName" placeholder="Enter Wallet Name" aria-required="true">
+            <div class="error-message" id="walletNameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="budget">Budget <span class="red-text">*</span></label>
+            <input type="number" id="budget" placeholder="Enter Budget" aria-required="true">
+            <div class="error-message" id="budgetError"></div>
+        </div>
+
+        <div id="flightDatesContainer">
+            <div class="form-group">
+                <label for="flightStartDate">Flight Start Date <span class="red-text">*</span></label>
+                <input type="text" id="flightStartDate" placeholder="Select Start Date" aria-required="true">
+                <div class="error-message" id="flightStartDateError"></div>
+            </div>
+            <div class="form-group">
+                <label for="flightEndDate">Flight End Date <span class="red-text">*</span></label>
+                <input type="text" id="flightEndDate" placeholder="Select End Date" aria-required="true">
+                <div class="error-message" id="flightEndDateError"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numberOfDays">Number of Days <span class="red-text">*</span></label>
+            <input type="text" id="numberOfDays" placeholder="Number of Days" readonly aria-required="true">
+            <div class="error-message" id="numberOfDaysError"></div>
+        </div>
+
+        <!-- Tactic selection -->
+        <div class="form-group tactic-selection">
+            <label for="tactic">Select Tactic <span class="red-text">*</span></label>
+            <select id="tactic" onchange="updateTactic()" aria-required="true">
+                <option value="">-- Select Tactic --</option>
+                <option value="SPA">SPA</option>
+                <option value="BA">BA</option>
+            </select>
+            <div class="error-message" id="tacticError"></div>
+        </div>
+        <!-- Section break style -->
+        <div class="section-header">Tactic-Specific Configuration</div>
+        <!-- KW Group Names and Brand fields, hidden initially -->
+        <div class="form-group hidden" id="placementFields">
+            <label for="kwGroupNames">KW Group Names (comma-separated)</label>
+            <input type="text" id="kwGroupNames" placeholder="Enter KW Group Names">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" placeholder="Enter Brand">
+        </div>
+
+        <!-- Keyword Input for BA Tactic -->
+        <div class="form-group hidden" id="baKeywords">
+            <label for="keywords">Keywords (one per line)</label>
+            <textarea id="keywords" rows="5" placeholder="Enter Keywords (one per line)"></textarea>
+        </div>
+
+        <!-- Wallet Cap Type -->
+        <div class="form-group">
+            <label for="walletCapType">Wallet Cap Type</label>
+            <select id="walletCapType">
+                <option value="capped">Capped</option>
+                <option value="uncapped">Uncapped</option>
+            </select>
+        </div>
+
+        <!-- Generate Data Button -->
+        <div class="form-group" style="text-align: center;">
+            <button class="btn" onclick="generateData()"><i class="fas fa-cogs"></i> Generate Data</button>
+        </div>
+
+        <!-- Section to display result -->
+        <div class="result" id="result"></div>
+        <button class="btn" onclick="copyResult()">Copy Result</button>
+
     </div>
-    <div class="form-group">
-        <label for="dealId">Deal ID</label>
-        <input type="text" id="dealId" placeholder="Enter Deal ID">
-    </div>
-    <div class="form-group">
-        <label for="team">Team</label>
-        <input type="text" id="team" placeholder="Enter Team Name">
-    </div>
-    <div class="form-group">
-        <label for="walletName">Wallet Name</label>
-        <input type="text" id="walletName" placeholder="Enter Wallet Name">
-    </div>
-    <div class="form-group">
-        <label for="budget">Budget</label>
-        <input type="number" id="budget" placeholder="Enter Budget">
-    </div>
-    <div class="form-group">
-        <label for="flightStartDate">Flight Start Date</label>
-        <input type="text" id="flightStartDate" placeholder="Select Start Date">
-    </div>
-    <div class="form-group">
-        <label for="flightEndDate">Flight End Date</label>
-        <input type="text" id="flightEndDate" placeholder="Select End Date">
-    </div>
-    <div class="form-group">
-        <label for="numberOfDays">Number of Days</label>
-        <input type="text" id="numberOfDays" placeholder="Number of Days" readonly>
-    </div>
 
-    <!-- Tactic selection -->
-    <div class="form-group">
-        <label for="tactic">Select Tactic</label>
-        <select id="tactic" onchange="updateTactic()">
-            <option value="">-- Select Tactic --</option>
-            <option value="SPA">SPA</option>
-            <option value="BA">BA</option>
-        </select>
-    </div>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const config = {
+            bufferMultiplier: 1.40,
+            bufferUsedText: '40%',
+            maxBudget: 1000000, // Example limit
+            keywordLimit: 600, //Example limit
+            dealIdFormat: /^GA-\d+$/
+        };
 
-    <!-- KW Group Names and Brand fields, hidden initially -->
-    <div class="form-group hidden" id="placementFields">
-        <label for="kwGroupNames">KW Group Names (comma-separated)</label>
-        <input type="text" id="kwGroupNames" placeholder="Enter KW Group Names">
-        <label for="brand">Brand</label>
-        <input type="text" id="brand" placeholder="Enter Brand">
-    </div>
-
-    <!-- Wallet Cap Type -->
-    <div class="form-group">
-        <label for="walletCapType">Wallet Cap Type</label>
-        <select id="walletCapType">
-            <option value="capped">Capped</option>
-            <option value="uncapped">Uncapped</option>
-        </select>
-    </div>
-
-    <!-- Generate Data Button -->
-    <div class="form-group">
-        <button class="btn" onclick="generateData()">Generate Data</button>
-    </div>
-
-    <!-- Section to display result -->
-    <div class="result" id="result"></div>
-</div>
-
-<!-- Flatpickr JS -->
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script>
-    // Initialize Flatpickr for date inputs
-    document.addEventListener('DOMContentLoaded', function() {
-        flatpickr('#flightStartDate', {
-            dateFormat: "m/d/Y",
-            onChange: calculateDays
-        });
-        flatpickr('#flightEndDate', {
-            dateFormat: "m/d/Y",
-            onChange: calculateDays
-        });
-    });
-
-    // Update visibility of KW Group Names and Brand fields based on tactic
-    function updateTactic() {
-        const tactic = document.getElementById('tactic').value;
-        const placementFields = document.getElementById('placementFields');
-        if (tactic === 'SPA') {
-            placementFields.classList.remove('hidden');
-        } else if (tactic === 'BA') {
-            placementFields.classList.add('hidden');
-        }
-    }
-
-    // Calculate the number of days between start and end dates
-        function calculateDays() {
-        const startDate = new Date(document.getElementById('flightStartDate').value);
-        const endDate = new Date(document.getElementById('flightEndDate').value);
-    
-        if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
-        const diffTime = Math.abs(endDate - startDate);
-        const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1; // Add 1 for extra count
-        document.getElementById('numberOfDays').value = numberOfDays;
-        } else {
-        document.getElementById('numberOfDays').value = '';
-    }
-}
-
-    // Validate inputs and highlight empty fields
-    function validateInputs() {
-        let valid = true;
-        const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'budget', 'flightStartDate', 'flightEndDate', 'numberOfDays'];
-        requiredFields.forEach(id => {
-            const input = document.getElementById(id);
-            if (!input.value.trim()) {
-                input.classList.add('highlight');
-                valid = false;
-            } else {
-                input.classList.remove('highlight');
-            }
-        });
-        return valid;
-    }
-
-    // Function to highlight special characters other than underscores in red
-    function highlightSpecialChars(text) {
-        return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
-    }
-
-    // Generate and display the result data based on form inputs
-    function generateData() {
-        if (!validateInputs()) {
-            alert('Please fill in all required fields.');
-            return;
-        }
-
-        // Highlight special characters in Deal Name and Wallet Name
-        const dealName = highlightSpecialChars(document.getElementById('dealName').value.replace(/[\s/]/g, '_'));
-        const dealId = document.getElementById('dealId').value;
-        const team = document.getElementById('team').value;
-        const walletName = highlightSpecialChars(document.getElementById('walletName').value.replace(/[\s/]/g, '_'));
-        const budget = parseFloat(document.getElementById('budget').value);
-        const flightStartDate = document.getElementById('flightStartDate').value;
-        const flightEndDate = document.getElementById('flightEndDate').value;
-        const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
-        const tactic = document.getElementById('tactic').value;
-        const walletCapType = document.getElementById('walletCapType').value;
-
-        // Buffer multiplier for budget calculations
-        const bufferMultiplier = 1.40; // 40% additional
-        const bufferUsedText = '40%';
-
-        // Generate placements based on selected tactic
-        let placements = '';
-        if (tactic === 'SPA') {
-            const kwGroupNames = document.getElementById('kwGroupNames').value.split(',').map(name => {
-                return highlightSpecialChars(name.trim().replace(/[\s/]/g, '_'));
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr('#flightStartDate', {
+                dateFormat: "m/d/Y",
+                onChange: calculateDays
             });
-            const brand = highlightSpecialChars(document.getElementById('brand').value.replace(/\s+/g, '_'));
-            placements = `
-                <ul>
-                    ${kwGroupNames.map(name => `<li>KW_${name}_${brand}_${dealId}</li>`).join('')}
-                    <li>CAT_${brand}_${dealId}</li>
-                </ul>
-            `;
-        } else if (tactic === 'BA') {
-            placements = `<p>ST_${dealName}_${dealId}</p>`;
+            flatpickr('#flightEndDate', {
+                dateFormat: "m/d/Y",
+                onChange: calculateDays
+            });
+        });
+
+        function updateTactic() {
+            const tactic = document.getElementById('tactic').value;
+            const placementFields = document.getElementById('placementFields');
+            const baKeywordsDiv = document.getElementById('baKeywords');
+
+            if (tactic === 'SPA') {
+                placementFields.classList.remove('hidden');
+                baKeywordsDiv.classList.add('hidden');
+            } else if (tactic === 'BA') {
+                placementFields.classList.add('hidden');
+                baKeywordsDiv.classList.remove('hidden');
+            } else {
+                placementFields.classList.add('hidden');
+                baKeywordsDiv.classList.add('hidden');
+            }
         }
 
-        // Calculate wallet cap if capped
-        const walletCap = walletCapType === 'capped' ? Math.round((budget / numberOfDays) * bufferMultiplier) : 'N/A';
+        function calculateDays() {
+            const startDate = new Date(document.getElementById('flightStartDate').value);
+            const endDate = new Date(document.getElementById('flightEndDate').value);
 
-        // Display the generated data
-        const resultHtml = `
+            if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+                const diffTime = Math.abs(endDate - startDate);
+                const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                document.getElementById('numberOfDays').value = numberOfDays;
+            } else {
+                document.getElementById('numberOfDays').value = '';
+            }
+        }
+        function escapeHTML(str) {
+            let div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function validateInputs() {
+            let valid = true;
+            const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'budget', 'flightStartDate', 'flightEndDate',
+                'numberOfDays', 'tactic'
+            ];
+
+            requiredFields.forEach(id => {
+                const input = document.getElementById(id);
+                const errorDiv = document.getElementById(id + 'Error');  // Consistent error div naming
+                errorDiv.textContent = ''; // Clear previous errors
+
+                if (!input.value.trim()) {
+                    input.classList.add('highlight');
+                    errorDiv.textContent = 'This field is required.';  // Specific error message
+                    valid = false;
+                } else {
+                    input.classList.remove('highlight');
+                }
+            });
+
+            const budgetInput = document.getElementById('budget');
+            if (budgetInput.value && isNaN(parseFloat(budgetInput.value))) {
+              budgetInput.classList.add('highlight');
+              document.getElementById('budgetError').textContent = 'Budget must be a number.';
+              valid = false
+            } else{
+              budgetInput.classList.remove('highlight');
+              document.getElementById('budgetError').textContent = '';
+            }
+
+
+            if (document.getElementById('tactic').value === 'BA') {
+                const keywordsInput = document.getElementById('keywords');
+                if (!keywordsInput.value.trim()) {
+                    keywordsInput.classList.add('highlight');
+                    document.getElementById('baKeywords').querySelector('label').classList.add('red-text'); //Add highlight to ba label above keyword field
+                    valid = false;
+
+                } else {
+                    keywordsInput.classList.remove('highlight');
+                    document.getElementById('baKeywords').querySelector('label').classList.remove('red-text'); //remove highlight
+                }
+            } else{
+              document.getElementById('baKeywords').querySelector('label').classList.remove('red-text'); //remove highlight
+
+            }
+
+
+            return valid;
+        }
+
+        function highlightSpecialChars(text) {
+            //More strict handling that does not automatically ignore slashes - this caused incorrect placements generated
+            return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${escapeHTML(match)}</span>`);
+        }
+
+       function validateDealId(value) {
+            if (!config.dealIdFormat.test(value)) {
+                validateDealId.errorMessage = `Deal ID must match format: ${config.dealIdFormat.source}`;
+                return false;
+            }
+            return true;
+        }
+
+
+        function generateData() {
+            if (!validateInputs()) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const dealName = document.getElementById('dealName').value.replace(/[\s]/g, '_'); //Removed escaping of the slash so we can enforce it later
+            const dealId = document.getElementById('dealId').value;
+            const team = document.getElementById('team').value;
+            const walletName = document.getElementById('walletName').value.replace(/[\s]/g, '_');  //same thing applied here
+            const budget = parseFloat(document.getElementById('budget').value);
+            const flightStartDate = document.getElementById('flightStartDate').value;
+            const flightEndDate = document.getElementById('flightEndDate').value;
+            const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
+            const tactic = document.getElementById('tactic').value;
+            const walletCapType = document.getElementById('walletCapType').value;
+
+
+
+            // Generate placements based on selected tactic
+            let placements = '';
+            if (tactic === 'SPA') {
+                const kwGroupNames = document.getElementById('kwGroupNames').value.split(',').map(name => name.trim()
+                    .replace(/[\s\/]/g, '_'));
+                const brand = document.getElementById('brand').value.replace(/[\s\/]/g, '_');
+                placements = `<ul>${kwGroupNames.map(name => `<li>${highlightSpecialChars("KW_" + name + "_" + brand + "_" + dealId)}</li>`).join('')}<li>${highlightSpecialChars("CAT_" + brand + "_" + dealId)}</li></ul>`;
+            } else if (tactic === 'BA') {
+
+                let baPlacements = `
+                  <p>${highlightSpecialChars(`KWT_Set1_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set1_Phrase_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set2_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set2_Phrase_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set3_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set3_Phrase_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set4_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set4_Phrase_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set5_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set5_Phrase_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set6_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`KWT_Set6_Phrase_${dealName}_${dealId}`)}</p>
+                  <p>${highlightSpecialChars(`CAT_${dealName}_${dealId}`)}</p>
+                  <p>Thank You</P>
+                  @Ei
+                `;
+
+              const keywordsText = document.getElementById('keywords').value;
+              const keywords = keywordsText.split('\n').map(keyword => keyword.trim()).filter(keyword => keyword !== '');
+
+              let keywordSetsHtml = '';
+                let i = 0;
+
+
+                for (i = 0; i < keywords.length; i += 100) {
+
+                  const setNumber = Math.floor(i / 100) + 1;
+                  const keywordSet = keywords.slice(i, i + 100);
+
+                    keywordSetsHtml += `<div class="ba-keyword-set"><strong>Set ${setNumber}:</strong><p>${highlightSpecialChars(keywordSet.join(', '))}</p></div>`;
+
+                }
+
+            placements = baPlacements + `<div class="ba-keyword-sets">${keywordSetsHtml}</div>`;
+
+            }
+
+            // Calculate wallet cap if capped
+            const walletCap = walletCapType === 'capped' ? Math.round((budget / numberOfDays) * config.bufferMultiplier) : 'N/A';
+
+            const highlightedDealName = highlightSpecialChars(dealName);
+            const highlightedWalletName = highlightSpecialChars(walletName);
+
+            // Display the generated data
+            const resultHtml = `
             <p>Hi @</p>
             <p>The campaigns have been trafficked and QAed. Below are the details:</p>
             <p>Note:</p>
             <p>1.</p>
             <p>2.</p>
             <p><strong>Details:</strong></p>
-            <p>Deal Name: ${dealName}</p>
+            <p>Deal Name: ${highlightedDealName}</p>
             <p>Deal ID: ${dealId}</p>
             <p>Team: ${team}</p>
-            <p>Wallet Name: ${walletName}</p>
+            <p>Wallet Name: ${highlightedWalletName}</p>
             <p>Budget: $${budget.toFixed(2)}</p>
             <p>Flight Dates: ${flightStartDate} - ${flightEndDate}</p>
             <p>Number of Days: ${numberOfDays}</p>
-            ${walletCapType === 'capped' ? `<p>Buffer Used: ${bufferUsedText}</p><p>Wallet Cap: $${walletCap}</p>` : ''}
+            ${walletCapType === 'capped' ? `<p>Buffer Used: ${config.bufferUsedText}</p><p>Wallet Cap: $${walletCap}</p>` : ''}
+            ${tactic === 'BA' ? '<p><strong>BA Placements:</strong></p>' : ''}
             ${placements}
+            <p>Thank You</P>
+            @Ei
         `;
-
-        document.getElementById('result').innerHTML = resultHtml;
-    }
-</script>
+            document.getElementById('result').innerHTML = resultHtml;
+        }
+        function copyResult() {
+                const resultElement = document.getElementById("result");
+                if (resultElement) {
+                    const textToCopy = resultElement.innerText; // Using innerText to get formatted text
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        alert("Result copied to clipboard!");
+                    }).catch(err => {
+                        console.error("Failed to copy text: ", err);
+                        alert("Failed to copy result. Please copy manually.");
+                    });
+                }
+            }
+    </script>
 
 </body>
+
 </html>
