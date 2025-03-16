@@ -338,10 +338,18 @@
             const startDate = new Date(document.getElementById('flightStartDate').value);
             const endDate = new Date(document.getElementById('flightEndDate').value);
 
+              // Reset times to midnight (to avoid time affecting the calculation)
+              startDate.setHours(0, 0, 0, 0);
+              endDate.setHours(0, 0, 0, 0);
+
             if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
-                const diffTime = Math.abs(endDate - startDate);
-                const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                document.getElementById('numberOfDays').value = numberOfDays;
+                if (startDate > endDate) {
+                    document.getElementById("numberOfDays").value = "Start date must be before end date.";
+                } else {
+                    const diffTime = Math.abs(endDate - startDate);
+                    const numberOfDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                    document.getElementById('numberOfDays').value = numberOfDays;
+                }
             } else {
                 document.getElementById('numberOfDays').value = '';
             }
