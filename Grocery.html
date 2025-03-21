@@ -1,1 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Actuation: Streamlined Deal Configuration</title>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
 
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            margin: 30px auto;
+            width: 90%;
+            max-width: 900px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .heading {
+            background-color: #3f51b5;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+            margin: -30px -30px 25px -30px;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #82b1ff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(62, 109, 242, 0.2);
+        }
+
+        .highlight {
+            border-color: #ff6347;
+            background-color: #ffebee;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background-color: #f5f5f5;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+            width: 100%;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            color: #ffffff;
+            background-color: #3f51b5;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 17px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #283593;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .red-text {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        #flightDatesContainer {
+            display: flex;
+            gap: 20px;
+        }
+
+        #flightDatesContainer .form-group {
+            flex: 1;
+        }
+
+        .tactic-selection {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        #tactic {
+            width: 50%;
+            min-width: 200px;
+            margin: 0 auto;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: larger;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .section-header {
+            text-align: center;
+            padding: 15px;
+            font-size: larger;
+            width: 100%;
+        }
+
+        #baKeywords label,
+        #placementFields label {
+            color: gray;
+            font-style: italic;
+        }
+
+        /* Style for BA Keyword Sets */
+        .ba-keyword-sets {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .ba-keyword-set {
+            width: calc(50% - 10px);
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            box-sizing: border-box;
+        }
+
+        .ba-keyword-set strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .ba-keyword-set p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* On smaller screens, make each set take up full width */
+        @media (max-width: 768px) {
+            .ba-keyword-set {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Heading -->
+        <div class="heading"><i class="fas fa-shopping-cart"></i> Grocery</div>
+
+        <!-- Form for data input -->
+        <div class="form-group">
+            <label for="dealName">Deal Name <span class="red-text">*</span></label>
+            <input type="text" id="dealName" placeholder="Enter Deal Name" aria-required="true">
+            <div class="error-message" id="dealNameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="dealId">Deal ID <span class="red-text">*</span></label>
+            <input type="text" id="dealId" placeholder="Enter Deal ID" aria-required="true">
+            <div class="error-message" id="dealIdError"></div>
+        </div>
+        <div class="form-group">
+            <label for="team">Team <span class="red-text">*</span></label>
+            <input type="text" id="team" placeholder="Enter Team Name" aria-required="true">
+            <div class="error-message" id="teamError"></div>
+        </div>
+        <div class="form-group">
+            <label for="walletName">Wallet Name <span class="red-text">*</span></label>
+            <input type="text" id="walletName" placeholder="Enter Wallet Name" aria-required="true">
+            <div class="error-message" id="walletNameError"></div>
+        </div>
+        <div class="form-group">
+            <label for="budget">Budget <span class="red-text">*</span></label>
+            <input type="number" id="budget" placeholder="Enter Budget" aria-required="true">
+            <div class="error-message" id="budgetError"></div>
+        </div>
+
+        <div id="flightDatesContainer">
+            <div class="form-group">
+                <label for="flightStartDate">Flight Start Date <span class="red-text">*</span></label>
+                <input type="text" id="flightStartDate" placeholder="Select Start Date" aria-required="true">
+                <div class="error-message" id="flightStartDateError"></div>
+            </div>
+            <div class="form-group">
+                <label for="flightEndDate">Flight End Date <span class="red-text">*</span></label>
+                <input type="text" id="flightEndDate" placeholder="Select End Date" aria-required="true">
+                <div class="error-message" id="flightEndDateError"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numberOfDays">Number of Days <span class="red-text">*</span></label>
+            <input type="text" id="numberOfDays" placeholder="Number of Days" readonly aria-required="true">
+            <div class="error-message" id="numberOfDaysError"></div>
+        </div>
+
+        <!-- Tactic selection -->
+        <div class="form-group tactic-selection">
+            <label for="tactic">Select Tactic <span class="red-text">*</span></label>
+            <select id="tactic" onchange="updateTactic()" aria-required="true">
+                <option value="">-- Select Tactic --</option>
+                <option value="SPA">SPA</option>
+                <option value="BA">BA</option>
+            </select>
+            <div class="error-message" id="tacticError"></div>
+        </div>
+        <!-- Section break style -->
+        <div class="section-header">Tactic-Specific Configuration</div>
+        <!-- KW Group Names and Brand fields, hidden initially -->
+        <div class="form-group hidden" id="placementFields">
+            <label for="kwGroupNames">KW Group Names (comma-separated)</label>
+            <input type="text" id="kwGroupNames" placeholder="Enter KW Group Names">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" placeholder="Enter Brand">
+        </div>
+
+        <!-- Keyword Input for BA Tactic -->
+        <div class="form-group hidden" id="baKeywords">
+            <label for="keywords">Keywords (one per line)</label>
+            <textarea id="keywords" rows="5" placeholder="Enter Keywords (one per line)"></textarea>
+        </div>
+
+        <!-- Wallet Cap Type -->
+        <div class="form-group">
+            <label for="walletCapType">Wallet Cap Type</label>
+            <select id="walletCapType">
+                <option value="capped">Capped</option>
+                <option value="uncapped">Uncapped</option>
+            </select>
+        </div>
+
+        <!-- Generate Data Button -->
+        <div class="form-group" style="text-align: center;">
+            <button class="btn" onclick="generateData()"><i class="fas fa-cogs"></i> Generate Data</button>
+        </div>
+
+        <!-- Section to display result -->
+        <div class="result" id="result"></div>
+        <button class="btn" onclick="copyResult()">Copy Result</button>
+
+    </div>
+
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        const config = {
+            bufferMultiplier: 1.40,
+            bufferUsedText: '40%',
+            maxBudget: 1000000, // Example limit
+            keywordLimit: 600, //Example limit
+            maxKeywordSets : 6
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            flatpickr('#flightStartDate', {
+                dateFormat: "m/d/Y",
+                onChange: calculateDays
+            });
+            flatpickr('#flightEndDate', {
+                dateFormat: "m/d/Y",
+                onChange: calculateDays
+            });
+        });
+
+        function updateTactic() {
+            const tactic = document.getElementById('tactic').value;
+            const placementFields = document.getElementById('placementFields');
+            const baKeywordsDiv = document.getElementById('baKeywords');
+
+            if (tactic === 'SPA') {
+                placementFields.classList.remove('hidden');
+                baKeywordsDiv.classList.add('hidden');
+            } else if (tactic === 'BA') {
+                placementFields.classList.add('hidden');
+                baKeywordsDiv.classList.remove('hidden');
+            } else {
+                placementFields.classList.add('hidden');
+                baKeywordsDiv.classList.add('hidden');
+            }
+        }
+
+        function calculateDays() {
+            const startDate = new Date(document.getElementById('flightStartDate').value);
+            const endDate = new Date(document.getElementById('flightEndDate').value);
+
+            if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
+                const diffTime = Math.abs(endDate - startDate);
+                const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                document.getElementById('numberOfDays').value = numberOfDays;
+            } else {
+                document.getElementById('numberOfDays').value = '';
+            }
+        }
+        function escapeHTML(str) {
+            let div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function validateInputs() {
+            let valid = true;
+            const requiredFields = ['dealName', 'dealId', 'team', 'walletName', 'budget', 'flightStartDate', 'flightEndDate',
+                'numberOfDays', 'tactic'
+            ];
+
+            requiredFields.forEach(id => {
+                const input = document.getElementById(id);
+                const errorDiv = document.getElementById(id + 'Error');  // Consistent error div naming
+                errorDiv.textContent = ''; // Clear previous errors
+
+                if (!input.value.trim()) {
+                    input.classList.add('highlight');
+                    errorDiv.textContent = 'This field is required.';  // Specific error message
+                    valid = false;
+                } else {
+                    input.classList.remove('highlight');
+                }
+            });
+
+            const budgetInput = document.getElementById('budget');
+            if (budgetInput.value && isNaN(parseFloat(budgetInput.value))) {
+              budgetInput.classList.add('highlight');
+              document.getElementById('budgetError').textContent = 'Budget must be a number.';
+              valid = false
+            } else{
+              budgetInput.classList.remove('highlight');
+              document.getElementById('budgetError').textContent = '';
+            }
+
+
+            if (document.getElementById('tactic').value === 'BA') {
+                const keywordsInput = document.getElementById('keywords');
+                if (!keywordsInput.value.trim()) {
+                    keywordsInput.classList.add('highlight');
+                    document.getElementById('baKeywords').querySelector('label').classList.add('red-text'); //Add highlight to ba label above keyword field
+                    valid = false;
+
+                } else {
+                    keywordsInput.classList.remove('highlight');
+                    document.getElementById('baKeywords').querySelector('label').classList.remove('red-text'); //remove highlight
+                }
+            } else{
+              document.getElementById('baKeywords').querySelector('label').classList.remove('red-text'); //remove highlight
+
+            }
+
+
+            return valid;
+        }
+
+        function highlightSpecialChars(text) {
+            //More strict handling that does not automatically ignore slashes - this caused incorrect placements generated
+            return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${escapeHTML(match)}</span>`);
+        }
+
+
+        function generateData() {
+            if (!validateInputs()) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+
+            const dealName = escapeHTML(document.getElementById('dealName').value.replace(/[\s]/g, '_')); //Removed escaping of the slash so we can enforce it later
+            const dealId = escapeHTML(document.getElementById('dealId').value);
+            const team = escapeHTML(document.getElementById('team').value);
+            const walletName = escapeHTML(document.getElementById('walletName').value.replace(/[\s]/g, '_'));  //same thing applied here
+            const budget = parseFloat(document.getElementById('budget').value);
+            const flightStartDate = escapeHTML(document.getElementById('flightStartDate').value);
+            const flightEndDate = escapeHTML(document.getElementById('flightEndDate').value);
+            const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
+            const tactic = document.getElementById('tactic').value;
+            const walletCapType = document.getElementById('walletCapType').value;
+
+
+
+            // Generate placements based on selected tactic
+            let placements = '';
+            if (tactic === 'SPA') {
+                const kwGroupNames = document.getElementById('kwGroupNames').value.split(',').map(name => escapeHTML(name.trim()
+                    .replace(/[\s\/]/g, '_')));
+                const brand = escapeHTML(document.getElementById('brand').value.replace(/[\s\/]/g, '_'));
+                placements = `<ul>${kwGroupNames.map(name => `<li>KW_${name}_${brand}_${dealId}</li>`).join('')}<li>CAT_${brand}_${dealId}</li></ul>`;
+            } else if (tactic === 'BA') {
+
+              let baPlacements = `
+                  <p>KWT_set1_${dealName}_${dealId}</p>
+                  <p>KWT_set1_Phrase_${dealName}_${dealId}</p>
+                  <p>KWT_set2_${dealName}_${dealId}</p>
+                  <p>KWT_set2_Phrase_${dealName}_${dealId}</p>
+                  <p>KWT_set3_${dealName}_${dealId}</p>
+                  <p>KWT_set3_Phrase_${dealName}_${dealId}</p>
+                  <p>KWT_set4_${dealName}_${dealId}</p>
+                  <p>KWT_set4_Phrase_${dealName}_${dealId}</p>
+                  <p>KWT_set5_${dealName}_${dealId}</p>
+                  <p>KWT_set5_Phrase_${dealName}_${dealId}</p>
+                  <p>KWT_set6_${dealName}_${dealId}</p>
+                  <p>KWT_set6_Phrase_${dealName}_${dealId}</p>
+                  <p>CAT_${dealName}_${dealId}</p>
+                  <p>KWC_Brand_${dealName}_${dealId}</p>
+                  <p>KWP_Brand_${dealName}_${dealId}</p>
+                `;
+
+              const keywordsText = document.getElementById('keywords').value;
+              const keywords = keywordsText.split('\n').map(keyword => keyword.trim()).filter(keyword => keyword !== '');
+
+              let keywordSetsHtml = '';
+                let i = 0;
+
+              if (keywords.length > config.keywordLimit) {
+                    alert(`Warning! there is ${keywords.length} of keywords. Recommended ammount should not exceed  ${config.keywordLimit}. Check placement name results. This can cause unintentended spend if not careful`)
+              }
+
+              if (keywords.length/100 > config.maxKeywordSets){
+                 alert(`Your ammount of keywords per ammount sets have exceeded recomendations! Try using keywords/maxSets. You currently use`+keywords.length/100+ " when " +config.maxKeywordSets+ "was asked!");
+                 return false;
+
+              }
+                for (i = 0; i < keywords.length; i += 100) {
+
+                  const setNumber = Math.floor(i / 100) + 1;
+                  const keywordSet = keywords.slice(i, i + 100);
+
+                    keywordSetsHtml += `<div class="ba-keyword-set"><strong>Set ${setNumber}:</strong><p>${escapeHTML(keywordSet.join(', '))}</p></div>`;
+
+                }
+
+            placements = baPlacements + `<div class="ba-keyword-sets">${keywordSetsHtml}</div>`;
+
+            }
+
+            // Calculate wallet cap if capped
+            const walletCap = walletCapType === 'capped' ? Math.round((budget / numberOfDays) * config.bufferMultiplier) : 'N/A';
+
+            // Display the generated data
+            const resultHtml = `
+            <p>Hi @</p>
+            <p>The campaigns have been trafficked and QAed. Below are the details:</p>
+            <p>Note:</p>
+            <p>1.</p>
+            <p>2.</p>
+            <p><strong>Details:</strong></p>
+            <p>Deal Name: ${highlightSpecialChars(dealName)}</p>
+            <p>Deal ID: ${dealId}</p>
+            <p>Team: ${team}</p>
+            <p>Wallet Name: ${highlightSpecialChars(walletName)}</p>
+            <p>Budget: $${budget.toFixed(2)}</p>
+            <p>Flight Dates: ${flightStartDate} - ${flightEndDate}</p>
+            <p>Number of Days: ${numberOfDays}</p>
+            ${walletCapType === 'capped' ? `<p>Buffer Used: ${config.bufferUsedText}</p><p>Wallet Cap: $${walletCap}</p>` : ''}
+            ${tactic === 'BA' ? '<p><strong>BA Placements:</strong></p>' : ''}
+            ${placements}
+        `;
+            document.getElementById('result').innerHTML = resultHtml;
+        }
+        function copyResult() {
+                const resultElement = document.getElementById("result");
+                if (resultElement) {
+                    const textToCopy = resultElement.innerText; // Using innerText to get formatted text
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        alert("Result copied to clipboard!");
+                    }).catch(err => {
+                        console.error("Failed to copy text: ", err);
+                        alert("Failed to copy result. Please copy manually.");
+                    });
+                }
+            }
+    </script>
+
+</body>
+
+</html>
