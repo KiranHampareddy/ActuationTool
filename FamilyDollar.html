@@ -1,361 +1,494 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ticket Drafting Tool</title>
-  <style>
-    .input-section {
-      display: none;
-      margin-top: 20px;
-    }
-    label {
-      margin-right: 10px;
-    }
-    .error {
-      color: red;
-      font-size: 12px;
-    }
-     .red-text {
-    color: red;
-  }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Dollar</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7fafc;
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        /* Centered content styles */
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        /* Tactic Selection */
+        select {
+            padding: 12px;
+            font-size: 16px;
+            margin: 15px 0;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background-color: #fff;
+            transition: border 0.3s ease;
+        }
+
+        select:hover,
+        select:focus {
+            border-color: #4A90E2;
+            outline: none;
+        }
+
+        /* Input Section Styling */
+        .input-section {
+            display: none;
+            margin-top: 20px;
+            padding: 25px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .input-section.active {
+            display: block;
+            transform: translateY(0);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 14px;
+            color: #4A4A4A;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 100%;
+            padding: 14px;
+            margin-top: 8px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 16px;
+            background-color: #fff;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        select:focus {
+            border-color: #4A90E2;
+            outline: none;
+        }
+
+        /* Error Message Styling */
+        .error {
+            color: #E74C3C;
+            font-size: 13px;
+        }
+
+        .red-text {
+            color: #E74C3C;
+        }
+
+        /* Buttons Styling */
+        button {
+            padding: 14px 28px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 25px;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #357ABD;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            background-color: #2C6E9D;
+        }
+
+        /* Output Box Styling */
+        #output {
+            display: none;
+            margin-top: 20px;
+            padding: 25px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        #output h3 {
+            margin-bottom: 15px;
+            font-size: 1.8rem;
+            color: #333;
+        }
+
+        #output_text {
+            font-size: 1.2rem;
+            color: #333;
+        }
+
+        /* Add smooth animation for output visibility */
+        #output.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #output.inactive {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+    </style>
 </head>
+
 <body>
+    <div class="container">
+        <h1>Family Dollar</h1>
+        <label for="tactic">Select Tactic:</label>
+        <select id="tactic" onchange="showInputs()">
+            <option value="">--Select Tactic--</option>
+            <option value="SPA">Search</option>
+            <option value="BAx">Banner X</option>
+            <option value="Lockouts">Lockouts</option>
+        </select>
 
-  <h1>Family Dollar Legend Satish</h1>
+        <div id="spa" class="input-section">
+            <h3>SPA Inputs</h3>
+            <div class="input-group">
+                <label for="spa_deal_name">Deal Name:</label>
+                <input type="text" id="spa_deal_name">
+            </div>
+            <div class="input-group">
+                <label for="spa_deal_id">Deal ID:</label>
+                <input type="text" id="spa_deal_id">
+            </div>
+            <div class="input-group">
+                <label for="spa_additional">Additional Information:</label>
+                <input type="text" id="spa_additional">
+            </div>
+        </div>
 
-  <!-- Dropdown for selecting tactic -->
-  <label for="tactic">Select Tactic:</label>
-  <select id="tactic" onchange="showInputs()">
-    <option value="">--Select Tactic--</option>
-    <option value="SPA">SPA</option>
-    <option value="BAx">BAx</option>
-    <option value="Lockouts">Lockouts</option>
-  </select>
+        <div id="bax" class="input-section">
+            <h3>BAx Inputs</h3>
+            <form id="placementForm">
+                <div class="input-group">
+                    <label for="dealName">Deal Name:</label>
+                    <input type="text" id="dealName" name="dealName">
+                </div>
+                <div class="input-group">
+                    <label for="dealId">Deal ID:</label>
+                    <input type="text" id="dealId" name="dealId">
+                </div>
+                <div class="input-group">
+                    <label for="team">Team:</label>
+                    <input type="text" id="team" name="team">
+                </div>
+                <div class="input-group">
+                    <label for="walletName">Wallet Name:</label>
+                    <input type="text" id="walletName" name="walletName" oninput="updateWalletId()">
+                </div>
+                <div class="input-group">
+                    <label for="walletId">Wallet ID:</label>
+                    <input type="text" id="walletId" name="walletId" readonly>
+                </div>
+                <div class="input-group">
+                    <label for="budget">Budget:</label>
+                    <input type="number" id="budget" name="budget" step="0.01">
+                </div>
+                <div class="input-group">
+                    <label for="appUrl">Input APP URL:</label>
+                    <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here"
+                        oninput="validateUrls()">
+                    <span id="appUrlError" class="error"></span>
+                </div>
+                <div class="input-group">
+                    <label for="webUrl">Input WEB URL:</label>
+                    <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here"
+                        oninput="validateUrls()">
+                    <span id="webUrlError" class="error"></span>
+                </div>
+                <div class="input-group">
+                    <label for="flightStartDate">Flight Start Date:</label>
+                    <input type="text" id="flightStartDate" name="flightStartDate" onchange="calculateDays()">
+                </div>
+                <div class="input-group">
+                    <label for="flightEndDate">Flight End Date:</label>
+                    <input type="text" id="flightEndDate" name="flightEndDate" onchange="calculateDays()">
+                </div>
+                <div class="input-group">
+                    <label for="numberOfDays">Number of Days:</label>
+                    <input type="number" id="numberOfDays" name="numberOfDays" readonly>
+                </div>
+            </form>
+        </div>
 
-  <!-- Inputs for SPA -->
-  <div id="spa" class="input-section">
-    <h3>SPA Inputs</h3>
-    <label for="spa_deal_name">Deal Name:</label>
-    <input type="text" id="spa_deal_name"><br><br>
-    <label for="spa_deal_id">Deal ID:</label>
-    <input type="text" id="spa_deal_id"><br><br>
-    <label for="spa_additional">Additional Information:</label>
-    <input type="text" id="spa_additional"><br><br>
-  </div>
+        <div id="lockouts" class="input-section">
+            <h3>Lockouts Inputs</h3>
+            <div class="input-group">
+                <label for="lockouts_deal_name">Deal Name:</label>
+                <input type="text" id="lockouts_deal_name">
+            </div>
+            <div class="input-group">
+                <label for="lockouts_deal_id">Deal ID:</label>
+                <input type="text" id="lockouts_deal_id">
+            </div>
+            <div class="input-group">
+                <label for="lockouts_reason">Lockout Reason:</label>
+                <input type="text" id="lockouts_reason">
+            </div>
+        </div>
 
-  <!-- Inputs for BAx -->
-  <div id="bax" class="input-section">
-    <h3>BAx Inputs</h3>
-    <form id="placementForm" name="placementForm">
-      <label for="dealName">Deal Name:</label>
-      <input type="text" id="dealName" name="dealName"> <br><br>
+        <div id="output" style="margin-top: 20px;">
+            <h3>Output:</h3>
+            <p id="output_text"></p>
+        </div>
 
-      <label for="dealId">Deal ID:</label>
-      <input type="text" id="dealId" name="dealId"> <br><br>
+        <button onclick="generateOutput()">Generate Output</button>
+    </div>
 
-      <label for="team">Team:</label>
-      <input type="text" id="team" name="team"> <br><br>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        // Utility Functions
+        const replaceSpaces = (input) => {
+            return input.replace(/\s+/g, '_');
+        };
 
-      <label for="walletName">Wallet Name:</label>
-      <input type="text" id="walletName" name="walletName" oninput="updateWalletId()"> <br><br>
+        // Initialize Flatpickr for the date fields
+        document.addEventListener("DOMContentLoaded", function () {
+            flatpickr("#flightStartDate", {
+                dateFormat: "m-d-Y", // Date format for the start date
+                enableTime: false, // Disable time selection
+            });
 
-      <label for="walletId">Wallet ID:</label>
-      <input type="text" id="walletId" name="walletId" readonly> <br><br>
+            flatpickr("#flightEndDate", {
+                dateFormat: "m-d-y", // Date format for the end date
+                enableTime: false, // Disable time selection
+            });
+        });
 
-      <label for="budget">Budget:</label>
-      <input type="number" id="budget" name="budget" step="0.01"> <br><br>
+        const highlightSpecialChars = (text) => {
+            return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
+        };
 
-      <label for="appUrl">Input APP URL:</label>
-      <input type="text" id="appUrl" name="appUrl" placeholder="Enter the App URL here" oninput="validateUrls()"> <br><br>
-      <span id="appUrlError" class="error"></span> <br><br>
+        const updateWalletId = () => {
+            const walletName = document.getElementById('walletName').value;
+            let walletId = walletName.replace(/\D/g, '').slice(0, 7).padStart(7, '0');
+            document.getElementById('walletId').value = walletId;
+        };
 
-      <label for="webUrl">Input WEB URL:</label>
-      <input type="text" id="webUrl" name="webUrl" placeholder="Enter the Web URL here" oninput="validateUrls()"> <br><br>
-      <span id="webUrlError" class="error"></span> <br><br>
+        const validateUrls = () => {
+            const appUrl = document.getElementById("appUrl").value;
+            const webUrl = document.getElementById("webUrl").value;
 
-      <label for="flightStartDate">Flight Start Date:</label> 
-      <input type="date" id="flightStartDate" name="flightStartDate" onchange="calculateDays()"> <br><br>
+            const appUrlPattern = /^fdshop:\/\/coupon\/\d+$/;
+            const webUrlPattern = /^https:\/\/www\.familydollar\.com\/coupon-details\/\d+$/;
 
-      <label for="flightEndDate">Flight End Date:</label>
-      <input type="date" id="flightEndDate" name="flightEndDate" onchange="calculateDays()"> <br><br>
+            document.getElementById("appUrlError").textContent = !appUrlPattern.test(appUrl) ? "Invalid App URL format. Correct format: fdshop://coupon/{id}." : '';
+            document.getElementById("webUrlError").textContent = !webUrlPattern.test(webUrl) ? "Invalid Web URL format. Correct format: https://www.familydollar.com/coupon-details/{id}." : '';
+        };
 
-      <label for="numberOfDays">Number of Days:</label>
-      <input type="number" id="numberOfDays" name="numberOfDays" readonly> <br><br>
-    </form>
-  </div>
+        const calculateDays = () => {
+            const start = new Date(document.getElementById("flightStartDate").value);
+            const end = new Date(document.getElementById("flightEndDate").value);
+            const difference = start && end ? Math.floor((end - start) / (1000 * 60 * 60 * 24) + 1) : 0;
+            document.getElementById("numberOfDays").value = difference;
+        };
 
-  <!-- Inputs for Lockouts -->
-  <div id="lockouts" class="input-section">
-    <h3>Lockouts Inputs</h3>
-    <label for="lockouts_deal_name">Deal Name:</label>
-    <input type="text" id="lockouts_deal_name"><br><br>
-    <label for="lockouts_deal_id">Deal ID:</label>
-    <input type="text" id="lockouts_deal_id"><br><br>
-    <label for="lockouts_reason">Lockout Reason:</label>
-    <input type="text" id="lockouts_reason"><br><br>
-  </div>
+        const showInputs = () => {
+            const sections = ['spa', 'bax', 'lockouts'];
+            sections.forEach(section => document.getElementById(section).style.display = 'none');
 
-  <!-- Output -->
-  <div id="output" style="margin-top: 20px;">
-    <h3>Output:</h3>
-    <p id="output_text"></p>
-  </div>
+            const tactic = document.getElementById("tactic").value;
+            if (tactic) {
+                document.getElementById(tactic.toLowerCase()).style.display = 'block';
+            }
+        };
 
-  <!-- Submit Button -->
-  <button onclick="generateOutput()">Generate Output</button>
+        const generateOutput = () => {
+            const tactic = document.getElementById("tactic").value;
+            if (!tactic) {
+                alert("Please select a tactic first.");
+                return;
+            }
 
-  <script>
-    // Function to replace spaces with underscores in all input fields
-  function replaceSpaces(input) {
-    input.value = input.value.replace(/\s+/g, '_');
-  }
+            let outputText = "";
 
-  // Function to highlight special characters in red (non-alphanumeric except underscores)
-  function highlightSpecialChars(input) {
-    // Regex to match non-alphanumeric characters, excluding underscore (_)
-    const specialCharRegex = /[^a-zA-Z0-9_]/g;
-    const value = input.value;
-
-    // Find special characters and highlight them in red
-    const highlightedValue = value.replace(specialCharRegex, function(match) {
-      return `<span class="red-text">${match}</span>`;
-    });
-
-    // Set the HTML content of the input field to highlight special characters
-    input.innerHTML = highlightedValue;
-  }
-
-  // Add event listeners for all input fields
-  document.querySelectorAll('input[type="text"], input[type="number"], input[type="date"]').forEach(function(input) {
-    // Replace spaces with underscores when typing
-    input.addEventListener('input', function() {
-      replaceSpaces(input);
-      highlightSpecialChars(input);
-    });
-  });
-
-    // Function to show the input fields based on the selected tactic
-    function showInputs() {
-      // Hide all input sections initially
-      document.getElementById("spa").style.display = "none";
-      document.getElementById("bax").style.display = "none";
-      document.getElementById("lockouts").style.display = "none";
-
-      // Get selected tactic
-      var tactic = document.getElementById("tactic").value;
-
-      // Show the relevant section based on the selected tactic
-      if (tactic === "SPA") {
-        document.getElementById("spa").style.display = "block";
-      } else if (tactic === "BAx") {
-        document.getElementById("bax").style.display = "block";
-      } else if (tactic === "Lockouts") {
-        document.getElementById("lockouts").style.display = "block";
-      }
-    }
-
-    // Function to validate the URLs
-    function validateUrls() {
-      const appUrl = document.getElementById("appUrl").value;
-      const webUrl = document.getElementById("webUrl").value;
-      
-      const appUrlPattern = /^fdshop:\/\/coupon\/\d+$/;
-      const webUrlPattern = /^https:\/\/www\.familydollar\.com\/coupon-details\/\d+$/;
-
-      let validAppUrl = appUrlPattern.test(appUrl);
-      let validWebUrl = webUrlPattern.test(webUrl);
-
-      // Validate App URL
-      if (appUrl && !validAppUrl) {
-        document.getElementById("appUrlError").textContent = "Invalid App URL format. Correct format: fdshop://coupon/{id}.";
-      } else {
-        document.getElementById("appUrlError").textContent = "";
-      }
-
-      // Validate Web URL
-      if (webUrl && !validWebUrl) {
-        document.getElementById("webUrlError").textContent = "Invalid Web URL format. Correct format: https://www.familydollar.com/coupon-details/{id}.";
-      } else {
-        document.getElementById("webUrlError").textContent = "";
-      }
-    }
-
-    // Function to generate output based on the input values
-function generateOutput() {
-  var tactic = document.getElementById("tactic").value;
-  var outputText = "";
-
-  if (tactic === "SPA") {
-    var dealName = document.getElementById("spa_deal_name").value;
-    var dealId = document.getElementById("spa_deal_id").value;
-    var additional = document.getElementById("spa_additional").value;
-    outputText = `SPA Placements Ticket:
-                  <br>Deal Name: ${dealName}
+            // SPA
+            if (tactic === "SPA") {
+                const dealName = document.getElementById("spa_deal_name").value;
+                const dealId = document.getElementById("spa_deal_id").value;
+                const additional = document.getElementById("spa_additional").value;
+                if (!dealName || !dealId) {
+                    alert("Please fill in all required fields for SPA.");
+                    return;
+                }
+                outputText = `SPA Placements Ticket:
+                  <br>Deal Name: ${replaceSpaces(dealName)}
                   <br>Deal ID: ${dealId}
                   <br>Additional Info: ${additional}`;
-  } else if (tactic === "BAx") {
-    var dealName = document.getElementById("dealName").value;
-    var dealId = document.getElementById("dealId").value;
-    var team = document.getElementById("team").value;
-    var walletName = document.getElementById("walletName").value;
-    var walletId = document.getElementById("walletId").value;
-    var budget = parseFloat(document.getElementById("budget").value);
-    var appUrl = document.getElementById("appUrl").value;
-    var webUrl = document.getElementById("webUrl").value;
-    var flightStartDate = document.getElementById("flightStartDate").value;
-    var flightEndDate = document.getElementById("flightEndDate").value;
-    var numberOfDays = parseInt(document.getElementById("numberOfDays").value);
+            }
+            // BAx
+            else if (tactic === "BAx") {
+                const dealName = document.getElementById("dealName").value;
+                const dealId = document.getElementById("dealId").value;
+                const team = document.getElementById("team").value;
+                const walletName = document.getElementById("walletName").value;
+                const walletId = document.getElementById("walletId").value;
+                const budget = parseFloat(document.getElementById("budget").value);
+                const appUrl = document.getElementById("appUrl").value;
+                const webUrl = document.getElementById("webUrl").value;
+                const flightStartDate = document.getElementById("flightStartDate").value;
+                const flightEndDate = document.getElementById("flightEndDate").value;
+                const numberOfDays = parseInt(document.getElementById("numberOfDays").value);
 
-    // If any of the critical fields are empty, show an error
-    if (!dealName || !dealId || !team || !walletName || !walletId || isNaN(budget) || !flightStartDate || !flightEndDate || isNaN(numberOfDays)) {
-      outputText = "Please fill in all the required fields for BAx.";
-    } else {
-      let bufferMultiplier = 1.20;  // For BAx
-      let pointBuffer = '20%';  // Point buffer for BAx
+                if (!dealName || !dealId || !team || !walletName || !budget || !appUrl || !webUrl || !flightStartDate || !flightEndDate) {
+                    alert("Please fill in all required fields for BAx.");
+                    return;
+                }
+                let bufferMultiplier = 1.20; // For BAx
+                let pointBuffer = '20%'; // Point buffer for BAx
 
-      const walletCap = Math.round((budget / numberOfDays) * bufferMultiplier);
-      const rosBuffer = Math.round(walletCap * 0.20);  // 20% buffer
+                const walletCap = Math.round((budget / numberOfDays) * bufferMultiplier);
+                const rosBuffer = Math.round(walletCap * 0.20); // 20% buffer
 
-      outputText = `<p>Hi @</p>
-                    <p>Note:</p>
-                    <p>1. </p>
-                    <p>2. </p>
-                    <p>The campaigns have been trafficked and QAed. Below are the details:</p>
-                    <p><strong>BAx: </strong></p>
-                    <p><Strong>Deal Name:</strong> ${dealName}</p>
-                    <p><strong>Deal ID:</strong> ${dealId}</p>
-                    <p><strong>Team:</strong> ${team}</p>
-                    <p><strong>Wallet Name:</strong> ${walletName}</p>
-                    <p><strong>Wallet ID:</strong> ${walletId}</p>
-                    <p><strong>APP URL:</strong>${appUrl}</p>
-                    <p><strong>WEB URL:</strong>${webUrl}</p>
-                    <p><strong>Budget:</strong> $${budget.toFixed(2)}</p>
-                    <p><strong>Flight Start Date:</strong> ${flightStartDate}</p>
-                    <p><strong>Flight End Date:</strong> ${flightEndDate}</p>
-                    <p><strong>Number of Days:</strong> ${numberOfDays}</p>
-                    <p><strong>Wallet Cap:</strong> $${walletCap.toFixed(2)}</p>
-                    <p><strong>Buffer Used:</strong> ${pointBuffer}</p>
-                    <P><strong>App Placements:</strong>
-                    <p><strong>Product Details Page: (Product Page) (Slot: medium-banner) (CPM:$0.012) </strong></p>
-                    <ul>
-                        <li>PDP_Med_${dealName}_${dealId}</li>
-                    </ul>
+                outputText = `<p>Hi @</p>
+                  <p>Note:</p>
+                  <p>1. </p>
+                  <p>2. </p>
+                  <p>The campaigns have been trafficked and QAed. Below are the details:</p>
+                  <br>
+                  <p><strong>BAx: </strong></p>
+                  <p>Deal Name: ${highlightSpecialChars(replaceSpaces(dealName))}</p>
+                  <p>Deal ID: ${dealId}</p>
+                  <p>Team: ${team}</p>
+                  <p>Wallet Name: ${highlightSpecialChars(replaceSpaces(walletName))} | Wallet ID: ${walletId}</p>
+                  <p>Budget: $${budget.toFixed(2)}</p>
+                  <p>APP URL: ${highlightSpecialChars(appUrl)}</p>
+                  <p>Web URL: ${highlightSpecialChars(webUrl)}</p>
+                  <p>Flight Dates: ${flightStartDate} to ${flightEndDate}</p>
+                  <p>Number of Days: ${numberOfDays}</p>
+                  <p>Wallet Cap: $${walletCap.toFixed(2)}</p>
+                  <p>Buffer Used: ${pointBuffer}</p>
+                  <br> <!-- Added line gap after Buffer Used -->
 
-                    <p><strong>Run of Site: (Run of Site) (Slot: medium-banner) (CPM:$0.012)</strong></p>
-                    <ul>
-                        <li>ROS_${dealName}_${dealId}</li>
-                    </ul>
+                  <p><strong>App Placements:</strong></p>
+<br> <!-- Added line gap after App Placements -->
 
-                    <p><strong>Coupon Details Page: (Coupon) (Slot: medium-banner) (CPM:$0.016)</strong></p>
-                    <ul>
-                        <li>CP_Med_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Product Details Page: (Product Page) (Slot: medium-banner) (CPM: $0.009)</strong></p>
+<p>PDP_Med_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Search Results Page: (Search) (Slot: thin-banner) (CPM:$0.012)</strong></p>
-                    <ul>
-                        <li>Search_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Run of Site: (Run of Site) (Slot: medium-banner) (CPM: $0.009)</strong></p>
+<p>ROS_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Sub-Category: (Category) (Slot: thin-banner) (CPM:$0.012)</strong></p>
-                    <ul>
-                        <li>SubCAT_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Coupon Details Page: (Coupon) (Slot: medium-banner) (CPM: $0.016)</strong></p>
+<p>CP_Med_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Coupon Listing Page: (Coupon) (Slot: thin-banner) (CPM:$0.016)</strong></p>
-                    <ul>
-                        <li>CP_Thin_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Search Results Page: (Search) (Slot: thin-banner) (CPM: $0.009)</strong></p>
+<p>Search_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Product Details Page - Top: (Product Page) (Slot: pdp-pencil-banner) (CPM:$0.012)</strong></p>
-                    <ul>
-                        <li>PDP_Pencil_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Sub-Category: (Category) (Slot: thin-banner) (CPM: $0.009)</strong></p>
+<p>SubCAT_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Coupon Details Page - Top: (Coupon) (Slot: pdp-pencil-banner) (CPM:$0.016)</strong></p>
-                    <ul>
-                        <li>CP_Pencil_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Coupon Listing Page: (Coupon) (Slot: thin-banner) (CPM: $0.016)</strong></p>
+<p>CP_Thin_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Homepage - Midpage: (Homepage - App) (Slot: midpage-banner) (CPM:$0.018)</strong></p>
-                    <ul>
-                        <li>HPApp_Mid_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Product Details Page - Top: (Product Page) (Slot: pdp-pencil-banner) (CPM: $0.009)</strong></p>
+<p>PDP_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Coupon Category Navigation: (Category) (Slot: coupon-navigation-banner) (CPM:$0.016)</strong></p>
-                    <ul>
-                        <li>CP_${dealName}_${dealId}</li>
-                    </ul>
+<p><strong>Coupon Details Page - Top: (Coupon) (Slot: pdp-pencil-banner) (CPM: $0.016)</strong></p>
+<p>CP_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-                    <p><strong>Category - Hero: (Category) (Slot: category-hero-banner) (CPM:$0.018)</strong></p>
-                    <ul>
-                        <li>CAT_${dealName}_${dealId}</li>
-                    </ul>
-                    <P><strong>Web Placements:</strong>
-                    <p><strong>Homepage – Large 2-Across: (Homepage - Web) (Slot: 2-across-banner) (CPM:$0.018)</strong></p>
-                    <ul>
-                        <li>HPWeb_2Across_${dealName}_${dealId}</li>
-                    </ul>
-                    <p><strong>Homepage – Pencil Banner ​: (Homepage - Web) (pencil-banner) (CPM:$0.012)</strong></p>
-                    <ul>
-                        <li>HPWeb_Pencil_${dealName}_${dealId}</li>
-                    </ul>`;
-                    
-                    
-    }
-  } else if (tactic === "Lockouts") {
-    var dealName = document.getElementById("lockouts_deal_name").value;
-    var dealId = document.getElementById("lockouts_deal_id").value;
-    var reason = document.getElementById("lockouts_reason").value;
-    outputText = `Lockouts Ticket:
-                  <br>Deal Name: ${dealName}
-                  <br>Deal ID: ${dealId}
-                  <br>Lockout Reason: ${reason}`;
-  } else {
-    outputText = "Please select a tactic and provide the necessary details.";
-  }
+<p><strong>Homepage - Midpage: (Homepage - App) (Slot: midpage-banner) (CPM: $0.016)</strong></p>
+<p>HPApp_Mid_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-  // Display the output
-  document.getElementById("output_text").innerHTML = outputText;
-}
- function highlightSpecialChars(text) {
-    return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
-}
+<p><strong>Coupon Category Navigation: (Category) (Slot: coupon-navigation-banner) (CPM: $0.016)</strong></p>
+<p>CP_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
+<p><strong>Category - Hero: (Category) (Slot: category-hero-banner) (CPM: $0.009)</strong></p>
+<p>CAT_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
 
-    // Function to update the wallet ID when the wallet name is entered
-    function updateWalletId() {
-            const walletName = document.getElementById('walletName').value;
-            if (walletName) {
-                // Remove non-numeric characters
-                let walletId = walletName.replace(/\D/g, '');
+<br> <!-- Line break for separation -->
 
-                // Ensure walletId is exactly 7 digits long
-                if (walletId.length > 7) {
-                    walletId = walletId.substring(0, 7);
-                } else if (walletId.length < 7) {
-                    walletId = walletId.padStart(7, '0');
+<p><strong>Web Placements:</strong></p>
+
+<br> <!-- Line break for separation -->
+
+<p><strong>Homepage – Large 2-Across: (Homepage - Web) (Slot: 2-across-banner) (CPM: $0.016)</strong></p>
+<p>HPWeb_2Across_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
+
+<p><strong>Homepage – Pencil Banner: (Homepage - Web) (Slot: pencil-banner) (CPM: $0.016)</strong></p>
+<p>HPWeb_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}</p>
+
+<br>
+<p> Thank you..!</P>`;
+            }
+            // Lockouts
+            else if (tactic === "Lockouts") {
+                const dealName = document.getElementById("lockouts_deal_name").value;
+                const dealId = document.getElementById("lockouts_deal_id").value;
+                const reason = document.getElementById("lockouts_reason").value;
+
+                if (!dealName || !dealId || !reason) {
+                    alert("Please fill in all required fields for Lockouts.");
+                    return;
                 }
 
-                document.getElementById('walletId').value = walletId;
-            } else {
-                document.getElementById('walletId').value = '';
+                outputText = `Lockouts Ticket:
+                  <br>Deal Name: ${dealName}
+                  <br>Deal ID: ${dealId}
+                  <br>Reason: ${reason}`;
             }
-        }
-    // Function to calculate the number of days between the flight dates
-    function calculateDays() {
-      var flightStartDate = document.getElementById("flightStartDate").value;
-      var flightEndDate = document.getElementById("flightEndDate").value;
 
-      if (flightStartDate && flightEndDate) {
-        var start = new Date(flightStartDate);
-        var end = new Date(flightEndDate);
-        var difference = Math.floor((end - start) / (1000 * 60 * 60 * 24) +1 ); // Difference in days
-        document.getElementById("numberOfDays").value = difference;
-      }
-    }
-  </script>
+            // Output the generated text
+            document.getElementById("output_text").innerHTML = outputText;
 
+            // Show output box with animation
+            const outputBox = document.getElementById("output");
+            outputBox.classList.add('active');
+        };
+    </script>
 </body>
+
 </html>
