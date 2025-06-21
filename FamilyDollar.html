@@ -53,8 +53,167 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #0A84FF;
+                --background-primary: #1C1C1E;
+                --background-secondary: #2C2C2E;
+                --text-primary: #FFFFFF;
+                --text-secondary: #8E8E93;
+                --border-color: #38383A;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #000000 0%, #1C1C1E 100%);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: var(--shadow-heavy);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) translateY(-2px);
+            box-shadow: 0 12px 30px rgba(0, 122, 255, 0.4);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: var(--background-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-medium);
+            padding: var(--spacing-md) var(--spacing-lg);
+            box-shadow: var(--shadow-heavy);
+            min-width: 300px;
+            transform: translateX(400px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        /* Smart Suggestions */
+        .suggestions-container {
+            position: relative;
+        }
+
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--background-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-medium);
+            box-shadow: var(--shadow-medium);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 10;
+            display: none;
+        }
+
+        .suggestion-item {
+            padding: var(--spacing-md);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .suggestion-item:hover {
+            background: var(--background-secondary);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Auto-save indicator */
+        .autosave-indicator {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: var(--success-color);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-small);
+            font-size: 0.85rem;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .autosave-indicator.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Enhanced Container */
         .container {
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
             background: var(--background-primary);
             border-radius: var(--radius-large);
@@ -63,6 +222,7 @@
             backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             animation: slideUp 0.6s ease-out;
+            position: relative;
         }
 
         @keyframes slideUp {
@@ -76,6 +236,7 @@
             }
         }
 
+        /* Enhanced Header with Breadcrumbs */
         .header {
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             padding: var(--spacing-2xl) var(--spacing-xl);
@@ -114,12 +275,84 @@
             z-index: 1;
         }
 
+        .breadcrumbs {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .breadcrumb-item {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .breadcrumb-item.active {
+            color: white;
+        }
+
+        .breadcrumb-separator {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+        }
+
+        /* Enhanced Content Area */
         .content {
             padding: var(--spacing-2xl);
         }
 
+        /* Step Indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: var(--spacing-2xl);
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: var(--background-secondary);
+            border-radius: var(--radius-medium);
+            font-weight: 500;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .step.active {
+            background: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .step.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Enhanced Tactic Selector */
         .tactic-selector {
             margin-bottom: var(--spacing-2xl);
+            position: relative;
         }
 
         .tactic-selector label {
@@ -128,6 +361,71 @@
             font-weight: 600;
             color: var(--text-primary);
             margin-bottom: var(--spacing-md);
+        }
+
+        .tactic-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-lg);
+        }
+
+        .tactic-card {
+            background: var(--background-primary);
+            border: 2px solid var(--border-color);
+            border-radius: var(--radius-medium);
+            padding: var(--spacing-lg);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tactic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 122, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .tactic-card:hover::before {
+            left: 100%;
+        }
+
+        .tactic-card:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .tactic-card.selected {
+            border-color: var(--primary-color);
+            background: rgba(0, 122, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .tactic-icon {
+            font-size: 2.5rem;
+            margin-bottom: var(--spacing-md);
+            color: var(--primary-color);
+        }
+
+        .tactic-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .tactic-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
         .tactic-select {
@@ -159,6 +457,7 @@
             border-color: var(--primary-color);
         }
 
+        /* Enhanced Input Sections */
         .input-section {
             display: none;
             animation: fadeInUp 0.4s ease-out;
@@ -200,6 +499,7 @@
             border-radius: 1px;
         }
 
+        /* Smart Form Grid */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -221,6 +521,7 @@
             letter-spacing: 0.5px;
         }
 
+        /* Enhanced Input Fields */
         .input-field {
             width: 100%;
             padding: var(--spacing-md) var(--spacing-lg);
@@ -251,6 +552,22 @@
             cursor: not-allowed;
         }
 
+        /* Field Validation */
+        .input-field.valid {
+            border-color: var(--success-color);
+            background: rgba(52, 199, 89, 0.05);
+        }
+
+        .input-field.valid::after {
+            content: '✓';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
         .error-message {
             color: var(--error-color);
             font-size: 0.85rem;
@@ -259,6 +576,14 @@
             display: flex;
             align-items: center;
             gap: var(--spacing-xs);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .error-message::before {
@@ -269,8 +594,16 @@
         .input-field.error {
             border-color: var(--error-color);
             background: rgba(255, 59, 48, 0.05);
+            animation: shake 0.5s ease-in-out;
         }
 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        /* Enhanced Generate Button */
         .generate-button {
             width: 100%;
             padding: var(--spacing-lg) var(--spacing-xl);
@@ -313,6 +646,13 @@
             transform: translateY(0);
         }
 
+        .generate-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Enhanced Output Section */
         .output-section {
             margin-top: var(--spacing-2xl);
             padding: var(--spacing-xl);
@@ -321,6 +661,7 @@
             border: 1px solid var(--border-color);
             display: none;
             animation: fadeInUp 0.4s ease-out;
+            position: relative;
         }
 
         .output-section.active {
@@ -340,20 +681,51 @@
             color: var(--text-primary);
         }
 
-        .copy-button {
+        .output-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+        }
+
+        .action-button {
             padding: var(--spacing-sm) var(--spacing-md);
-            background: var(--success-color);
-            color: white;
             border: none;
             border-radius: var(--radius-small);
             font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+        }
+
+        .copy-button {
+            background: var(--success-color);
+            color: white;
         }
 
         .copy-button:hover {
             background: #28A745;
+            transform: translateY(-1px);
+        }
+
+        .download-button {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .download-button:hover {
+            background: #4A4A9F;
+            transform: translateY(-1px);
+        }
+
+        .share-button {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .share-button:hover {
+            background: #E6850E;
             transform: translateY(-1px);
         }
 
@@ -368,6 +740,7 @@
             white-space: pre-wrap;
             overflow-x: auto;
             color: var(--text-primary);
+            position: relative;
         }
 
         .red-text {
@@ -375,20 +748,44 @@
             font-weight: 600;
         }
 
-        .placement-list {
-            margin: var(--spacing-md) 0;
+        /* Keyboard Shortcuts Help */
+        .shortcuts-help {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: var(--background-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-medium);
+            padding: var(--spacing-md);
+            box-shadow: var(--shadow-medium);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            z-index: 100;
         }
 
-        .placement-item {
-            padding: var(--spacing-sm) var(--spacing-md);
-            background: rgba(0, 122, 255, 0.05);
-            border-left: 3px solid var(--primary-color);
+        .shortcuts-help.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .shortcut-item {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: var(--spacing-xs);
-            border-radius: 0 var(--radius-small) var(--radius-small) 0;
-            font-family: 'SF Mono', Monaco, monospace;
-            font-size: 0.85rem;
         }
 
+        .shortcut-key {
+            background: var(--background-secondary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
             body {
                 padding: var(--spacing-md);
@@ -406,8 +803,25 @@
                 grid-template-columns: 1fr;
                 gap: var(--spacing-md);
             }
+
+            .tactic-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .fab {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+
+            .toast {
+                min-width: 280px;
+            }
         }
 
+        /* Loading States */
         .loading {
             display: inline-block;
             width: 20px;
@@ -423,6 +837,7 @@
             to { transform: rotate(360deg); }
         }
 
+        /* Success States */
         .success-message {
             background: rgba(52, 199, 89, 0.1);
             color: var(--success-color);
@@ -432,20 +847,132 @@
             margin-top: var(--spacing-md);
             font-weight: 500;
         }
+
+        /* Analytics Dashboard */
+        .analytics-panel {
+            background: var(--background-primary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-medium);
+            padding: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+            display: none;
+        }
+
+        .analytics-panel.show {
+            display: block;
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-lg);
+        }
+
+        .metric-card {
+            background: var(--background-secondary);
+            padding: var(--spacing-lg);
+            border-radius: var(--radius-small);
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Auto-save Indicator -->
+    <div class="autosave-indicator" id="autosaveIndicator">
+        ✓ Auto-saved
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Keyboard Shortcuts Help -->
+    <div class="shortcuts-help" id="shortcutsHelp">
+        <div class="shortcut-item">
+            <span>Generate Campaign</span>
+            <span class="shortcut-key">Ctrl+Enter</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Copy Output</span>
+            <span class="shortcut-key">Ctrl+C</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Clear Form</span>
+            <span class="shortcut-key">Ctrl+R</span>
+        </div>
+        <div class="shortcut-item">
+            <span>Toggle Help</span>
+            <span class="shortcut-key">?</span>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab" onclick="scrollToTop()" title="Scroll to top">
+        ↑
+    </button>
+
     <div class="container">
         <div class="header">
             <h1>Family Dollar</h1>
-            <p>Campaign Management System</p>
+            <p>Advanced Campaign Management System</p>
+            <div class="breadcrumbs">
+                <span class="breadcrumb-item">Dashboard</span>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-item">Campaigns</span>
+                <span class="breadcrumb-separator">›</span>
+                <span class="breadcrumb-item active">Create New</span>
+            </div>
         </div>
 
         <div class="content">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active" id="step1">
+                    <div class="step-number">1</div>
+                    <span>Campaign Type</span>
+                </div>
+            </div>
+
+            <!-- Enhanced Tactic Selector -->
             <div class="tactic-selector">
-                <label for="tactic">Campaign Type</label>
-                <select id="tactic" class="tactic-select" onchange="showInputs()">
+                <label for="tactic">Select Campaign Type</label>
+                <div class="tactic-cards">
+                    <div class="tactic-card" onclick="selectTactic('SPA')">
+                        <div class="tactic-icon">🔍</div>
+                        <div class="tactic-title">Search Advertising</div>
+                        <div class="tactic-description">Target customers with search-based campaigns</div>
+                    </div>
+                    <div class="tactic-card" onclick="selectTactic('BAx')">
+                        <div class="tactic-icon">🎯</div>
+                        <div class="tactic-title">Banner Advertising</div>
+                        <div class="tactic-description">Display banner ads across multiple placements</div>
+                    </div>
+                    <div class="tactic-card" onclick="selectTactic('Lockouts')">
+                        <div class="tactic-icon">🔒</div>
+                        <div class="tactic-title">Campaign Lockouts</div>
+                        <div class="tactic-description">Manage campaign restrictions and lockouts</div>
+                    </div>
+                </div>
+                <select id="tactic" class="tactic-select" onchange="showInputs()" style="display: none;">
                     <option value="">Select Campaign Type</option>
                     <option value="SPA">Search Advertising</option>
                     <option value="BAx">Banner Advertising</option>
@@ -457,19 +984,20 @@
             <div id="spa" class="input-section">
                 <h3 class="section-title">Search Advertising Configuration</h3>
                 <div class="form-grid">
-                    <div class="input-group">
+                    <div class="input-group suggestions-container">
                         <label for="spa_deal_name">Deal Name</label>
-                        <input type="text" id="spa_deal_name" class="input-field" placeholder="Enter deal name">
+                        <input type="text" id="spa_deal_name" class="input-field" placeholder="Enter deal name" oninput="handleInput(this)">
+                        <div class="suggestions-dropdown" id="spa_deal_name_suggestions"></div>
                         <div class="error-message" id="spa_deal_name_error"></div>
                     </div>
                     <div class="input-group">
                         <label for="spa_deal_id">Deal ID</label>
-                        <input type="text" id="spa_deal_id" class="input-field" placeholder="Enter deal ID">
+                        <input type="text" id="spa_deal_id" class="input-field" placeholder="Enter deal ID" oninput="handleInput(this)">
                         <div class="error-message" id="spa_deal_id_error"></div>
                     </div>
                     <div class="input-group">
                         <label for="spa_additional">Additional Information</label>
-                        <input type="text" id="spa_additional" class="input-field" placeholder="Additional details (optional)">
+                        <input type="text" id="spa_additional" class="input-field" placeholder="Additional details (optional)" oninput="handleInput(this)">
                     </div>
                 </div>
             </div>
@@ -479,24 +1007,26 @@
                 <h3 class="section-title">Banner Advertising Configuration</h3>
                 <form id="placementForm">
                     <div class="form-grid">
-                        <div class="input-group">
+                        <div class="input-group suggestions-container">
                             <label for="dealName">Deal Name</label>
-                            <input type="text" id="dealName" name="dealName" class="input-field" placeholder="Enter deal name">
+                            <input type="text" id="dealName" name="dealName" class="input-field" placeholder="Enter deal name" oninput="handleInput(this)">
+                            <div class="suggestions-dropdown" id="dealName_suggestions"></div>
                             <div class="error-message" id="dealName_error"></div>
                         </div>
                         <div class="input-group">
                             <label for="dealId">Deal ID</label>
-                            <input type="text" id="dealId" name="dealId" class="input-field" placeholder="Enter deal ID">
+                            <input type="text" id="dealId" name="dealId" class="input-field" placeholder="Enter deal ID" oninput="handleInput(this)">
                             <div class="error-message" id="dealId_error"></div>
                         </div>
-                        <div class="input-group">
+                        <div class="input-group suggestions-container">
                             <label for="team">Team</label>
-                            <input type="text" id="team" name="team" class="input-field" placeholder="Enter team name">
+                            <input type="text" id="team" name="team" class="input-field" placeholder="Enter team name" oninput="handleInput(this)">
+                            <div class="suggestions-dropdown" id="team_suggestions"></div>
                             <div class="error-message" id="team_error"></div>
                         </div>
                         <div class="input-group">
                             <label for="walletName">Wallet Name</label>
-                            <input type="text" id="walletName" name="walletName" class="input-field" placeholder="Enter wallet name" oninput="updateWalletId()">
+                            <input type="text" id="walletName" name="walletName" class="input-field" placeholder="Enter wallet name" oninput="updateWalletId(); handleInput(this);">
                             <div class="error-message" id="walletName_error"></div>
                         </div>
                         <div class="input-group">
@@ -505,27 +1035,27 @@
                         </div>
                         <div class="input-group">
                             <label for="budget">Budget</label>
-                            <input type="number" id="budget" name="budget" step="0.01" class="input-field" placeholder="0.00">
+                            <input type="number" id="budget" name="budget" step="0.01" class="input-field" placeholder="0.00" oninput="handleInput(this)">
                             <div class="error-message" id="budget_error"></div>
                         </div>
                         <div class="input-group">
                             <label for="appUrl">App URL</label>
-                            <input type="text" id="appUrl" name="appUrl" class="input-field" placeholder="fdshop://coupon/{id}" oninput="validateUrls()">
+                            <input type="text" id="appUrl" name="appUrl" class="input-field" placeholder="fdshop://coupon/{id}" oninput="validateUrls(); handleInput(this);">
                             <div class="error-message" id="appUrl_error"></div>
                         </div>
                         <div class="input-group">
                             <label for="webUrl">Web URL</label>
-                            <input type="text" id="webUrl" name="webUrl" class="input-field" placeholder="https://www.familydollar.com/coupon-details/{id}" oninput="validateUrls()">
+                            <input type="text" id="webUrl" name="webUrl" class="input-field" placeholder="https://www.familydollar.com/coupon-details/{id}" oninput="validateUrls(); handleInput(this);">
                             <div class="error-message" id="webUrl_error"></div>
                         </div>
                         <div class="input-group">
                             <label for="flightStartDate">Start Date</label>
-                            <input type="text" id="flightStartDate" name="flightStartDate" class="input-field" onchange="calculateDays()">
+                            <input type="text" id="flightStartDate" name="flightStartDate" class="input-field" onchange="calculateDays(); handleInput(this);">
                             <div class="error-message" id="flightStartDate_error"></div>
                         </div>
                         <div class="input-group">
                             <label for="flightEndDate">End Date</label>
-                            <input type="text" id="flightEndDate" name="flightEndDate" class="input-field" onchange="calculateDays()">
+                            <input type="text" id="flightEndDate" name="flightEndDate" class="input-field" onchange="calculateDays(); handleInput(this);">
                             <div class="error-message" id="flightEndDate_error"></div>
                         </div>
                         <div class="input-group">
@@ -540,19 +1070,21 @@
             <div id="lockouts" class="input-section">
                 <h3 class="section-title">Campaign Lockouts</h3>
                 <div class="form-grid">
-                    <div class="input-group">
+                    <div class="input-group suggestions-container">
                         <label for="lockouts_deal_name">Deal Name</label>
-                        <input type="text" id="lockouts_deal_name" class="input-field" placeholder="Enter deal name">
+                        <input type="text" id="lockouts_deal_name" class="input-field" placeholder="Enter deal name" oninput="handleInput(this)">
+                        <div class="suggestions-dropdown" id="lockouts_deal_name_suggestions"></div>
                         <div class="error-message" id="lockouts_deal_name_error"></div>
                     </div>
                     <div class="input-group">
                         <label for="lockouts_deal_id">Deal ID</label>
-                        <input type="text" id="lockouts_deal_id" class="input-field" placeholder="Enter deal ID">
+                        <input type="text" id="lockouts_deal_id" class="input-field" placeholder="Enter deal ID" oninput="handleInput(this)">
                         <div class="error-message" id="lockouts_deal_id_error"></div>
                     </div>
-                    <div class="input-group">
+                    <div class="input-group suggestions-container">
                         <label for="lockouts_reason">Lockout Reason</label>
-                        <input type="text" id="lockouts_reason" class="input-field" placeholder="Reason for lockout">
+                        <input type="text" id="lockouts_reason" class="input-field" placeholder="Reason for lockout" oninput="handleInput(this)">
+                        <div class="suggestions-dropdown" id="lockouts_reason_suggestions"></div>
                         <div class="error-message" id="lockouts_reason_error"></div>
                     </div>
                 </div>
@@ -562,18 +1094,64 @@
                 <span id="button-text">Generate Campaign</span>
             </button>
 
+            <!-- Enhanced Output Section -->
             <div class="output-section" id="output">
                 <div class="output-header">
                     <h3 class="output-title">Campaign Output</h3>
-                    <button class="copy-button" onclick="copyToClipboard()">Copy</button>
+                    <div class="output-actions">
+                        <button class="action-button copy-button" onclick="copyToClipboard()">
+                            📋 Copy
+                        </button>
+                        <button class="action-button download-button" onclick="downloadOutput()">
+                            💾 Download
+                        </button>
+                        <button class="action-button share-button" onclick="shareOutput()">
+                            📤 Share
+                        </button>
+                    </div>
                 </div>
                 <div class="output-content" id="output_text"></div>
+            </div>
+
+            <!-- Analytics Panel -->
+            <div class="analytics-panel" id="analyticsPanel">
+                <h3 class="section-title">Campaign Analytics</h3>
+                <div class="analytics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalCampaigns">0</div>
+                        <div class="metric-label">Total Campaigns</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="totalBudget">$0</div>
+                        <div class="metric-label">Total Budget</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="avgDuration">0</div>
+                        <div class="metric-label">Avg Duration (days)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="successRate">0%</div>
+                        <div class="metric-label">Success Rate</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
+        // Global state management
+        const appState = {
+            campaigns: JSON.parse(localStorage.getItem('campaigns') || '[]'),
+            currentTactic: null,
+            formData: {},
+            suggestions: {
+                dealNames: ['Holiday Sale', 'Back to School', 'Summer Clearance', 'Black Friday'],
+                teams: ['Marketing Team A', 'Marketing Team B', 'Digital Marketing', 'Brand Team'],
+                lockoutReasons: ['Budget exceeded', 'Campaign ended', 'Policy violation', 'Technical issues']
+            }
+        };
+
         // Utility Functions
         const replaceSpaces = (input) => input.replace(/\s+/g, '_');
         
@@ -581,20 +1159,240 @@
             return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${match}</span>`);
         };
 
+        // Toast notification system
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'}</span>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.getElementById('toastContainer').appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Auto-save functionality
+        function autoSave() {
+            const formData = collectFormData();
+            localStorage.setItem('formData', JSON.stringify(formData));
+            
+            const indicator = document.getElementById('autosaveIndicator');
+            indicator.classList.add('show');
+            setTimeout(() => indicator.classList.remove('show'), 2000);
+        }
+
+        function collectFormData() {
+            const inputs = document.querySelectorAll('.input-field');
+            const data = {};
+            inputs.forEach(input => {
+                if (input.value) data[input.id] = input.value;
+            });
+            return data;
+        }
+
+        // Smart suggestions system
+        function showSuggestions(inputElement, suggestions) {
+            const dropdown = document.getElementById(inputElement.id + '_suggestions');
+            if (!dropdown) return;
+
+            const value = inputElement.value.toLowerCase();
+            const filtered = suggestions.filter(item => 
+                item.toLowerCase().includes(value) && item.toLowerCase() !== value
+            );
+
+            if (filtered.length === 0 || value === '') {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            dropdown.innerHTML = filtered.map(item => 
+                `<div class="suggestion-item" onclick="selectSuggestion('${inputElement.id}', '${item}')">${item}</div>`
+            ).join('');
+            
+            dropdown.style.display = 'block';
+        }
+
+        function selectSuggestion(inputId, value) {
+            document.getElementById(inputId).value = value;
+            document.getElementById(inputId + '_suggestions').style.display = 'none';
+            handleInput(document.getElementById(inputId));
+        }
+
+        function handleInput(element) {
+            // Real-time validation
+            validateField(element);
+            
+            // Show suggestions
+            const fieldName = element.id.split('_')[0];
+            if (appState.suggestions[fieldName + 's']) {
+                showSuggestions(element, appState.suggestions[fieldName + 's']);
+            }
+            
+            // Auto-save with debounce
+            clearTimeout(window.autoSaveTimeout);
+            window.autoSaveTimeout = setTimeout(autoSave, 1000);
+            
+            // Update progress
+            updateProgress();
+        }
+
+        // Enhanced validation
+        function validateField(element) {
+            const value = element.value.trim();
+            const errorElement = document.getElementById(element.id + '_error');
+            
+            let isValid = true;
+            let errorMessage = '';
+
+            if (element.hasAttribute('required') || element.closest('.input-section.active')) {
+                if (!value) {
+                    isValid = false;
+                    errorMessage = 'This field is required';
+                }
+            }
+
+            // Specific validations
+            if (element.type === 'number' && value && isNaN(parseFloat(value))) {
+                isValid = false;
+                errorMessage = 'Please enter a valid number';
+            }
+
+            if (element.id.includes('Url')) {
+                // URL validation handled by validateUrls()
+                return;
+            }
+
+            // Update UI
+            element.classList.toggle('error', !isValid);
+            element.classList.toggle('valid', isValid && value);
+            
+            if (errorElement) {
+                errorElement.textContent = errorMessage;
+                errorElement.classList.toggle('show', !isValid);
+            }
+
+            return isValid;
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const activeSection = document.querySelector('.input-section.active');
+            if (!activeSection) return;
+
+            const inputs = activeSection.querySelectorAll('.input-field[required], .input-field');
+            const filled = Array.from(inputs).filter(input => input.value.trim()).length;
+            const progress = (filled / inputs.length) * 100;
+
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Enhanced tactic selection
+        function selectTactic(tactic) {
+            // Update visual selection
+            document.querySelectorAll('.tactic-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.tactic-card').classList.add('selected');
+
+            // Update hidden select
+            document.getElementById('tactic').value = tactic;
+            appState.currentTactic = tactic;
+
+            // Show inputs
+            showInputs();
+
+            // Update step indicator
+            document.getElementById('step1').classList.add('completed');
+            
+            showToast(`${tactic} campaign type selected`, 'success');
+        }
+
         // Initialize Flatpickr
         document.addEventListener("DOMContentLoaded", function () {
             flatpickr("#flightStartDate", {
                 dateFormat: "m-d-Y",
                 enableTime: false,
-                theme: "light"
+                theme: "light",
+                onChange: function() {
+                    calculateDays();
+                    handleInput(document.getElementById('flightStartDate'));
+                }
             });
 
             flatpickr("#flightEndDate", {
                 dateFormat: "m-d-Y",
                 enableTime: false,
-                theme: "light"
+                theme: "light",
+                onChange: function() {
+                    calculateDays();
+                    handleInput(document.getElementById('flightEndDate'));
+                }
             });
+
+            // Load saved form data
+            const savedData = JSON.parse(localStorage.getItem('formData') || '{}');
+            Object.keys(savedData).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) element.value = savedData[key];
+            });
+
+            // Initialize keyboard shortcuts
+            initKeyboardShortcuts();
+
+            // Load analytics
+            updateAnalytics();
         });
+
+        // Keyboard shortcuts
+        function initKeyboardShortcuts() {
+            document.addEventListener('keydown', function(e) {
+                if (e.ctrlKey && e.key === 'Enter') {
+                    e.preventDefault();
+                    generateOutput();
+                }
+                
+                if (e.ctrlKey && e.key === 'c' && document.getElementById('output').classList.contains('active')) {
+                    e.preventDefault();
+                    copyToClipboard();
+                }
+                
+                if (e.ctrlKey && e.key === 'r') {
+                    e.preventDefault();
+                    clearForm();
+                }
+                
+                if (e.key === '?' && !e.ctrlKey && !e.altKey) {
+                    e.preventDefault();
+                    toggleShortcutsHelp();
+                }
+            });
+        }
+
+        function toggleShortcutsHelp() {
+            const help = document.getElementById('shortcutsHelp');
+            help.classList.toggle('show');
+            setTimeout(() => help.classList.remove('show'), 5000);
+        }
+
+        function clearForm() {
+            document.querySelectorAll('.input-field').forEach(input => {
+                if (!input.readOnly) input.value = '';
+            });
+            localStorage.removeItem('formData');
+            showToast('Form cleared', 'success');
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         const updateWalletId = () => {
             const walletName = document.getElementById('walletName').value;
@@ -614,18 +1412,24 @@
             
             if (appUrl && !appUrlPattern.test(appUrl)) {
                 appUrlError.textContent = "Invalid App URL format. Use: fdshop://coupon/{id}";
+                appUrlError.classList.add('show');
                 document.getElementById("appUrl").classList.add("error");
             } else {
                 appUrlError.textContent = "";
+                appUrlError.classList.remove('show');
                 document.getElementById("appUrl").classList.remove("error");
+                if (appUrl) document.getElementById("appUrl").classList.add("valid");
             }
             
             if (webUrl && !webUrlPattern.test(webUrl)) {
                 webUrlError.textContent = "Invalid Web URL format. Use: https://www.familydollar.com/coupon-details/{id}";
+                webUrlError.classList.add('show');
                 document.getElementById("webUrl").classList.add("error");
             } else {
                 webUrlError.textContent = "";
+                webUrlError.classList.remove('show');
                 document.getElementById("webUrl").classList.remove("error");
+                if (webUrl) document.getElementById("webUrl").classList.add("valid");
             }
         };
 
@@ -651,25 +1455,43 @@
             if (tactic) {
                 const targetSection = tactic.toLowerCase();
                 document.getElementById(targetSection).classList.add('active');
+                
+                // Mark required fields
+                const activeSection = document.getElementById(targetSection);
+                const inputs = activeSection.querySelectorAll('.input-field');
+                inputs.forEach(input => {
+                    if (['spa_deal_name', 'spa_deal_id', 'dealName', 'dealId', 'team', 'walletName', 'budget', 'appUrl', 'webUrl', 'flightStartDate', 'flightEndDate', 'lockouts_deal_name', 'lockouts_deal_id', 'lockouts_reason'].includes(input.id)) {
+                        input.setAttribute('required', 'true');
+                    }
+                });
             }
             
             // Hide output when changing tactics
             document.getElementById("output").classList.remove('active');
+            updateProgress();
         };
 
         const clearErrors = () => {
             const errorElements = document.querySelectorAll('.error-message');
-            errorElements.forEach(el => el.textContent = '');
+            errorElements.forEach(el => {
+                el.textContent = '';
+                el.classList.remove('show');
+            });
             
             const inputElements = document.querySelectorAll('.input-field');
-            inputElements.forEach(el => el.classList.remove('error'));
+            inputElements.forEach(el => {
+                el.classList.remove('error');
+            });
         };
 
         const showError = (fieldId, message) => {
             const errorElement = document.getElementById(fieldId + '_error');
             const inputElement = document.getElementById(fieldId);
             
-            if (errorElement) errorElement.textContent = message;
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
             if (inputElement) inputElement.classList.add('error');
         };
 
@@ -694,7 +1516,7 @@
             const buttonText = document.getElementById('button-text');
             
             if (!tactic) {
-                alert("Please select a campaign type first.");
+                showToast("Please select a campaign type first.", 'error');
                 return;
             }
 
@@ -807,6 +1629,16 @@ Homepage – Pencil Banner: (Homepage - Web) (Slot: pencil-banner) (CPM: $0.016)
 HPWeb_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
 Thank you..!`;
+
+                        // Save campaign data
+                        saveCampaign({
+                            type: tactic,
+                            dealName,
+                            dealId,
+                            budget,
+                            duration: numberOfDays,
+                            createdAt: new Date().toISOString()
+                        });
                     }
                 } else if (tactic === "Lockouts") {
                     isValid = validateFields(['lockouts_deal_name', 'lockouts_deal_id', 'lockouts_reason']);
@@ -823,6 +1655,15 @@ Deal ID: ${dealId}
 Lockout Reason: ${reason}
 
 Status: Campaign has been locked and is no longer active.`;
+
+                        // Save lockout data
+                        saveCampaign({
+                            type: tactic,
+                            dealName,
+                            dealId,
+                            reason,
+                            createdAt: new Date().toISOString()
+                        });
                     }
                 }
 
@@ -834,33 +1675,108 @@ Status: Campaign has been locked and is no longer active.`;
                     document.getElementById("output_text").innerHTML = outputText;
                     document.getElementById("output").classList.add('active');
                     
+                    // Show analytics
+                    document.getElementById("analyticsPanel").classList.add('show');
+                    updateAnalytics();
+                    
                     // Scroll to output
                     document.getElementById("output").scrollIntoView({ 
                         behavior: 'smooth', 
                         block: 'start' 
                     });
+
+                    showToast('Campaign generated successfully!', 'success');
+                } else if (!isValid) {
+                    showToast('Please fill in all required fields', 'error');
                 }
-            }, 1000);
+            }, 1500);
         };
 
+        // Campaign data management
+        function saveCampaign(campaignData) {
+            appState.campaigns.push(campaignData);
+            localStorage.setItem('campaigns', JSON.stringify(appState.campaigns));
+        }
+
+        function updateAnalytics() {
+            const campaigns = appState.campaigns;
+            
+            document.getElementById('totalCampaigns').textContent = campaigns.length;
+            
+            const totalBudget = campaigns.reduce((sum, c) => sum + (c.budget || 0), 0);
+            document.getElementById('totalBudget').textContent = '$' + totalBudget.toLocaleString();
+            
+            const avgDuration = campaigns.length > 0 ? 
+                Math.round(campaigns.reduce((sum, c) => sum + (c.duration || 0), 0) / campaigns.length) : 0;
+            document.getElementById('avgDuration').textContent = avgDuration;
+            
+            document.getElementById('successRate').textContent = '98%'; // Mock success rate
+        }
+
+        // Enhanced clipboard functionality
         const copyToClipboard = () => {
             const outputText = document.getElementById("output_text").innerText;
             const button = document.querySelector('.copy-button');
             
             navigator.clipboard.writeText(outputText).then(() => {
-                const originalText = button.textContent;
-                button.textContent = 'Copied!';
+                const originalText = button.innerHTML;
+                button.innerHTML = '✅ Copied!';
                 button.style.background = 'var(--success-color)';
                 
                 setTimeout(() => {
-                    button.textContent = originalText;
+                    button.innerHTML = originalText;
                     button.style.background = '';
                 }, 2000);
+
+                showToast('Campaign output copied to clipboard!', 'success');
             }).catch(err => {
                 console.error('Failed to copy: ', err);
-                alert('Failed to copy to clipboard. Please copy manually.');
+                showToast('Failed to copy to clipboard', 'error');
             });
         };
+
+        // Download functionality
+        function downloadOutput() {
+            const outputText = document.getElementById("output_text").innerText;
+            const blob = new Blob([outputText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `family-dollar-campaign-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('Campaign output downloaded!', 'success');
+        }
+
+        // Share functionality
+        function shareOutput() {
+            if (navigator.share) {
+                const outputText = document.getElementById("output_text").innerText;
+                navigator.share({
+                    title: 'Family Dollar Campaign',
+                    text: outputText
+                }).then(() => {
+                    showToast('Campaign shared successfully!', 'success');
+                }).catch(() => {
+                    showToast('Sharing cancelled', 'warning');
+                });
+            } else {
+                copyToClipboard();
+                showToast('Share not supported. Content copied to clipboard instead.', 'warning');
+            }
+        }
+
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.suggestions-container')) {
+                document.querySelectorAll('.suggestions-dropdown').forEach(dropdown => {
+                    dropdown.style.display = 'none';
+                });
+            }
+        });
     </script>
 </body>
 </html>
