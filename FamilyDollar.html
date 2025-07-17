@@ -482,7 +482,6 @@
             font-size: 1.5rem;
             font-weight: 700;
             color: var(--text-primary);
-            margin-bottom: var(--spacing-xl);
             padding-bottom: var(--spacing-md);
             border-bottom: 2px solid var(--border-color);
             position: relative;
@@ -819,6 +818,12 @@
             .toast {
                 min-width: 280px;
             }
+
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-sm);
+            }
         }
 
         /* Loading States */
@@ -888,6 +893,48 @@
             color: var(--text-secondary);
             font-weight: 500;
         }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .section-header .section-title {
+            margin-bottom: 0;
+        }
+
+        .resource-links {
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-shrink: 0;
+            margin-left: var(--spacing-md);
+        }
+
+        .resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: var(--background-secondary);
+            color: var(--primary-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-small);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .resource-link:hover {
+            background-color: rgba(0, 122, 255, 0.1);
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-light);
+        }
+
     </style>
 </head>
 
@@ -982,7 +1029,13 @@
 
             <!-- SPA Section -->
             <div id="spa" class="input-section">
-                <h3 class="section-title">Search Advertising Configuration</h3>
+                <div class="section-header">
+                    <h3 class="section-title">Search Advertising Configuration</h3>
+                    <div class="resource-links">
+                        <!-- MODIFICATION: Replace "#" with the actual URL to your SPA guide -->
+                        <a href="http://publicisgroupe.sharepoint.com/:w:/r/sites/CitrusAd_US/_layouts/15/Doc.aspx?sourcedoc=%7BEB7AF42C-E535-48DD-A143-7BE7D907EADE%7D&file=Trafficking_FamilyDollar_SPA_final.docx&action=default&mobileredirect=true" class="resource-link" target="_blank" rel="noopener noreferrer" title="Link to the SPA Trafficking Guide">📄 SPA Guide</a>
+                    </div>
+                </div>
                 <div class="form-grid">
                     <div class="input-group suggestions-container">
                         <label for="spa_deal_name">Deal Name</label>
@@ -1004,7 +1057,14 @@
 
             <!-- BAx Section -->
             <div id="bax" class="input-section">
-                <h3 class="section-title">Banner Advertising Configuration</h3>
+                <div class="section-header">
+                    <h3 class="section-title">Banner Advertising Configuration</h3>
+                    <div class="resource-links">
+                        <!-- MODIFICATION: Replace "#" with the actual URL to your Banner guide -->
+                        <a href="https://publicisgroupe.sharepoint.com/:w:/r/sites/CitrusAd_US/_layouts/15/Doc.aspx?sourcedoc=%7B7E8EA44B-8DE9-4A8F-9536-6084E0F93FDD%7D&file=Trafficking%20-%20Family%20Dollar%20Banners.docx&action=default&mobileredirect=true" class="resource-link" target="_blank" rel="noopener noreferrer" title="Link to the Banner Trafficking Guide">📄 Banner Guide</a>
+                        <a href="https://publicisgroupe.sharepoint.com/:x:/r/sites/CitrusAd_US/_layouts/15/Doc.aspx?sourcedoc=%7BF4F5E34E-2E6B-4F86-9F10-169AA96D4E84%7D&file=FD%20Placement%20Trafficking_updated.xlsx&action=default&mobileredirect=true&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiI0OS8yNDAyMjkyNDUxNyJ9" class="resource-link" target="_blank" rel="noopener noreferrer">🔗Placement Trafficking Outline</a>
+                    </div>
+                </div>
                 <form id="placementForm">
                     <div class="form-grid">
                         <div class="input-group suggestions-container">
@@ -1068,7 +1128,13 @@
 
             <!-- Lockouts Section -->
             <div id="lockouts" class="input-section">
-                <h3 class="section-title">Campaign Lockouts</h3>
+                <div class="section-header">
+                    <h3 class="section-title">Campaign Lockouts</h3>
+                     <div class="resource-links">
+                        <!-- MODIFICATION: Replace "#" with the actual URL to your Banner/LOs guide -->
+                        <a href="https://publicisgroupe.sharepoint.com/:w:/r/sites/CitrusAd_US/_layouts/15/Doc.aspx?sourcedoc=%7B7E8EA44B-8DE9-4A8F-9536-6084E0F93FDD%7D&file=Trafficking%20-%20Family%20Dollar%20Banners.docx&action=default&mobileredirect=true" class="resource-link" target="_blank" rel="noopener noreferrer" title="Link to the Banner/LOs Trafficking Guide">📄 Banner/LOs Guide</a>
+                    </div>
+                </div>
                 <div class="form-grid">
                     <div class="input-group suggestions-container">
                         <label for="lockouts_deal_name">Deal Name</label>
