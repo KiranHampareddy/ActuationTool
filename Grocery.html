@@ -283,6 +283,20 @@
                 <option value="uncapped">Uncapped</option>
             </select>
         </div>
+        <div class="form-group">
+            <label for="bufferOptions">Total Daily Spend</label>
+            <select id="bufferOptions" onchange="toggleCustomBuffer()">
+                <option value="140">140% (default)</option>
+                <option value="100">100% (no buffer)</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
+
+        <div class="form-group hidden" id="customBufferContainer">
+            <label for="customBuffer">Custom Total Spend (%)</label>
+            <input type="number" id="customBuffer" placeholder="e.g., 120 for a 20% buffer">
+        </div>
+
 
         <!-- Generate Data Button -->
         <div class="form-group" style="text-align: center;">
@@ -298,14 +312,6 @@
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        const config = {
-            bufferMultiplier: 1.40,
-            bufferUsedText: '40%',
-            maxBudget: 1000000, // Example limit
-            keywordLimit: 600, //Example limit
-            maxKeywordSets : 6
-        };
-
         document.addEventListener('DOMContentLoaded', function() {
             flatpickr('#flightStartDate', {
                 dateFormat: "m/d/Y",
@@ -335,17 +341,27 @@
         }
 
         function calculateDays() {
-            const startDate = new Date(document.getElementById('flightStartDate').value);
-            const endDate = new Date(document.getElementById('flightEndDate').value);
+            const startDateInput = document.getElementById('flightStartDate').value;
+            const endDateInput = document.getElementById('flightEndDate').value;
 
-            if (startDate && endDate && !isNaN(startDate) && !isNaN(endDate)) {
-                const diffTime = Math.abs(endDate - startDate);
-                const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
-                document.getElementById('numberOfDays').value = numberOfDays;
+            // Check if both dates are selected
+            if (startDateInput && endDateInput) {
+                const startDate = new Date(startDateInput);
+                const endDate = new Date(endDateInput);
+
+                if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+                    const diffTime = Math.abs(endDate - startDate);
+                    const numberOfDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+                    document.getElementById('numberOfDays').value = numberOfDays;
+                } else {
+                    document.getElementById('numberOfDays').value = '';
+                }
             } else {
                 document.getElementById('numberOfDays').value = '';
             }
         }
+
+
         function escapeHTML(str) {
             let div = document.createElement('div');
             div.appendChild(document.createTextNode(str));
@@ -360,12 +376,17 @@
 
             requiredFields.forEach(id => {
                 const input = document.getElementById(id);
-                const errorDiv = document.getElementById(id + 'Error');  // Consistent error div naming
-                errorDiv.textContent = ''; // Clear previous errors
+                const errorDiv = document.getElementById(id + 'Error');
+                if (errorDiv) {
+                    errorDiv.textContent = '';
+                }
+
 
                 if (!input.value.trim()) {
                     input.classList.add('highlight');
-                    errorDiv.textContent = 'This field is required.';  // Specific error message
+                    if (errorDiv) {
+                        errorDiv.textContent = 'This field is required.';
+                    }
                     valid = false;
                 } else {
                     input.classList.remove('highlight');
@@ -374,29 +395,27 @@
 
             const budgetInput = document.getElementById('budget');
             if (budgetInput.value && isNaN(parseFloat(budgetInput.value))) {
-              budgetInput.classList.add('highlight');
-              document.getElementById('budgetError').textContent = 'Budget must be a number.';
-              valid = false
-            } else{
-              budgetInput.classList.remove('highlight');
-              document.getElementById('budgetError').textContent = '';
+                budgetInput.classList.add('highlight');
+                document.getElementById('budgetError').textContent = 'Budget must be a number.';
+                valid = false
             }
 
 
             if (document.getElementById('tactic').value === 'BA') {
                 const keywordsInput = document.getElementById('keywords');
+                const label = document.getElementById('baKeywords').querySelector('label');
                 if (!keywordsInput.value.trim()) {
                     keywordsInput.classList.add('highlight');
-                    document.getElementById('baKeywords').querySelector('label').classList.add('red-text'); //Add highlight to ba label above keyword field
+                    if (label) label.classList.add('red-text');
                     valid = false;
 
                 } else {
                     keywordsInput.classList.remove('highlight');
-                    document.getElementById('baKeywords').querySelector('label').classList.remove('red-text'); //remove highlight
+                    if (label) label.classList.remove('red-text');
                 }
-            } else{
-              document.getElementById('baKeywords').querySelector('label').classList.remove('red-text'); //remove highlight
-
+            } else {
+                const label = document.getElementById('baKeywords').querySelector('label');
+                if (label) label.classList.remove('red-text');
             }
 
 
@@ -408,6 +427,17 @@
             return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${escapeHTML(match)}</span>`);
         }
 
+        function toggleCustomBuffer() {
+            const bufferOptions = document.getElementById('bufferOptions');
+            const customBufferContainer = document.getElementById('customBufferContainer');
+
+            if (bufferOptions.value === 'custom') {
+                customBufferContainer.classList.remove('hidden');
+            } else {
+                customBufferContainer.classList.add('hidden');
+            }
+        }
+
 
         function generateData() {
             if (!validateInputs()) {
@@ -415,17 +445,37 @@
                 return;
             }
 
-            const dealName = escapeHTML(document.getElementById('dealName').value.replace(/[\s]/g, '_')); //Removed escaping of the slash so we can enforce it later
+            const dealName = escapeHTML(document.getElementById('dealName').value.replace(/[\s]/g, '_'));
             const dealId = escapeHTML(document.getElementById('dealId').value);
             const team = escapeHTML(document.getElementById('team').value);
-            const walletName = escapeHTML(document.getElementById('walletName').value.replace(/[\s]/g, '_'));  //same thing applied here
+            const walletName = escapeHTML(document.getElementById('walletName').value.replace(/[\s]/g, '_'));
             const budget = parseFloat(document.getElementById('budget').value);
             const flightStartDate = escapeHTML(document.getElementById('flightStartDate').value);
             const flightEndDate = escapeHTML(document.getElementById('flightEndDate').value);
-            const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
+            const numberOfDays = parseInt(document.getElementById('numberOfDays').value, 10);
             const tactic = document.getElementById('tactic').value;
             const walletCapType = document.getElementById('walletCapType').value;
+            const bufferOptions = document.getElementById('bufferOptions').value;
 
+            let totalSpendPercent = 140; // Default to 140%
+
+            if (bufferOptions === 'custom') {
+                const customValue = parseFloat(document.getElementById('customBuffer').value);
+                // Use the custom value if it's a valid number, otherwise stick to the default.
+                if (!isNaN(customValue)) {
+                    totalSpendPercent = customValue;
+                }
+            } else {
+                // Use the value from the dropdown (140 or 100)
+                totalSpendPercent = parseFloat(bufferOptions);
+            }
+
+            // The multiplier is the total spend percentage divided by 100
+            const bufferMultiplier = totalSpendPercent / 100.0;
+
+            // The buffer *used* is the total spend minus the base 100%
+            const actualBufferPercent = totalSpendPercent - 100;
+            const bufferUsedText = `${actualBufferPercent.toFixed(0)}%`;
 
 
             // Generate placements based on selected tactic
@@ -436,8 +486,10 @@
                 const brand = escapeHTML(document.getElementById('brand').value.replace(/[\s\/]/g, '_'));
                 placements = `<ul>${kwGroupNames.map(name => `<li>KW_${name}_${brand}_${dealId}</li>`).join('')}<li>CAT_${brand}_${dealId}</li></ul>`;
             } else if (tactic === 'BA') {
+                const keywordLimit = 600;
+                const maxKeywordSets = 6;
 
-              let baPlacements = `
+                let baPlacements = `
                   <p>KWT_set1_${dealName}_${dealId}</p>
                   <p>KWT_set1_Phrase_${dealName}_${dealId}</p>
                   <p>KWT_set2_${dealName}_${dealId}</p>
@@ -453,36 +505,36 @@
                   <p>CAT_${dealName}_${dealId}</p>
                 `;
 
-              const keywordsText = document.getElementById('keywords').value;
-              const keywords = keywordsText.split('\n').map(keyword => keyword.trim()).filter(keyword => keyword !== '');
+                const keywordsText = document.getElementById('keywords').value;
+                const keywords = keywordsText.split('\n').map(keyword => keyword.trim()).filter(keyword => keyword !== '');
 
-              let keywordSetsHtml = '';
-                let i = 0;
+                let keywordSetsHtml = '';
 
-              if (keywords.length > config.keywordLimit) {
-                    alert(`Warning! there is ${keywords.length} of keywords. Recommended ammount should not exceed  ${config.keywordLimit}. Check placement name results. This can cause unintentended spend if not careful`)
-              }
+                if (keywords.length > keywordLimit) {
+                    alert(`Warning! There are ${keywords.length} keywords. The recommended amount should not exceed ${keywordLimit}. Check placement name results. This can cause unintended spend if not careful.`)
+                }
 
-              if (keywords.length/100 > config.maxKeywordSets){
-                 alert(`Your ammount of keywords per ammount sets have exceeded recomendations! Try using keywords/maxSets. You currently use`+keywords.length/100+ " when " +config.maxKeywordSets+ "was asked!");
-                 return false;
+                if (keywords.length / 100 > maxKeywordSets) {
+                    alert(`Your number of keywords per set has exceeded recommendations! Try using fewer keywords. You currently have ${keywords.length / 100} sets when ${maxKeywordSets} is the maximum advised.`);
+                    return false;
 
-              }
-                for (i = 0; i < keywords.length; i += 100) {
+                }
+                for (let i = 0; i < keywords.length; i += 100) {
 
-                  const setNumber = Math.floor(i / 100) + 1;
-                  const keywordSet = keywords.slice(i, i + 100);
+                    const setNumber = Math.floor(i / 100) + 1;
+                    const keywordSet = keywords.slice(i, i + 100);
 
                     keywordSetsHtml += `<div class="ba-keyword-set"><strong>Set ${setNumber}:</strong><p>${escapeHTML(keywordSet.join(', '))}</p></div>`;
 
                 }
 
-            placements = baPlacements + `<div class="ba-keyword-sets">${keywordSetsHtml}</div>`;
+                placements = baPlacements + `<div class="ba-keyword-sets">${keywordSetsHtml}</div>`;
 
             }
 
             // Calculate wallet cap if capped
-            const walletCap = walletCapType === 'capped' ? Math.round((budget / numberOfDays) * config.bufferMultiplier) : 'N/A';
+            const walletCap = walletCapType === 'capped' ? Math.round((budget / numberOfDays) * bufferMultiplier) : 'N/A';
+
 
             // Display the generated data
             const resultHtml = `
@@ -499,24 +551,31 @@
             <p>Budget: $${budget.toFixed(2)}</p>
             <p>Flight Dates: ${flightStartDate} - ${flightEndDate}</p>
             <p>Number of Days: ${numberOfDays}</p>
-            ${walletCapType === 'capped' ? `<p>Buffer Used: ${config.bufferUsedText}</p><p>Wallet Cap: $${walletCap}</p>` : ''}
+            ${walletCapType === 'capped' ? `<p>Buffer Used: ${bufferUsedText}</p><p>Wallet Cap: $${walletCap}</p>` : ''}
             ${tactic === 'BA' ? '<p><strong>BA Placements:</strong></p>' : ''}
             ${placements}
         `;
             document.getElementById('result').innerHTML = resultHtml;
         }
+
         function copyResult() {
-                const resultElement = document.getElementById("result");
-                if (resultElement) {
-                    const textToCopy = resultElement.innerText; // Using innerText to get formatted text
-                    navigator.clipboard.writeText(textToCopy).then(() => {
-                        alert("Result copied to clipboard!");
-                    }).catch(err => {
-                        console.error("Failed to copy text: ", err);
-                        alert("Failed to copy result. Please copy manually.");
-                    });
+            const resultElement = document.getElementById("result");
+            if (resultElement) {
+                // Use a temporary textarea to preserve formatting like line breaks
+                const tempTextArea = document.createElement("textarea");
+                tempTextArea.value = resultElement.innerText;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                try {
+                    document.execCommand("copy");
+                    alert("Result copied to clipboard!");
+                } catch (err) {
+                    console.error("Failed to copy text: ", err);
+                    alert("Failed to copy result. Please copy manually.");
                 }
+                document.body.removeChild(tempTextArea);
             }
+        }
     </script>
 
 </body>
