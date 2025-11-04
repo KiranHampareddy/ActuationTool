@@ -743,9 +743,9 @@
         }
 
         .red-text {
-            color: var(--error-color);
-            font-weight: 600;
-        }
+    color: var(--error-color) !important;
+    font-weight: 600;
+}
 
         /* Keyboard Shortcuts Help */
         .shortcuts-help {
@@ -1109,15 +1109,15 @@
                             <div class="error-message" id="webUrl_error"></div>
                         </div>
                         <div class="input-group">
-                            <label for="flightStartDate">Start Date</label>
+                            <label for="flightStartDate" class="red-text">Overall Flight Start Date</label>
                             <input type="text" id="flightStartDate" name="flightStartDate" class="input-field" onchange="calculateDays(); handleInput(this);">
                             <div class="error-message" id="flightStartDate_error"></div>
                         </div>
                         <div class="input-group">
-                            <label for="flightEndDate">End Date</label>
-                            <input type="text" id="flightEndDate" name="flightEndDate" class="input-field" onchange="calculateDays(); handleInput(this);">
-                            <div class="error-message" id="flightEndDate_error"></div>
-                        </div>
+    <label for="flightEndDate" class="red-text"> Overall Flight End Date</label>
+    <input type="text" id="flightEndDate" name="flightEndDate" class="input-field" onchange="calculateDays(); handleInput(this);">
+    <div class="error-message" id="flightEndDate_error"></div>
+</div>
                         <div class="input-group">
                             <label for="numberOfDays">Campaign Duration</label>
                             <input type="number" id="numberOfDays" name="numberOfDays" class="input-field" readonly>
@@ -1157,7 +1157,7 @@
             </div>
 
             <button class="generate-button" onclick="generateOutput()">
-                <span id="button-text">Generate Campaign</span>
+                <span id="button-text">Eminem</span>
             </button>
 
             <!-- Enhanced Output Section -->
@@ -1587,7 +1587,7 @@
             }
 
             // Show loading state
-            buttonText.innerHTML = '<span class="loading"></span>Generating...';
+            buttonText.innerHTML = '<span class="loading"></span>Uh, summa-lumma, dooma-lumma, you assumin Im a human...';
             button.disabled = true;
 
             setTimeout(() => {
@@ -1653,45 +1653,45 @@ Buffer Used: ${pointBuffer}
 
 App Placements:
 
-Product Details Page: (Product Page) (Slot: medium-banner) (CPM: $0.009)
+Product Details Page: (Product Page) (Slot: medium-banner) (CPM: $0.018)
 PDP_Med_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Run of Site: (Run of Site) (Slot: medium-banner) (CPM: $0.009)
+Run of Site: (Run of Site) (Slot: medium-banner) (CPM: $0.018)
 ROS_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Coupon Details Page: (Coupon) (Slot: medium-banner) (CPM: $0.016)
+Coupon Details Page: (Coupon) (Slot: medium-banner) (CPM: $0.018)
 CP_Med_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Search Results Page: (Search) (Slot: thin-banner) (CPM: $0.009)
+Search Results Page: (Search) (Slot: thin-banner) (CPM: $0.018)
 Search_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Sub-Category: (Category) (Slot: thin-banner) (CPM: $0.009)
+Sub-Category: (Category) (Slot: thin-banner) (CPM: $0.018)
 SubCAT_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Coupon Listing Page: (Coupon) (Slot: thin-banner) (CPM: $0.016)
+Coupon Listing Page: (Coupon) (Slot: thin-banner) (CPM: $0.018)
 CP_Thin_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Product Details Page - Top: (Product Page) (Slot: pdp-pencil-banner) (CPM: $0.009)
+Product Details Page - Top: (Product Page) (Slot: pdp-pencil-banner) (CPM: $0.018)
 PDP_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Coupon Details Page - Top: (Coupon) (Slot: pdp-pencil-banner) (CPM: $0.016)
+Coupon Details Page - Top: (Coupon) (Slot: pdp-pencil-banner) (CPM: $0.018)
 CP_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Homepage - Midpage: (Homepage - App) (Slot: midpage-banner) (CPM: $0.016)
+Homepage - Midpage: (Homepage - App) (Slot: midpage-banner) (CPM: $0.018)
 HPApp_Mid_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Coupon Category Navigation: (Category) (Slot: coupon-navigation-banner) (CPM: $0.016)
+Coupon Category Navigation: (Category) (Slot: coupon-navigation-banner) (CPM: $0.018)
 CP_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Category - Hero: (Category) (Slot: category-hero-banner) (CPM: $0.009)
+Category - Hero: (Category) (Slot: category-hero-banner) (CPM: $0.018)
 CAT_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
 Web Placements:
 
-Homepage – Large 2-Across: (Homepage - Web) (Slot: 2-across-banner) (CPM: $0.016)
+Homepage – Large 2-Across: (Homepage - Web) (Slot: 2-across-banner) (CPM: $0.018)
 HPWeb_2Across_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
-Homepage – Pencil Banner: (Homepage - Web) (Slot: pencil-banner) (CPM: $0.016)
+Homepage – Pencil Banner: (Homepage - Web) (Slot: pencil-banner) (CPM: $0.018)
 HPWeb_Pencil_${highlightSpecialChars(replaceSpaces(dealName))}_${dealId}
 
 Thank you..!`;
@@ -1734,7 +1734,7 @@ Status: Campaign has been locked and is no longer active.`;
                 }
 
                 // Reset button state
-                buttonText.textContent = 'Generate Campaign';
+                buttonText.textContent = 'comin at you at supersonic speed';
                 button.disabled = false;
 
                 if (isValid && outputText) {
