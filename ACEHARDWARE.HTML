@@ -1,0 +1,368 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ace Hardware: Campaign Actuation Tool</title>
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root { --ace-red: #D40029; --ace-dark: #a80020; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; color: #333; }
+        .container { background-color: #fff; padding: 30px; margin: 30px auto; width: 90%; max-width: 900px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05); }
+        .heading { background-color: var(--ace-red); color: #ffffff; padding: 20px; border-radius: 12px 12px 0 0; text-align: center; font-size: 28px; font-weight: 600; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); margin: -30px -30px 25px -30px; letter-spacing: 0.5px; width: 100%; }
+        .form-group { margin-bottom: 20px; }
+        label { font-weight: 500; display: block; margin-bottom: 5px; color: #555; }
+        input[type="text"], input[type="number"], select, textarea { width: 100%; padding: 12px; margin-top: 5px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-size: 16px; transition: border-color 0.2s; }
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus { border-color: var(--ace-red); outline: none; box-shadow: 0 0 5px rgba(212, 0, 41, 0.2); }
+        .highlight { border-color: var(--ace-red); background-color: #ffebee; }
+        .result { margin-top: 30px; padding: 25px; background-color: #f5f5f5; border-radius: 12px; border: 1px solid #e0e0e0; width: 100%; }
+        .hidden { display: none; }
+        .btn { display: inline-block; padding: 12px 25px; color: #ffffff; background-color: var(--ace-red); border: none; border-radius: 8px; cursor: pointer; text-align: center; font-size: 17px; transition: background-color 0.3s, transform 0.2s; margin-top: 5px; }
+        .btn:hover { background-color: var(--ace-dark); transform: translateY(-2px); box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); }
+        .btn-secondary { background-color: #555; }
+        .red-text { color: var(--ace-red); font-weight: 600; }
+        #flightDatesContainer { display: flex; gap: 20px; }
+        #flightDatesContainer .form-group { flex: 1; }
+        .tactic-selection { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        #tactic { width: 50%; min-width: 200px; margin: 0 auto; padding: 15px; border-radius: 5px; font-size: larger; font-weight: 700; cursor: pointer; }
+        .section-header { text-align: center; padding: 15px; font-size: larger; width: 100%; border-top: 1px solid #eee; margin-top: 20px; color: var(--ace-red); font-weight: bold; }
+        .parser-box { background-color: #fff1f1; padding: 20px; border: 2px dashed var(--ace-red); border-radius: 8px; margin-bottom: 25px; }
+        .warning-text { color: var(--ace-red); font-size: 12px; font-weight: bold; margin-top: 4px; display: none; }
+        /* Placement Colors */
+.p-search { color: #673ab7; font-weight: bold; } /* Purple */
+.p-hp { color: #d32f2f; font-weight: bold; }     /* Red */
+.p-pdp { color: #0097a7; font-weight: bold; }    /* Cyan */
+.p-cat { color: #388e3c; font-weight: bold; }    /* Green */
+.p-nav { color: #5d4037; font-weight: bold; }    /* Brown */
+
+/* Slot Colors */
+.s-hero { color: #007bff; font-weight: 900; text-transform: uppercase; } /* Blue */
+.s-disruptor { color: #e65100; font-weight: 900; text-transform: uppercase; } /* Orange */
+.s-other { color: #607d8b; font-weight: 900; } /* Slate */
+
+/* Dimension Colors */
+.d-group1 { background-color: #fce4ec; color: #c2185b; padding: 0 4px; } /* Pink Group (2400*) */
+.d-group2 { background-color: #e8f5e9; color: #2e7d32; padding: 0 4px; } /* Green Group (3040*) */
+.d-group3 { background-color: #fff3e0; color: #ef6c00; padding: 0 4px; } /* Orange Group (HP Hero) */
+.d-group4 { background-color: #f3e5f5; color: #7b1fa2; padding: 0 4px; } /* Purple Group (Nav) */
+.d-group5 { background-color: #e1f5fe; color: #0277bd; padding: 0 4px; } /* Blue Group (Side Nav) */
+
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="heading"><i class="fas fa-toolbox"></i> Ace Hardware Traffic Tool</div>
+
+        <!-- WALLET PARSER AREA -->
+        <div class="parser-box">
+            <label for="walletPaste"><i class="fas fa-paste"></i> Auto-Fill: Paste Wallet Row Here</label>
+            <textarea id="walletPaste" rows="3" placeholder="Paste row from platform..."></textarea>
+            <div style="text-align: center;">
+                <button class="btn" onclick="parseWalletData()"><i class="fas fa-bolt"></i> Extract & Populate</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="dealName">Clean Deal Name <span class="red-text">*</span></label>
+            <input type="text" id="dealName" placeholder="Core Campaign Name">
+        </div>
+        <div class="form-group">
+            <label for="walletName">Full Wallet Name <span class="red-text">*</span></label>
+            <input type="text" id="walletName" placeholder="Full Wallet String">
+        </div>
+        <div class="form-group">
+            <label for="dealId">Deal ID <span class="red-text">*</span></label>
+            <input type="text" id="dealId" placeholder="Unique Deal ID">
+        </div>
+        <div class="form-group">
+            <label for="team">Team <span class="red-text">*</span></label>
+            <input type="text" id="team" placeholder="Enter Team Name">
+        </div>
+        <div class="form-group">
+            <label for="budget">Budget <span class="red-text">*</span></label>
+            <input type="number" id="budget" placeholder="Enter Budget" step="0.01">
+        </div>
+
+        <div id="flightDatesContainer">
+            <div class="form-group">
+                <label for="flightStartDate">Flight Start Date <span class="red-text">*</span></label>
+                <input type="text" id="flightStartDate" placeholder="Select Start Date">
+                <div id="dateWarning" class="warning-text"><i class="fas fa-exclamation-triangle"></i> Start Date is in the past!</div>
+            </div>
+            <div class="form-group">
+                <label for="flightEndDate">Flight End Date <span class="red-text">*</span></label>
+                <input type="text" id="flightEndDate" placeholder="Select End Date">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="numberOfDays">Number of Days <span class="red-text">*</span></label>
+            <input type="text" id="numberOfDays" placeholder="Calculated Days" readonly>
+        </div>
+
+        <div class="form-group tactic-selection">
+            <label for="tactic">Select Tactic <span class="red-text">*</span></label>
+            <select id="tactic" onchange="updateTactic()">
+                <option value="">-- Select Tactic --</option>
+                <option value="SPA">SPA</option>
+                <option value="BA">BA</option>
+            </select>
+        </div>
+
+        <div class="section-header">Tactic-Specific Configuration</div>
+
+        <div id="extractionArea" class="hidden">
+            <div class="form-group">
+                <label for="campaignNameRow">Paste Campaign Name Row (from Excel)</label>
+                <textarea id="campaignNameRow" rows="2" placeholder="Paste Excel 'Campaign Name' row here"></textarea>
+                <button class="btn btn-secondary" onclick="extractCampaignNames()"><i class="fas fa-magic"></i> Extract Groups</button>
+            </div>
+        </div>
+
+        <div class="form-group hidden" id="placementFields">
+            <label for="kwGroupNames">KW Group Names (comma-separated)</label>
+            <input type="text" id="kwGroupNames" placeholder="e.g. General, Steel Handle Axe">
+            <label for="brand">Brand</label>
+            <input type="text" id="brand" placeholder="Enter Brand Name">
+        </div>
+
+        <div class="form-group">
+            <label for="walletCapType">Wallet Cap Type</label>
+            <select id="walletCapType">
+                <option value="capped">Capped</option>
+                <option value="uncapped">Uncapped</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="bufferOptions">Total Daily Spend</label>
+            <select id="bufferOptions" onchange="toggleCustomBuffer()">
+                <option value="100">100% (No Buffer - Default)</option>
+                <option value="custom">Custom (%)</option>
+            </select>
+        </div>
+
+        <div class="form-group hidden" id="customBufferContainer">
+            <label for="customBuffer">Custom Total Spend (%)</label>
+            <input type="number" id="customBuffer" placeholder="e.g. 120">
+        </div>
+
+        <div class="form-group" style="text-align: center;">
+            <button class="btn" onclick="generateData()"><i class="fas fa-cogs"></i> Generate Data</button>
+        </div>
+
+        <div class="result" id="result"></div>
+        <button class="btn" onclick="copyResult()">Copy Result</button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        let startPicker, endPicker;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            startPicker = flatpickr('#flightStartDate', { dateFormat: "m/d/Y", onChange: calculateDays });
+            endPicker = flatpickr('#flightEndDate', { dateFormat: "m/d/Y", onChange: calculateDays });
+        });
+
+        function parseWalletData() {
+            const rawText = document.getElementById('walletPaste').value.trim();
+            if (!rawText) return;
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l !== "");
+            if (lines.length < 7) { alert("Invalid wallet data."); return; }
+
+            let fullWalletName = lines[0].replace(/^#\d+\s+/, ""); 
+            document.getElementById('walletName').value = fullWalletName;
+
+            let segments = fullWalletName.split(/_| /);
+            const dealId = segments[segments.length - 1];
+            document.getElementById('dealId').value = dealId;
+
+            let cleanStep1 = fullWalletName.replace(/^\d+_[A-Z]+_/, "");
+            let cleanStep2 = cleanStep1.replace(new RegExp(`[\\s\\_]${dealId}$`), ""); 
+            document.getElementById('dealName').value = cleanStep2.trim().replace(/\s+/g, '_');
+
+            startPicker.setDate(lines[3]);
+            endPicker.setDate(lines[5]);
+            document.getElementById('budget').value = lines[lines.length - 1].replace(/[$,]/g, "");
+
+            calculateDays();
+        }
+
+        function calculateDays() {
+            const startVal = document.getElementById('flightStartDate').value;
+            const endVal = document.getElementById('flightEndDate').value;
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const inputField = document.getElementById('flightStartDate');
+            const dateWarning = document.getElementById('dateWarning');
+
+            if (startVal) {
+                const startDate = new Date(startVal);
+                if (startDate < today) {
+                    inputField.classList.add('highlight');
+                    dateWarning.style.display = 'block';
+                } else {
+                    inputField.classList.remove('highlight');
+                    dateWarning.style.display = 'none';
+                }
+            }
+
+            if (startVal && endVal) {
+                const start = new Date(startVal);
+                const end = new Date(endVal);
+                const diff = Math.floor((end - start) / (1000 * 60 * 60 * 24)) + 1;
+                document.getElementById('numberOfDays').value = diff > 0 ? diff : 0;
+            }
+        }
+
+        function updateTactic() {
+            const tactic = document.getElementById('tactic').value;
+            document.getElementById('placementFields').classList.toggle('hidden', tactic !== 'SPA');
+            document.getElementById('extractionArea').classList.toggle('hidden', tactic !== 'SPA');
+        }
+
+        function escapeHTML(str) {
+            let div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
+        function highlightSpecialChars(text) {
+            return text.replace(/[^a-zA-Z0-9_]/g, match => `<span class="red-text">${escapeHTML(match)}</span>`);
+        }
+
+        function toggleCustomBuffer() {
+            document.getElementById('customBufferContainer').classList.toggle('hidden', document.getElementById('bufferOptions').value !== 'custom');
+        }
+
+        function validateInputs() {
+            let valid = true;
+            const required = ['dealName', 'dealId', 'walletName', 'budget', 'flightStartDate', 'flightEndDate', 'tactic'];
+            required.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) { el.classList.add('highlight'); valid = false; }
+                else { el.classList.remove('highlight'); }
+            });
+            return valid;
+        }
+
+        function generateData() {
+            if (!validateInputs()) { alert('Please fill in all required fields.'); return; }
+
+            const startVal = document.getElementById('flightStartDate').value;
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            const isPast = new Date(startVal) < today;
+
+            const dealNameRaw = document.getElementById('dealName').value.replace(/[\s]/g, '_');
+            const dealId = escapeHTML(document.getElementById('dealId').value);
+            const team = escapeHTML(document.getElementById('team').value);
+            const walletNameRaw = document.getElementById('walletName').value.replace(/[\s]/g, '_');
+            const budget = parseFloat(document.getElementById('budget').value);
+            const flightStartDate = document.getElementById('flightStartDate').value;
+            const flightEndDate = document.getElementById('flightEndDate').value;
+            const numberOfDays = parseInt(document.getElementById('numberOfDays').value);
+            const tactic = document.getElementById('tactic').value;
+            const walletCapType = document.getElementById('walletCapType').value;
+
+            let bufferPercent = document.getElementById('bufferOptions').value === 'custom' 
+                ? parseFloat(document.getElementById('customBuffer').value) || 100 
+                : parseFloat(document.getElementById('bufferOptions').value);
+
+            let placements = '';
+
+            if (tactic === 'SPA') {
+                const kwGroupsRaw = document.getElementById('kwGroupNames').value;
+                const kwGroups = kwGroupsRaw ? kwGroupsRaw.split(',').map(n => n.trim().replace(/[\s\/]/g, '_')) : [];
+                const brand = document.getElementById('brand').value.replace(/[\s\/]/g, '_');
+                
+                placements = `
+                    <p><strong>SPA Placements:</strong></p>
+                    <ul>
+                        ${kwGroups.map(group => `<li>${highlightSpecialChars(`KW_${group}_${brand}_${dealId}`)}</li>`).join('')}
+                        <li>${highlightSpecialChars(`CAT_${brand}_${dealId}`)}</li>
+                        <li>${highlightSpecialChars(`PDP_${brand}_${dealId}`)}</li>
+                        <li>${highlightSpecialChars(`HP_${brand}_${dealId}`)}</li>
+                    </ul>`;
+        } else if (tactic === 'BA')
+        {
+    const baConfigs = [
+        { name: `KW_BA_Disruptor_${dealNameRaw}_${dealId}`, p: 'Search Banner X', pClass: 'p-search', s: 'Disruptor', sClass: 's-disruptor', d: '2400*200,686*150,1372*300', dClass: 'd-group1' },
+        { name: `KW_BA_Hero_${dealNameRaw}_${dealId}`, p: 'Search Banner X', pClass: 'p-search', s: 'Hero', sClass: 's-hero', d: '3040x200,686x150', dClass: 'd-group2' },
+        { name: `HP_BA_Disruptor_${dealNameRaw}_${dealId}`, p: 'Homepage Banner X Disruptor', pClass: 'p-hp', s: 'Disruptor', sClass: 's-disruptor', d: '2400*200,686*150,1372*300', dClass: 'd-group1' },
+        { name: `HP_BA_Hero_${dealNameRaw}_${dealId}`, p: 'Homepage Banner X Hero', pClass: 'p-hp', s: 'Hero', sClass: 's-hero', d: '686x150,748x892 and 1372x300', dClass: 'd-group3' },
+        { name: `PDP_BA_Disruptor_${dealNameRaw}_${dealId}`, p: 'PDP Banner X', pClass: 'p-pdp', s: 'Disruptor', sClass: 's-disruptor', d: '2400*200,686*150,1372*300', dClass: 'd-group1' },
+        { name: `PDP_BA_Hero_${dealNameRaw}_${dealId}`, p: 'PDP Banner X', pClass: 'p-pdp', s: 'Hero', sClass: 's-hero', d: '3040x200,686x150', dClass: 'd-group2' },
+        { name: `CAT_BA_Disruptor_${dealNameRaw}_${dealId}`, p: 'Category Banner X', pClass: 'p-cat', s: 'Disruptor', sClass: 's-disruptor', d: '2400*200,686*150,1372*300', dClass: 'd-group1' },
+        { name: `CAT_BA_Hero_${dealNameRaw}_${dealId}`, p: 'Category Banner X', pClass: 'p-cat', s: 'Hero', sClass: 's-hero', d: '3040x200,686x150', dClass: 'd-group2' },
+        { name: `CAT_BA_Side_Nav_${dealNameRaw}_${dealId}`, p: 'Category Banner X', pClass: 'p-cat', s: 'Side Navigator', sClass: 's-other', d: '490*150', dClass: 'd-group5' },
+        { name: `Shop_Nav_BA_Nav_Flyout_${dealNameRaw}_${dealId}`, p: 'Shop Nav Banner X', pClass: 'p-nav', s: 'Navigation-Flyout', sClass: 's-other', d: '540*848, 610*250,1372*300', dClass: 'd-group4' }
+    ];
+
+    placements = `<p><strong>BA Campaigns:</strong></p>--------------------------------------------------------------------------------<br>`;
+    
+    baConfigs.forEach(item => {
+        placements += `
+            (Placement - <span class="${item.pClass}">${item.p}</span>) (Slot- <span class="${item.sClass}">${item.s}</span>) (Dimensions <span class="${item.dClass}">${item.d}</span>)<br>
+            ${highlightSpecialChars(item.name)}<br>
+            --------------------------------------------------------------------------------<br>`;
+    });
+}
+
+            const walletCapValue = Math.round((budget / numberOfDays) * (bufferPercent / 100));
+
+            // Highlight start date in red if it is historical
+            const startDateDisplay = isPast 
+                ? `<span class="red-text"><strong>${flightStartDate} (Historical)</strong></span>` 
+                : flightStartDate;
+
+            const resultHtml = `
+                <p>Hi @</p>
+                <p>The campaigns have been trafficked and QAed. Below are the details:</p>
+                ${isPast ? `<p class="red-text"><strong>Note:</strong> We see the flight start date is in the past; we have trafficked from today. Please raise the CR in PIO.</p>` : ''}
+                <p><strong>Details:</strong></p>
+                <p>Deal Name: ${highlightSpecialChars(dealNameRaw)}</p>
+                <p>Deal ID: ${dealId}</p>
+                <p>Team: ${team}</p>
+                <p>Wallet Name: ${highlightSpecialChars(walletNameRaw)}</p>
+                <p>Budget: $${budget.toFixed(2)}</p>
+                <p>Flight Dates: ${startDateDisplay} - ${flightEndDate}</p>
+                <p>Number of Days: ${numberOfDays}</p>
+                ${walletCapType === 'capped' ? `<p>Buffer Used: ${bufferPercent - 100}%</p><p>Wallet Cap: $${walletCapValue}</p>` : ''}
+                <hr>
+                ${placements}
+            `;
+            document.getElementById('result').innerHTML = resultHtml;
+        }
+
+        function extractCampaignNames() {
+            const input = document.getElementById('campaignNameRow').value;
+            if (!input.trim()) return;
+            const regex = /Campaign Name:\s*([^	\n\r]+)/gi;
+            let matches, names = [];
+            while ((matches = regex.exec(input)) !== null) {
+                let name = matches[1].trim();
+                if (name.toLowerCase().includes("keyword")) name = name.split(/keyword/i)[0].trim();
+                if (name) names.push(name);
+            }
+            if (names.length > 0) document.getElementById('kwGroupNames').value = names.join(', ');
+        }
+
+        function copyResult() {
+            const temp = document.createElement("textarea");
+            temp.value = document.getElementById("result").innerText;
+            document.body.appendChild(temp);
+            temp.select();
+            document.execCommand("copy");
+            document.body.removeChild(temp);
+            alert("Result copied!");
+        }
+    </script>
+</body>
+</html>
