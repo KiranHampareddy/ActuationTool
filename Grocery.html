@@ -202,6 +202,14 @@
     <div class="container">
         <!-- Heading -->
         <div class="heading"><i class="fas fa-shopping-cart"></i> Grocery</div>
+        <!-- WALLET PARSER AREA -->
+<div style="background-color: #e8eaf6; padding: 20px; border: 2px dashed #3f51b5; border-radius: 12px; margin-bottom: 25px;">
+    <label for="walletPaste" style="font-weight: bold; color: #3f51b5;">Step 1: Auto-Fill (Paste Wallet Row Here)</label>
+    <textarea id="walletPaste" rows="3" placeholder="Paste row from platform here..." style="width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ced4da;"></textarea>
+    <div style="text-align: center; margin-top: 10px;">
+        <button class="btn" onclick="parseWalletData()"><i class="fas fa-bolt"></i> Extract & Populate Fields</button>
+    </div>
+</div>
 
         <!-- Form for data input -->
         <div class="form-group">
@@ -312,17 +320,21 @@
     <!-- Flatpickr JS -->
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            flatpickr('#flightStartDate', {
-                dateFormat: "m/d/Y",
-                onChange: calculateDays
-            });
-            flatpickr('#flightEndDate', {
-                dateFormat: "m/d/Y",
-                onChange: calculateDays
-            });
-        });
+        // 1. Declare these OUTSIDE of any function so the whole script can see them
+let startPicker, endPicker; 
 
+document.addEventListener('DOMContentLoaded', function() {
+    // 2. Initialize the pickers and assign them to the global variables
+    startPicker = flatpickr('#flightStartDate', {
+        dateFormat: "m/d/Y",
+        onChange: calculateDays
+    });
+    
+    endPicker = flatpickr('#flightEndDate', {
+        dateFormat: "m/d/Y",
+        onChange: calculateDays
+    });
+});
         function updateTactic() {
             const tactic = document.getElementById('tactic').value;
             const placementFields = document.getElementById('placementFields');
@@ -576,6 +588,54 @@
                 document.body.removeChild(tempTextArea);
             }
         }
+        function parseWalletData() {
+    const rawText = document.getElementById('walletPaste').value.trim();
+    if (!rawText) return;
+    
+    // Split the text into lines and clean them up
+    const lines = rawText.split('\n').map(l => l.trim()).filter(l => l !== "");
+    
+    // 1. SET FULL WALLET NAME
+    let fullWalletName = lines[0].replace(/^#\d+\s+/, ""); 
+    document.getElementById('walletName').value = fullWalletName;
+
+    // 2. EXTRACT DEAL ID (The number at the very end)
+    let segments = fullWalletName.split(/_| /);
+    const dealId = segments[segments.length - 1];
+    document.getElementById('dealId').value = dealId;
+
+    // 3. CLEAN DEAL NAME
+    // Removes prefix (like 12596890_SL_), suffix (_2092102), and _Q4_
+    let cleanName = fullWalletName
+        .replace(/^\d+_[A-Z0-9]+_/, "") 
+        .replace(new RegExp(`[\\s\\_]${dealId}$`), "")
+        .replace(/_Q[1-4]_/g, "_")
+        .replace(/_+/g, "_");
+    document.getElementById('dealName').value = cleanName;
+
+    // 4. SMART DATE EXTRACTION (Fixed part)
+    // This looks through ALL lines for anything that looks like a date (00/00/0000)
+    const dateRegex = /\d{2}\/\d{2}\/\d{4}/;
+    const foundDates = lines.filter(line => dateRegex.test(line));
+
+    if (foundDates.length >= 2) {
+        // The first date found is Start, the second is End
+        if(startPicker) startPicker.setDate(foundDates[0]);
+        if(endPicker) endPicker.setDate(foundDates[1]);
+    } else {
+        console.log("Dates not found in the expected format");
+    }
+
+    // 5. SET BUDGET
+    // Grabs the very last line and cleans it
+    const budgetValue = lines[lines.length - 1].replace(/[$,]/g, "");
+    document.getElementById('budget').value = budgetValue;
+
+    // 6. TRIGGER CALCULATION
+    calculateDays();
+    
+    alert("Extracted: " + cleanName);
+}
     </script>
 
 </body>
