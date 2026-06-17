@@ -1854,6 +1854,8 @@ Status: Campaign has been locked and is no longer active.`;
                 });
             }
         });
+        
+
         function parseWalletData() {
     const rawText = document.getElementById('walletPaste').value.trim();
     if (!rawText) return;
@@ -1864,36 +1866,57 @@ Status: Campaign has been locked and is no longer active.`;
         return;
     }
 
-    // 1. Get Wallet Name & Clean Deal Name
+    // 1. Get Wallet Name
     let fullWalletName = lines[0].replace(/^#\d+\s+/, ""); 
     document.getElementById('walletName').value = fullWalletName;
     
-    // Extract ID (assumes ID is the last numeric part)
+    // 2. Extract Deal ID (The number at the very end)
     let segments = fullWalletName.split(/_| /);
     const dealId = segments[segments.length - 1];
+    
+    // Fill all ID fields
     document.getElementById('dealId').value = dealId;
+    document.getElementById('spa_deal_id').value = dealId;
+    document.getElementById('lockouts_deal_id').value = dealId;
 
-    // Clean name (removes ID and replaces spaces with underscores)
-    let cleanName = fullWalletName.replace(new RegExp(`[\\s\\_]${dealId}$`), "").trim();
+    // 3. CLEAN DEAL NAME (The Fix)
+    let cleanName = fullWalletName
+        .replace(/^\d+_[A-Z0-9]+_/, "") // Removes prefix like "12596890_SL_"
+        .replace(new RegExp(`[\\s\\_]${dealId}$`), "") // Removes the Deal ID from end
+        .replace(/_Q[1-4]_/g, "_") // Removes "_Q4_"
+        .replace(/_+/g, "_") // Fixes double underscores
+        .trim();
+
+    // Fill all Name fields across different sections
     document.getElementById('dealName').value = cleanName;
+    document.getElementById('spa_deal_name').value = cleanName;
+    document.getElementById('lockouts_deal_name').value = cleanName;
 
-    // 2. Set Dates (Indices 3 and 5 are standard for these platform rows)
-    if(startPicker && lines[3]) startPicker.setDate(lines[3]);
-    if(endPicker && lines[5]) endPicker.setDate(lines[5]);
+    // 4. SMART DATE EXTRACTION
+    const dateRegex = /\d{2}[\/-]\d{2}[\/-]\d{4}/;
+    const foundDates = lines.filter(line => dateRegex.test(line));
 
-    // 3. Set Budget (Last line, strip symbols)
+    if (foundDates.length >= 2) {
+        if(startPicker) startPicker.setDate(foundDates[0]);
+        if(endPicker) endPicker.setDate(foundDates[1]);
+    }
+
+    // 5. Set Budget
     const budgetVal = lines[lines.length - 1].replace(/[$,]/g, "");
     document.getElementById('budget').value = budgetVal;
 
-    // 4. Trigger Internal Updates
+    // 6. Trigger Internal Updates & Validation
     updateWalletId();
     calculateDays();
     
-    // Run validation on all fields we just filled
-    const fieldsToValidate = ['dealName', 'dealId', 'walletName', 'budget', 'flightStartDate', 'flightEndDate'];
-    fieldsToValidate.forEach(id => validateField(document.getElementById(id)));
+    // Run validation to clear red errors
+    const fieldsToValidate = ['dealName', 'spa_deal_name', 'lockouts_deal_name', 'dealId', 'walletName', 'budget', 'flightStartDate', 'flightEndDate'];
+    fieldsToValidate.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) validateField(el);
+    });
 
-    showToast("Wallet data extracted! Switch to Banner Advertising to see.", "success");
+    showToast("Data Populated: " + cleanName, "success");
 }
     </script>
 </body>
