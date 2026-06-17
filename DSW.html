@@ -495,11 +495,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.error('Failed to copy: ', err);
                 });
         }
+        
         function parseWalletData() {
     const rawText = document.getElementById('walletPaste').value.trim();
     if (!rawText) return;
     
-    // Splits the pasted text into separate lines
+    // Splits the pasted text into separate lines and removes empty ones
     const lines = rawText.split('\n').map(l => l.trim()).filter(l => l !== "");
     
     if (lines.length < 5) { 
@@ -507,33 +508,45 @@ document.addEventListener('DOMContentLoaded', function () {
         return; 
     }
 
-    // 1. Set Wallet Name (Usually the first line)
-    // Removes the leading #12345 ID if it exists
+    // 1. Set FULL Wallet Name
     let fullWalletName = lines[0].replace(/^#\d+\s+/, ""); 
     document.getElementById('walletName').value = fullWalletName;
 
-    // 2. Extract Deal ID (Assuming it's the last part of the name)
+    // 2. Extract Deal ID (The number at the very end)
     let segments = fullWalletName.split(/_| /);
     const dealId = segments[segments.length - 1];
     document.getElementById('dealId').value = dealId;
 
-    // 3. Set Clean Deal Name
-    // Removes the Deal ID from the end to make a cleaner name
-    let cleanName = fullWalletName.replace(new RegExp(`[\\s\\_]${dealId}$`), ""); 
-    document.getElementById('dealName').value = cleanName.trim().replace(/\s+/g, '_');
+    // 3. CLEAN DEAL NAME (The Fix)
+    // This removes prefix numbers, team codes, quarter codes, and the suffix ID
+    let cleanName = fullWalletName
+        .replace(/^\d+_[A-Z0-9]+_/, "") // Removes "12596890_SL_"
+        .replace(new RegExp(`[\\s\\_]${dealId}$`), "") // Removes the Deal ID from the end
+        .replace(/_Q[1-4]_/g, "_") // Removes "_Q4_"
+        .replace(/_+/g, "_") // Fixes any double underscores
+        .trim();
 
-    // 4. Set Dates (Assumes standard platform row layout)
-    // Note: Adjust indices [3] and [5] if your platform layout is different
-    if(startPicker && lines[3]) startPicker.setDate(lines[3]);
-    if(endPicker && lines[5]) endPicker.setDate(lines[5]);
+    document.getElementById('dealName').value = cleanName;
 
-    // 5. Set Budget (Looks for the last line and removes $ and commas)
-    document.getElementById('budget').value = lines[lines.length - 1].replace(/[$,]/g, "");
+    // 4. SMART DATE EXTRACTION
+    // Searches every line for the date pattern (00/00/0000)
+    const dateRegex = /\d{2}[\/-]\d{2}[\/-]\d{4}/;
+    const foundDates = lines.filter(line => dateRegex.test(line));
 
-    // 6. Run the calculation for number of days automatically
+    if (foundDates.length >= 2) {
+        // The first date found is Start, the second is End
+        if(startPicker) startPicker.setDate(foundDates[0]);
+        if(endPicker) endPicker.setDate(foundDates[1]);
+    }
+
+    // 5. Set Budget (Last line)
+    const budgetValue = lines[lines.length - 1].replace(/[$,]/g, "");
+    document.getElementById('budget').value = budgetValue;
+
+    // 6. Update internal calculation for days
     calculateDays();
     
-    alert("Fields populated!");
+    alert("Data Populated: " + cleanName);
 }
     </script>
 
