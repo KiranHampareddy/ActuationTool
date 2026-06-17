@@ -186,6 +186,13 @@
 
     <div class="container">
         <div class="heading">DSW (Designer Shoe Warehouse)</div>
+        <div style="background-color: #f0f4ff; padding: 20px; border: 2px dashed #3f51b5; border-radius: 12px; margin-bottom: 25px;">
+    <label for="walletPaste" style="font-weight: bold;">Step 1: Auto-Fill (Paste Wallet Row Here)</label>
+    <textarea id="walletPaste" rows="3" placeholder="Paste row from platform here..." style="width: 100%; margin-top: 10px; padding: 10px; border-radius: 8px; border: 1px solid #ced4da;"></textarea>
+    <div style="text-align: center; margin-top: 10px;">
+        <button class="btn" onclick="parseWalletData()">Extract & Populate Fields</button>
+    </div>
+</div>
 
         <div class="form-group">
             <label for="dealName">Deal Name</label>
@@ -276,16 +283,19 @@
 
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            flatpickr('#flightStartDate', {
-                dateFormat: "m/d/Y",
-                onChange: calculateDays
-            });
-            flatpickr('#flightEndDate', {
-                dateFormat: "m/d/Y",
-                onChange: calculateDays
-            });
-        });
+        let startPicker, endPicker; // This allows us to control the dates via code
+
+document.addEventListener('DOMContentLoaded', function () {
+    // We assign the pickers to the variables here
+    startPicker = flatpickr('#flightStartDate', {
+        dateFormat: "m/d/Y",
+        onChange: calculateDays
+    });
+    endPicker = flatpickr('#flightEndDate', {
+        dateFormat: "m/d/Y",
+        onChange: calculateDays
+    });
+});
 
         function calculateDays() {
             const startDate = new Date(document.getElementById("flightStartDate").value);
@@ -485,6 +495,46 @@
                     console.error('Failed to copy: ', err);
                 });
         }
+        function parseWalletData() {
+    const rawText = document.getElementById('walletPaste').value.trim();
+    if (!rawText) return;
+    
+    // Splits the pasted text into separate lines
+    const lines = rawText.split('\n').map(l => l.trim()).filter(l => l !== "");
+    
+    if (lines.length < 5) { 
+        alert("The pasted data doesn't look right. Please make sure you copied the full row."); 
+        return; 
+    }
+
+    // 1. Set Wallet Name (Usually the first line)
+    // Removes the leading #12345 ID if it exists
+    let fullWalletName = lines[0].replace(/^#\d+\s+/, ""); 
+    document.getElementById('walletName').value = fullWalletName;
+
+    // 2. Extract Deal ID (Assuming it's the last part of the name)
+    let segments = fullWalletName.split(/_| /);
+    const dealId = segments[segments.length - 1];
+    document.getElementById('dealId').value = dealId;
+
+    // 3. Set Clean Deal Name
+    // Removes the Deal ID from the end to make a cleaner name
+    let cleanName = fullWalletName.replace(new RegExp(`[\\s\\_]${dealId}$`), ""); 
+    document.getElementById('dealName').value = cleanName.trim().replace(/\s+/g, '_');
+
+    // 4. Set Dates (Assumes standard platform row layout)
+    // Note: Adjust indices [3] and [5] if your platform layout is different
+    if(startPicker && lines[3]) startPicker.setDate(lines[3]);
+    if(endPicker && lines[5]) endPicker.setDate(lines[5]);
+
+    // 5. Set Budget (Looks for the last line and removes $ and commas)
+    document.getElementById('budget').value = lines[lines.length - 1].replace(/[$,]/g, "");
+
+    // 6. Run the calculation for number of days automatically
+    calculateDays();
+    
+    alert("Fields populated!");
+}
     </script>
 
 </html>
